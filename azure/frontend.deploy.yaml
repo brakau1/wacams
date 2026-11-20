@@ -1,0 +1,22 @@
+# Azure Static Web Apps Deployment Configuration
+# Deploy with: az staticwebapp deploy --name <app-name> --resource-group <rg> --source Frontend/dist
+
+# App settings
+apiBaseUrl: https://<backend-app>.azurewebsites.net/api
+
+# Build configuration
+# buildCommand: npm run build
+# outputLocation: dist
+
+# Routes
+routes:
+  - route: /api/*
+    allowedRoles: read-only
+  - route: /*
+    isAsset: true
+    statusCode: 200
+
+# Response overrides for SPA routing
+responseOverrides:
+  404:
+    rewrite: /index.html

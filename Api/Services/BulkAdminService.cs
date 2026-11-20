@@ -1,0 +1,454 @@
+using Microsoft.EntityFrameworkCore;
+using Wacam.Api.Data;
+using Wacam.Api.DTOs;
+using WACAMS.Core.Entities;
+
+namespace Wacam.Api.Services;
+
+/// <summary>
+/// Service for bulk administration operations.
+/// </summary>
+public class BulkAdminService
+{
+    private readonly WacamDbContext _context;
+    private readonly AuditService _auditService;
+
+    public BulkAdminService(WacamDbContext context, AuditService auditService)
+    {
+        _context = context;
+        _auditService = auditService;
+    }
+
+    /// <summary>
+    /// Bulk assign role to multiple users.
+    /// </summary>
+    public async Task<BulkOperationResultDto> BulkAssignRoleAsync(
+        List<string> employeeIds,
+        string roleName,
+        string initiatedBy)
+    {
+        var result = new BulkOperationResultDto
+        {
+            OperationType = "RoleAssignment",
+            TotalRecords = employeeIds.Count,
+            Status = "Processing",
+            InitiatedBy = initiatedBy,
+            StartedAt = DateTime.UtcNow
+        };
+
+        try
+        {
+            var role = await _context.Roles
+                .FirstOrDefaultAsync(r => r.Name == roleName);
+
+            if (role == null)
+            {
+                result.Status = "Failed";
+                result.ErrorMessage = $"Role '{roleName}' not found";
+                return result;
+            }
+
+            var successCount = 0;
+            var errorCount = 0;
+            var errors = new List<string>();
+
+            foreach (var employeeId in employeeIds)
+            {
+                try
+                {
+                    var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+
+                    if (user == null)
+                    {
+                        errors.Add($"User {employeeId} not found");
+                        errorCount++;
+                        continue;
+                    }
+
+                    var existingRole = await _context.UserRoles
+                        .FirstOrDefaultAsync(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+
+                    if (existingRole != null)
+                    {
+                        errors.Add($"User {employeeId} already has role {roleName}");
+                        errorCount++;
+                        continue;
+                    }
+
+                    var userRole = new UserRole
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = user.Id,
+                        RoleId = role.Id,
+                        AssignedAt = DateTime.UtcNow
+                    };
+
+                    _context.UserRoles.Add(userRole);
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"User {employeeId}: {ex.Message}");
+                    errorCount++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            result.SuccessCount = successCount;
+            result.ErrorCount = errorCount;
+            result.Status = "Completed";
+            result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
+            result.CompletedAt = DateTime.UtcNow;
+
+            await _auditService.LogAsync(
+                "BulkRoleAssignment",
+                "SuperAdmin",
+                "UserRole",
+                role.Id.ToString(),
+                $"Bulk assigned role '{roleName}' to {successCount} users",
+                null,
+                new { roleName, result.TotalRecords, successCount, errorCount },
+                initiatedBy);
+        }
+        catch (Exception ex)
+        {
+            result.Status = "Failed";
+            result.ErrorMessage = ex.Message;
+            result.CompletedAt = DateTime.UtcNow;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Bulk remove role from multiple users.
+    /// </summary>
+    public async Task<BulkOperationResultDto> BulkRemoveRoleAsync(
+        List<string> employeeIds,
+        string roleName,
+        string initiatedBy)
+    {
+        var result = new BulkOperationResultDto
+        {
+            OperationType = "RoleRemoval",
+            TotalRecords = employeeIds.Count,
+            Status = "Processing",
+            InitiatedBy = initiatedBy,
+            StartedAt = DateTime.UtcNow
+        };
+
+        try
+        {
+            var role = await _context.Roles
+                .FirstOrDefaultAsync(r => r.Name == roleName);
+
+            if (role == null)
+            {
+                result.Status = "Failed";
+                result.ErrorMessage = $"Role '{roleName}' not found";
+                return result;
+            }
+
+            var successCount = 0;
+            var errorCount = 0;
+            var errors = new List<string>();
+
+            foreach (var employeeId in employeeIds)
+            {
+                try
+                {
+                    var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+
+                    if (user == null)
+                    {
+                        errors.Add($"User {employeeId} not found");
+                        errorCount++;
+                        continue;
+                    }
+
+                    var userRole = await _context.UserRoles
+                        .FirstOrDefaultAsync(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+
+                    if (userRole == null)
+                    {
+                        errors.Add($"User {employeeId} does not have role {roleName}");
+                        errorCount++;
+                        continue;
+                    }
+
+                    _context.UserRoles.Remove(userRole);
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"User {employeeId}: {ex.Message}");
+                    errorCount++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            result.SuccessCount = successCount;
+            result.ErrorCount = errorCount;
+            result.Status = "Completed";
+            result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
+            result.CompletedAt = DateTime.UtcNow;
+
+            await _auditService.LogAsync(
+                "BulkRoleRemoval",
+                "SuperAdmin",
+                "UserRole",
+                role.Id.ToString(),
+                $"Bulk removed role '{roleName}' from {successCount} users",
+                null,
+                new { roleName, result.TotalRecords, successCount, errorCount },
+                initiatedBy);
+        }
+        catch (Exception ex)
+        {
+            result.Status = "Failed";
+            result.ErrorMessage = ex.Message;
+            result.CompletedAt = DateTime.UtcNow;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Bulk assign department to multiple users.
+    /// </summary>
+    public async Task<BulkOperationResultDto> BulkAssignDepartmentAsync(
+        List<string> employeeIds,
+        string departmentName,
+        string initiatedBy)
+    {
+        var result = new BulkOperationResultDto
+        {
+            OperationType = "DepartmentAssignment",
+            TotalRecords = employeeIds.Count,
+            Status = "Processing",
+            InitiatedBy = initiatedBy,
+            StartedAt = DateTime.UtcNow
+        };
+
+        try
+        {
+            var department = await _context.Departments
+                .FirstOrDefaultAsync(d => d.Name == departmentName);
+
+            if (department == null)
+            {
+                result.Status = "Failed";
+                result.ErrorMessage = $"Department '{departmentName}' not found";
+                return result;
+            }
+
+            var successCount = 0;
+            var errorCount = 0;
+            var errors = new List<string>();
+
+            foreach (var employeeId in employeeIds)
+            {
+                try
+                {
+                    var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+
+                    if (user == null)
+                    {
+                        errors.Add($"User {employeeId} not found");
+                        errorCount++;
+                        continue;
+                    }
+
+                    user.DepartmentId = department.Id;
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"User {employeeId}: {ex.Message}");
+                    errorCount++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            result.SuccessCount = successCount;
+            result.ErrorCount = errorCount;
+            result.Status = "Completed";
+            result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
+            result.CompletedAt = DateTime.UtcNow;
+
+            await _auditService.LogAsync(
+                "BulkDepartmentAssignment",
+                "SuperAdmin",
+                "User",
+                department.Id.ToString(),
+                $"Bulk assigned department '{departmentName}' to {successCount} users",
+                null,
+                new { departmentName, result.TotalRecords, successCount, errorCount },
+                initiatedBy);
+        }
+        catch (Exception ex)
+        {
+            result.Status = "Failed";
+            result.ErrorMessage = ex.Message;
+            result.CompletedAt = DateTime.UtcNow;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Bulk activate user accounts.
+    /// </summary>
+    public async Task<BulkOperationResultDto> BulkActivateUsersAsync(
+        List<string> employeeIds,
+        string initiatedBy)
+    {
+        var result = new BulkOperationResultDto
+        {
+            OperationType = "AccountActivation",
+            TotalRecords = employeeIds.Count,
+            Status = "Processing",
+            InitiatedBy = initiatedBy,
+            StartedAt = DateTime.UtcNow
+        };
+
+        try
+        {
+            var successCount = 0;
+            var errorCount = 0;
+            var errors = new List<string>();
+
+            foreach (var employeeId in employeeIds)
+            {
+                try
+                {
+                    var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+
+                    if (user == null)
+                    {
+                        errors.Add($"User {employeeId} not found");
+                        errorCount++;
+                        continue;
+                    }
+
+                    user.IsActive = true;
+                    user.IsLocked = false;
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"User {employeeId}: {ex.Message}");
+                    errorCount++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            result.SuccessCount = successCount;
+            result.ErrorCount = errorCount;
+            result.Status = "Completed";
+            result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
+            result.CompletedAt = DateTime.UtcNow;
+
+            await _auditService.LogAsync(
+                "BulkAccountActivation",
+                "SuperAdmin",
+                "User",
+                "Bulk",
+                $"Bulk activated {successCount} user accounts",
+                null,
+                new { result.TotalRecords, successCount, errorCount },
+                initiatedBy);
+        }
+        catch (Exception ex)
+        {
+            result.Status = "Failed";
+            result.ErrorMessage = ex.Message;
+            result.CompletedAt = DateTime.UtcNow;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Bulk deactivate user accounts.
+    /// </summary>
+    public async Task<BulkOperationResultDto> BulkDeactivateUsersAsync(
+        List<string> employeeIds,
+        string initiatedBy)
+    {
+        var result = new BulkOperationResultDto
+        {
+            OperationType = "AccountDeactivation",
+            TotalRecords = employeeIds.Count,
+            Status = "Processing",
+            InitiatedBy = initiatedBy,
+            StartedAt = DateTime.UtcNow
+        };
+
+        try
+        {
+            var successCount = 0;
+            var errorCount = 0;
+            var errors = new List<string>();
+
+            foreach (var employeeId in employeeIds)
+            {
+                try
+                {
+                    var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
+
+                    if (user == null)
+                    {
+                        errors.Add($"User {employeeId} not found");
+                        errorCount++;
+                        continue;
+                    }
+
+                    user.IsActive = false;
+                    user.IsLocked = true;
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"User {employeeId}: {ex.Message}");
+                    errorCount++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            result.SuccessCount = successCount;
+            result.ErrorCount = errorCount;
+            result.Status = "Completed";
+            result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
+            result.CompletedAt = DateTime.UtcNow;
+
+            await _auditService.LogAsync(
+                "BulkAccountDeactivation",
+                "SuperAdmin",
+                "User",
+                "Bulk",
+                $"Bulk deactivated {successCount} user accounts",
+                null,
+                new { result.TotalRecords, successCount, errorCount },
+                initiatedBy);
+        }
+        catch (Exception ex)
+        {
+            result.Status = "Failed";
+            result.ErrorMessage = ex.Message;
+            result.CompletedAt = DateTime.UtcNow;
+        }
+
+        return result;
+    }
+}

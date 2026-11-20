@@ -1,0 +1,40 @@
+name: Build WACAMS Backend
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'Api/**'
+      - 'Core/**'
+      - 'Infrastructure/**'
+      - '.github/workflows/build-backend.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore Api/Api.csproj
+
+    - name: Build
+      run: dotnet build Api/Api.csproj --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish Api/Api.csproj --configuration Release --output ./publish --self-contained false
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: wacams-backend-rc1
+        path: ./publish/
+        retention-days: 30

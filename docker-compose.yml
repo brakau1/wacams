@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database
+  postgres:
+    image: postgres:16-alpine
+    container_name: wacam-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: wacam_db
+      POSTGRES_USER: wacam_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-WacamStr0ng!2024}
+      TZ: Africa/Johannesburg
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-scripts/01-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./postgres/init-scripts/02-indexes.sql:/docker-entrypoint-initdb.d/02-indexes.sql
+      - ./postgres/init-scripts/03-seed.sql:/docker-entrypoint-initdb.d/03-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wacam_user -d wacam_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - wacam-network
+
+  # .NET Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: wacam-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__WacamDb: Host=postgres;Port=5432;Database=wacam_db;Username=wacam_user;Password=${DB_PASSWORD:-WacamStr0ng!2024};SSL Mode=Prefer;Trust Server Certificate=true;
+      Jwt__Key: ${JWT_KEY:-WACAMS-Production-JWT-Secret-Key-MustBe-Very-Long!}
+      Jwt__Issuer: WACAMS
+      Jwt__Audience: WACAMS-API
+      TZ: Africa/Johannesburg
+    ports:
+      - "8080:8080"
+    volumes:
+      - signatures_data:/app/wwwroot/signatures
+      - api_logs:/app/logs
+    networks:
+      - wacam-network
+
+  # React Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: wacam-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - wacam-network
+
+  # Adminer (database management UI) - optional, for development
+  adminer:
+    image: adminer:latest
+    container_name: wacam-adminer
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    networks:
+      - wacam-network
+
+volumes:
+  postgres_data:
+    driver: local
+  signatures_data:
+    driver: local
+  api_logs:
+    driver: local
+
+networks:
+  wacam-network:
+    driver: bridge

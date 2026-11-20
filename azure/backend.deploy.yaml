@@ -1,0 +1,18 @@
+# Azure App Service Deployment Configuration
+# Deploy with: az webapp deploy --resource-group <rg> --name <app-name> --src-path Api/bin/publish/net8.0-win-x64/publish.zip
+
+# Environment variables for Azure
+# Set these via: az webapp config appsettings set --name <app-name> --resource-group <rg> --settings KEY=VALUE
+
+ASPNETCORE_ENVIRONMENT: Production
+ConnectionStrings__WacamDb: Host=<postgres-host>;Port=5432;Database=wacam_db;Username=wacam_user;Password=<db-password>;SSL Mode=Required;Trust Server Certificate=false;
+Jwt__Key: <jwt-secret-key-min-32-chars>
+Jwt__Issuer: WACAMS
+Jwt__Audience: WACAMS-API
+
+# Azure-specific settings
+WEBSITE_HTTPLOGGING_RETENTION_DAYS: 7
+WEBSITE_LOG_LEVEL: Information
+
+# Startup command for .NET 8 on Azure
+# dotnet WACAMS.Api.dll

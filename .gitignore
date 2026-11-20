@@ -1,0 +1,57 @@
+# Visual Studio / .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.dll
+*.exe
+[Dd]ebug/
+[Rr]elease/x86/
+[Rr]elease/x64/
+[Rr]elease/
+[Rr]el/
+[Bb]uild/
+vs/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# EF Core Migrations (keep generated files, ignore custom ones)
+Infrastructure/Migrations/[0000000]*.cs
+Infrastructure/Migrations/[0000000]*Design.cs
+
+# Node / React
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.vite/
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+Api/logs/*.txt
+Api/logs/*.log
+
+# Uploads (signed forms stored in wwwroot)
+Api/wwwroot/signatures/*
+!Api/wwwroot/signatures/.gitkeep
+
+# Docker volumes data (don't version-control)
+postgres_data/
+
+# Config with secrets (use templates instead)
+Api/appsettings.Production.json
+Infrastructure/Data/config.secrets.json

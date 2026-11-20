@@ -1,0 +1,45 @@
+{
+  "name": "WACAMS - Workforce Attendance & Corrective Action Management System",
+  "short_name": "WACAMS",
+  "description": "Monitor workforce attendance, track exceptions, manage corrective actions and warnings for production teams",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f3460",
+  "background_color": "#1a1a2e",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Clock In/Out",
+      "url": "/clock-in",
+      "description": "Quick clock in or out"
+    },
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "View attendance dashboard"
+    }
+  ]
+}

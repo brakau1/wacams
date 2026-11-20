@@ -1,0 +1,96 @@
+# =============================================================================
+# WACAMS Alertmanager Configuration
+# =============================================================================
+
+global:
+  resolve_timeout: 5m
+  # SMTP Configuration
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'wacams-alerts@yourcompany.com'
+  smtp_auth_username: 'wacams-alerts@yourcompany.com'
+  smtp_auth_password: '${SMTP_ALERT_PASSWORD}'
+  smtp_require_tls: true
+
+# Templates
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Inhibition rules
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']
+
+# Routing tree
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'default-receiver'
+  
+  routes:
+    # Critical alerts → immediate notification
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      continue: true
+    
+    # Database alerts → DBA team
+    - match:
+        alertname: 'PostgreSQLDown|HighDatabaseConnections|ReplicationLag|DatabaseDeadlocks'
+      receiver: 'database-team'
+    
+    # Infrastructure alerts → Ops team
+    - match_re:
+        alertname: 'HighCPU|HighMemory|HighDisk|NodeDown'
+      receiver: 'ops-team'
+    
+    # SSL alerts → Security team
+    - match_re:
+        alertname: 'SSLCertificate.*'
+      receiver: 'security-team'
+    
+    # Backup alerts → DBA + Ops
+    - match_re:
+        alertname: 'Backup.*'
+      receiver: 'backup-alerts'
+
+# Receivers
+receivers:
+  - name: 'default-receiver'
+    email_configs:
+      - to: 'it-team@yourcompany.com'
+        send_resolved: true
+
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'it-manager@yourcompany.com'
+        send_resolved: true
+        headers:
+          Subject: '[CRITICAL] {{ .GroupLabels.alertname }}'
+    webhook_configs:
+      - url: 'http://backend:8080/api/notifications/alert'
+        send_resolved: true
+
+  - name: 'database-team'
+    email_configs:
+      - to: 'dba-team@yourcompany.com'
+        send_resolved: true
+
+  - name: 'ops-team'
+    email_configs:
+      - to: 'ops-team@yourcompany.com'
+        send_resolved: true
+
+  - name: 'security-team'
+    email_configs:
+      - to: 'security-team@yourcompany.com'
+        send_resolved: true
+
+  - name: 'backup-alerts'
+    email_configs:
+      - to: 'dba-team@yourcompany.com,ops-team@yourcompany.com'
+        send_resolved: true

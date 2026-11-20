@@ -1,0 +1,251 @@
+# WACAMS Prometheus Alert Rules
+
+groups:
+  # Infrastructure Alerts
+  - name: infrastructure_alerts
+    rules:
+      # High CPU Usage
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is above 80% for more than 5 minutes on {{ $labels.instance }}"
+
+      - alert: CriticalCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical CPU usage detected"
+          description: "CPU usage is above 95% for more than 2 minutes on {{ $labels.instance }}"
+
+      # High Memory Usage
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is above 85% for more than 5 minutes on {{ $labels.instance }}"
+
+      - alert: CriticalMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical memory usage detected"
+          description: "Memory usage is above 95% for more than 2 minutes on {{ $labels.instance }}"
+
+      # High Disk Usage
+      - alert: HighDiskUsage
+        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High disk usage detected"
+          description: "Disk usage is above 80% on {{ $labels.instance }} for mount point {{ $labels.mountpoint }}"
+
+      - alert: CriticalDiskUsage
+        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 90
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical disk usage detected"
+          description: "Disk usage is above 90% on {{ $labels.instance }} for mount point {{ $labels.mountpoint }}"
+
+      # Disk I/O High
+      - alert: HighDiskIO
+        expr: rate(node_disk_io_time_seconds_total[5m]) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High disk I/O detected"
+          description: "Disk I/O utilization is above 90% on {{ $labels.instance }} for device {{ $labels.device }}"
+
+  # Database Alerts
+  - name: database_alerts
+    rules:
+      # PostgreSQL Down
+      - alert: PostgreSQLDown
+        expr: pg_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL is down"
+          description: "PostgreSQL instance {{ $labels.instance }} is not responding"
+
+      # High Database Connections
+      - alert: HighDatabaseConnections
+        expr: pg_stat_activity_count > 150
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High database connection count"
+          description: "PostgreSQL has {{ $value }} active connections on {{ $labels.instance }}"
+
+      - alert: CriticalDatabaseConnections
+        expr: pg_stat_activity_count > 180
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical database connection count"
+          description: "PostgreSQL has {{ $value }} active connections (near max_connections limit) on {{ $labels.instance }}"
+
+      # Slow Queries
+      - alert: SlowQueries
+        expr: rate(pg_stat_activity_max_tx_duration{datname!~"template.*|postgres"}[5m]) > 300
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow database queries detected"
+          description: "Long-running queries detected on {{ $labels.instance }} database {{ $labels.datname }}"
+
+      # Database Replication Lag
+      - alert: ReplicationLag
+        expr: pg_replication_lag > 300
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database replication lag detected"
+          description: "Replication lag is {{ $value }} seconds on {{ $labels.instance }}"
+
+      # Deadlocks
+      - alert: DatabaseDeadlocks
+        expr: increase(pg_stat_database_deadlocks[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database deadlocks detected"
+          description: "{{ $value }} deadlocks detected on {{ $labels.instance }} database {{ $labels.datname }}"
+
+  # Application Alerts
+  - name: application_alerts
+    rules:
+      # Backend API Down
+      - alert: BackendAPIDown
+        expr: up{job="wacams-backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend API is down"
+          description: "Backend API {{ $labels.instance }} is not responding"
+
+      # High API Response Time
+      - alert: HighAPIResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API response time"
+          description: "95th percentile API response time is {{ $value }}s on {{ $labels.instance }}"
+
+      # High Error Rate
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API error rate"
+          description: "API error rate is {{ $value }}% on {{ $labels.instance }}"
+
+      - alert: CriticalErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) * 100 > 10
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical API error rate"
+          description: "API error rate is {{ $value }}% on {{ $labels.instance }}"
+
+      # Nginx Down
+      - alert: NginxDown
+        expr: nginx_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Nginx is down"
+          description: "Nginx instance {{ $labels.instance }} is not responding"
+
+      # High Nginx Connections
+      - alert: HighNginxConnections
+        expr: nginx_connections_active > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Nginx connection count"
+          description: "Nginx has {{ $value }} active connections on {{ $labels.instance }}"
+
+  # Backup Alerts
+  - name: backup_alerts
+    rules:
+      # Backup Failure
+      - alert: BackupFailure
+        expr: time() - pg_backup_last_completed_timestamp > 86400
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database backup failure"
+          description: "No successful backup in the last 24 hours on {{ $labels.instance }}"
+
+      # Backup Too Old
+      - alert: BackupTooOld
+        expr: time() - pg_backup_last_completed_timestamp > 172800
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database backup is too old"
+          description: "Last backup is older than 48 hours on {{ $labels.instance }}"
+
+  # SSL Certificate Alerts
+  - name: ssl_alerts
+    rules:
+      # SSL Certificate Expiring Soon
+      - alert: SSLCertificateExpiringSoon
+        expr: ssl_certificate_expiry_seconds < 2592000  # 30 days
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate expiring soon"
+          description: "SSL certificate for {{ $labels.domain }} expires in {{ $value | humanizeDuration }}"
+
+      - alert: SSLCertificateExpiringCritical
+        expr: ssl_certificate_expiry_seconds < 604800  # 7 days
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: "SSL certificate expiring critically soon"
+          description: "SSL certificate for {{ $labels.domain }} expires in {{ $value | humanizeDuration }}"
+
+      # SSL Certificate Expired
+      - alert: SSLCertificateExpired
+        expr: ssl_certificate_expiry_seconds < 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "SSL certificate expired"
+          description: "SSL certificate for {{ $labels.domain }} has expired"
