@@ -32,7 +32,7 @@ public class AttendanceRepository : Repository<AttendanceRecord>, IAttendanceRep
     }
 
     /// <inheritdoc />
-    public async Task<Dictionary<Core.Enums.AttendanceStatus, int>> GetDailyStatsAsync(
+    public async Task<Dictionary<WACAMS.Core.Enums.AttendanceStatus, int>> GetDailyStatsAsync(
         DateTime date, CancellationToken cancellationToken = default)
     {
         var records = await _dbSet.AsNoTracking()
