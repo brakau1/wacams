@@ -245,6 +245,12 @@ public class Program
         // 4. Authentication (JWT Bearer)
         app.UseAuthentication();
 
+        // 4.5. DEV-ONLY: Bypass authentication — inject fake development user
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseMiddleware<Api.Middleware.DevelopmentUserMiddleware>();
+        }
+
         // 5. Authorization
         app.UseAuthorization();
 
