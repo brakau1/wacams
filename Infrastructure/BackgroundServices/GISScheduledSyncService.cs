@@ -28,12 +28,12 @@ public class GISScheduledSyncService : BackgroundService
         _logger = logger;
         
         // Configurable sync interval (default: 1 hour)
-        var intervalMinutes = configuration.GetValue<int>("GIS:SyncIntervalMinutes", 60);
+        var intervalMinutes = int.TryParse(configuration["GIS:SyncIntervalMinutes"], out var im) ? im : 60;
         _syncInterval = TimeSpan.FromMinutes(intervalMinutes);
         
         // Retry configuration
-        _maxRetryAttempts = configuration.GetValue<int>("GIS:MaxRetryAttempts", 3);
-        var retryDelaySeconds = configuration.GetValue<int>("GIS:RetryDelaySeconds", 30);
+        _maxRetryAttempts = int.TryParse(configuration["GIS:MaxRetryAttempts"], out var mra) ? mra : 3;
+        var retryDelaySeconds = int.TryParse(configuration["GIS:RetryDelaySeconds"], out var rds) ? rds : 30;
         _retryDelay = TimeSpan.FromSeconds(retryDelaySeconds);
     }
 

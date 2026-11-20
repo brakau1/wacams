@@ -125,16 +125,16 @@ public class CorrectiveActionFormPdfGenerator
                 grid.Columns(2);
                 grid.Spacing(10);
                 
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Employee ID:", data.EmployeeId));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Employee Name:", data.EmployeeName));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Department:", data.Department));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Position:", data.Position));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Incident Date:", data.IncidentDate.ToString("dd MMM yyyy")));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Offence Type:", data.OffenceType));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Disciplinary Level:", data.DisciplinaryLevel));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Offence Number:", $"#{data.OffenceNumber}"));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Issued Date:", data.IssuedDate.ToString("dd MMM yyyy")));
-                grid.Item().ColumnSpan(1).Element(c => GenerateInfoField(c, "Issued By:", data.IssuedBy));
+                grid.Item().Element(c => GenerateInfoField(c, "Employee ID:", data.EmployeeId));
+                grid.Item().Element(c => GenerateInfoField(c, "Employee Name:", data.EmployeeName));
+                grid.Item().Element(c => GenerateInfoField(c, "Department:", data.Department));
+                grid.Item().Element(c => GenerateInfoField(c, "Position:", data.Position));
+                grid.Item().Element(c => GenerateInfoField(c, "Incident Date:", data.IncidentDate.ToString("dd MMM yyyy")));
+                grid.Item().Element(c => GenerateInfoField(c, "Offence Type:", data.OffenceType));
+                grid.Item().Element(c => GenerateInfoField(c, "Disciplinary Level:", data.DisciplinaryLevel));
+                grid.Item().Element(c => GenerateInfoField(c, "Offence Number:", $"#{data.OffenceNumber}"));
+                grid.Item().Element(c => GenerateInfoField(c, "Issued Date:", data.IssuedDate.ToString("dd MMM yyyy")));
+                grid.Item().Element(c => GenerateInfoField(c, "Issued By:", data.IssuedBy));
             });
         });
     }
@@ -203,7 +203,7 @@ public class CorrectiveActionFormPdfGenerator
                 grid.Spacing(20);
                 
                 // Employee Signature
-                grid.Item().ColumnSpan(1).Column(col =>
+                grid.Item().Column(col =>
                 {
                     col.Item().Text("Employee Signature").FontSize(10).Bold();
                     col.Item().Height(40);
@@ -216,7 +216,7 @@ public class CorrectiveActionFormPdfGenerator
                 });
                 
                 // Manager Signature
-                grid.Item().ColumnSpan(1).Column(col =>
+                grid.Item().Column(col =>
                 {
                     col.Item().Text("Manager Signature").FontSize(10).Bold();
                     col.Item().Height(40);
