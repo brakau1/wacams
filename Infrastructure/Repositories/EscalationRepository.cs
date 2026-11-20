@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Entities;
 using WACAMS.Core.Escalations.Interfaces;
-using WACAMS.Core.Escalations.Models;
 using WACAMS.Infrastructure.Data;
 
 namespace WACAMS.Infrastructure.Repositories;
@@ -48,7 +49,7 @@ public class EscalationRepository : IEscalationRepository
         return await _context.Escalations
             .Include(e => e.History)
             .Where(e => e.Status == EscalationStatus.Pending || 
-                        e.Status == EscalationStatus.Acknowledged)
+                        e.Status == EscalationStatus.Accepted)
             .OrderBy(e => e.NextEscalationTime)
             .ToListAsync();
     }
@@ -58,7 +59,7 @@ public class EscalationRepository : IEscalationRepository
         return await _context.Escalations
             .Include(e => e.History)
             .Where(e => (e.Status == EscalationStatus.Pending || 
-                        e.Status == EscalationStatus.Acknowledged) &&
+                        e.Status == EscalationStatus.Accepted) &&
                         e.NextEscalationTime <= cutoffTime &&
                         !e.DocumentUploaded)
             .ToListAsync();

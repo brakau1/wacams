@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WACAMS.Core.Escalations.Interfaces;
+using WACAMS.Core.Escalations.Rules;
+using WACAMS.Core.Exceptions.Interfaces;
 using WACAMS.Core.Interfaces;
 using WACAMS.Core.Services;
 using WACAMS.Infrastructure.Data;
@@ -41,15 +44,22 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IAttendanceRepository, AttendanceRepository>();
         services.AddScoped<IWarningRepository, WarningRepository>();
+        services.AddScoped<IExceptionRepository, ExceptionRepository>();
+        services.AddScoped<IEscalationRepository, EscalationRepository>();
         services.AddScoped<IAuditLogService, AuditLogService>();
 
         // Register Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        // Register Escalation Rules Configuration
+        services.AddSingleton<EscalationRules>();
+
         // Register Domain Services
         services.AddScoped<IAttendanceCalculationService, AttendanceCalculationService>();
         services.AddScoped<IWarningGenerationService, WarningGenerationService>();
-        services.AddScoped<IEscalationService, EscalationService>();
+        services.AddScoped<Core.Services.IEscalationService, EscalationService>();
+        services.AddScoped<Core.Escalations.Interfaces.IEscalationService, EscalationService>(sp =>
+            (EscalationService)sp.GetRequiredService<Core.Services.IEscalationService>());
 
         return services;
     }

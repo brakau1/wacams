@@ -1,4 +1,3 @@
-using WACAMS.Core.Escalations.Models;
 
 namespace WACAMS.Core.Escalations.Rules;
 
@@ -8,39 +7,32 @@ namespace WACAMS.Core.Escalations.Rules;
 public class EscalationRules
 {
     /// <summary>
-    /// Hours before escalation to next level
+    /// Hours before escalation to next level (by integer level)
     /// </summary>
-    public Dictionary<EscalationLevel, int> EscalationHours { get; set; } = new()
+    public Dictionary<int, int> EscalationHours { get; set; } = new()
     {
-        { EscalationLevel.ManagerLevel1, 24 },
-        { EscalationLevel.ManagerLevel2, 48 },
-        { EscalationLevel.ManagerLevel3, 72 },
-        { EscalationLevel.ManagerLevel4, 96 },
-        { EscalationLevel.ManagerLevel5, 120 },
-        { EscalationLevel.HR, 144 }
+        { 1, 24 },
+        { 2, 48 },
+        { 3, 72 }
     };
 
     /// <summary>
     /// Gets the next escalation level
     /// </summary>
-    public EscalationLevel? GetNextLevel(EscalationLevel currentLevel)
+    public int? GetNextLevel(int currentLevel)
     {
         return currentLevel switch
         {
-            EscalationLevel.ManagerLevel1 => EscalationLevel.ManagerLevel2,
-            EscalationLevel.ManagerLevel2 => EscalationLevel.ManagerLevel3,
-            EscalationLevel.ManagerLevel3 => EscalationLevel.ManagerLevel4,
-            EscalationLevel.ManagerLevel4 => EscalationLevel.ManagerLevel5,
-            EscalationLevel.ManagerLevel5 => EscalationLevel.HR,
-            EscalationLevel.HR => EscalationLevel.Admin,
-            EscalationLevel.Admin => null // Admin is final level
+            1 => 2,
+            2 => 3,
+            3 => null // Max level reached
         };
     }
 
     /// <summary>
     /// Gets hours before escalation for a given level
     /// </summary>
-    public int GetHoursBeforeEscalation(EscalationLevel level)
+    public int GetHoursBeforeEscalation(int level)
     {
         return EscalationHours.TryGetValue(level, out var hours) ? hours : 24;
     }
@@ -48,7 +40,7 @@ public class EscalationRules
     /// <summary>
     /// Calculates next escalation time
     /// </summary>
-    public DateTime CalculateNextEscalationTime(EscalationLevel currentLevel, DateTime fromTime)
+    public DateTime CalculateNextEscalationTime(int currentLevel, DateTime fromTime)
     {
         var hours = GetHoursBeforeEscalation(currentLevel);
         return fromTime.AddHours(hours);

@@ -1,4 +1,4 @@
-using WACAMS.Core.Escalations.Models;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Core.Services;
 
@@ -7,6 +7,19 @@ namespace WACAMS.Core.Services;
 /// </summary>
 public interface IEscalationService
 {
+    /// <summary>
+    /// Creates a new escalation from a warning letter — assigns to the next manager in hierarchy.
+    /// Called by WarningGenerationService when a Final Written Warning is issued.
+    /// </summary>
+    Task<Escalation> CreateEscalation(
+        Guid warningLetterId,
+        string employeeId,
+        string toManagerId,
+        int level,
+        string actionRequired,
+        string performedBy,
+        CancellationToken cancellationToken = default);
+
     Task<Escalation> CreateEscalationAsync(Guid exceptionId, string createdBy);
     Task<Escalation> GetEscalationByIdAsync(Guid id);
     Task<IEnumerable<Escalation>> GetEscalationsByExceptionAsync(Guid exceptionId);

@@ -130,10 +130,15 @@ public class AzureBlobStorageService : IFileStorageService
         {
             var blobClient = new BlobClient(new Uri(fileUrl));
             
+            // Extract container name from the blob URI path
+            // URI format: https://account.blob.core.windows.net/container/blobpath
+            var uriSegments = new Uri(fileUrl).Segments;
+            var containerName = uriSegments.Length >= 2 ? uriSegments[1].TrimEnd('/') : _defaultContainer;
+            
             // Generate SAS token with read permissions
             var sasBuilder = new BlobSasBuilder
             {
-                BlobContainerName = blobClient.GetParentBlobContainerClient().Name,
+                BlobContainerName = containerName,
                 BlobName = blobClient.Name,
                 Resource = "b",
                 ExpiresOn = DateTimeOffset.UtcNow.Add(expiry)

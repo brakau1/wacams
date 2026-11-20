@@ -1,4 +1,4 @@
-using WACAMS.Core.Escalations.Models;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Core.Escalations.Interfaces;
 

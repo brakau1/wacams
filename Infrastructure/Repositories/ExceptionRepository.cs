@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Entities;
 using WACAMS.Core.Exceptions.Interfaces;
-using WACAMS.Core.Exceptions.Models;
 using WACAMS.Infrastructure.Data;
 
 namespace WACAMS.Infrastructure.Repositories;
@@ -21,7 +22,6 @@ public class ExceptionRepository : IExceptionRepository
     {
         return await _context.AttendanceExceptions
             .Include(e => e.Employee)
-            .Include(e => e.CorrectiveAction)
             .FirstOrDefaultAsync(e => e.Id == id);
     }
 
@@ -36,23 +36,24 @@ public class ExceptionRepository : IExceptionRepository
 
         if (startDate.HasValue)
         {
-            query = query.Where(e => e.ExceptionDate >= startDate.Value);
+            query = query.Where(e => e.Date >= startDate.Value);
         }
 
         if (endDate.HasValue)
         {
-            query = query.Where(e => e.ExceptionDate <= endDate.Value);
+            query = query.Where(e => e.Date <= endDate.Value);
         }
 
-        return await query.OrderByDescending(e => e.ExceptionDate).ToListAsync();
+        return await query.OrderByDescending(e => e.Date).ToListAsync();
     }
 
     public async Task<IEnumerable<AttendanceException>> GetPendingExceptionsAsync()
     {
         return await _context.AttendanceExceptions
             .Include(e => e.Employee)
-            .Where(e => e.Status == ApprovalStatus.Pending)
-            .OrderBy(e => e.ExceptionDate)
+            .Where(e => e.InvestigationStatus == InvestigationStatus.Open ||
+                        e.InvestigationStatus == InvestigationStatus.UnderReview)
+            .OrderBy(e => e.Date)
             .ToListAsync();
     }
 
@@ -62,8 +63,8 @@ public class ExceptionRepository : IExceptionRepository
     {
         return await _context.AttendanceExceptions
             .Include(e => e.Employee)
-            .Where(e => e.ExceptionDate >= startDate && e.ExceptionDate <= endDate)
-            .OrderBy(e => e.ExceptionDate)
+            .Where(e => e.Date >= startDate && e.Date <= endDate)
+            .OrderBy(e => e.Date)
             .ToListAsync();
     }
 

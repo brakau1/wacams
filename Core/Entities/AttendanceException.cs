@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using WACAMS.Core.Enums;
 
 namespace WACAMS.Core.Entities;
@@ -25,6 +26,24 @@ public class AttendanceException
     /// </summary>
     [Required]
     public DateTime Date { get; set; }
+
+    /// <summary>
+    /// Alias for Date — used by some services/repositories as ExceptionDate.
+    /// </summary>
+    public DateTime ExceptionDate
+    {
+        get => Date;
+        set => Date = value;
+    }
+
+    /// <summary>
+    /// Current processing status of the exception (alias for InvestigationStatus).
+    /// </summary>
+    public InvestigationStatus Status
+    {
+        get => InvestigationStatus;
+        set => InvestigationStatus = value;
+    }
 
     /// <summary>
     /// The type of exception (LateArrival, EarlyDeparture, AWOL, etc.).
@@ -121,4 +140,14 @@ public class AttendanceException
     /// Navigation property — collection of warning letters that may result from this exception.
     /// </summary>
     public ICollection<WarningLetter> WarningLetters { get; set; } = new List<WarningLetter>();
+
+    /// <summary>
+    /// Approval status for the exception (Pending, Approved, Rejected).
+    /// </summary>
+    public ApprovalStatus ApprovalStatus { get; set; } = ApprovalStatus.Pending;
+
+    /// <summary>
+    /// Foreign key to the corrective action (if any) resulting from this exception.
+    /// </summary>
+    public Guid? CorrectiveActionId { get; set; }
 }

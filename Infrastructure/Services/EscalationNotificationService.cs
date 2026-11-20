@@ -1,8 +1,6 @@
 using Microsoft.Extensions.Logging;
 using WACAMS.Core.Enums;
-using WACAMS.Core.Escalations.Models;
-
-using Escalation = WACAMS.Core.Escalations.Models.Escalation;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Infrastructure.Services;
 
@@ -87,8 +85,8 @@ public class EscalationNotificationService : IEscalationNotificationService
 
     public async Task SendEscalationEscalatedNotificationAsync(
         Escalation escalation,
-        EscalationLevel fromLevel,
-        EscalationLevel toLevel)
+        int fromLevel,
+        int toLevel)
     {
         try
         {

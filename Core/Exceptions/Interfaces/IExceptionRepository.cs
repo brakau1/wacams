@@ -1,4 +1,4 @@
-using WACAMS.Core.Exceptions.Models;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Core.Exceptions.Interfaces;
 

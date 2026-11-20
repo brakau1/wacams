@@ -1,7 +1,5 @@
 using WACAMS.Core.Enums;
-using WACAMS.Core.Escalations.Models;
-
-using Escalation = WACAMS.Core.Escalations.Models.Escalation;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Infrastructure.Services;
 
@@ -25,8 +23,8 @@ public interface IEscalationNotificationService
     /// </summary>
     Task SendEscalationEscalatedNotificationAsync(
         Escalation escalation, 
-        EscalationLevel fromLevel, 
-        EscalationLevel toLevel);
+        int fromLevel, 
+        int toLevel);
 
     /// <summary>
     /// Send notification when escalation is closed (document uploaded or resolved)

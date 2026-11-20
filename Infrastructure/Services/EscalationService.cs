@@ -1,29 +1,81 @@
 using Microsoft.Extensions.Logging;
+using WACAMS.Core.Constants;
+using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
 using WACAMS.Core.Escalations.Interfaces;
-using WACAMS.Core.Escalations.Models;
 using WACAMS.Core.Escalations.Rules;
+using WACAMS.Core.Interfaces;
 
 namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
-/// Service implementation for escalation workflow management
+/// Service implementation for escalation workflow management.
+/// Implements both Core.Services.IEscalationService and Core.Escalations.Interfaces.IEscalationService.
 /// </summary>
-public class EscalationService : IEscalationService
+public class EscalationService : Core.Services.IEscalationService, Core.Escalations.Interfaces.IEscalationService
 {
     private readonly IEscalationRepository _repository;
+    private readonly IEmployeeRepository _employeeRepository;
     private readonly ILogger<EscalationService> _logger;
     private readonly EscalationRules _rules;
 
     public EscalationService(
         IEscalationRepository repository,
+        IEmployeeRepository employeeRepository,
         ILogger<EscalationService> logger,
         EscalationRules rules)
     {
         _repository = repository;
+        _employeeRepository = employeeRepository;
         _logger = logger;
         _rules = rules;
     }
 
+    /// <summary>
+    /// Creates a new escalation from a warning letter — assigns to the next manager in hierarchy.
+    /// Called by WarningGenerationService when a Final Written Warning is issued.
+    /// </summary>
+    public async Task<Escalation> CreateEscalation(
+        Guid warningLetterId,
+        string employeeId,
+        string toManagerId,
+        int level,
+        string actionRequired,
+        string performedBy,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("Creating escalation for warning {WarningId}, employee {EmployeeId}, level {Level}",
+            warningLetterId, employeeId, level);
+
+        var escalation = new Escalation
+        {
+            Id = Guid.NewGuid(),
+            WarningLetterId = warningLetterId,
+            ExceptionId = Guid.Empty, // Will be linked later if needed
+            FromManagerId = performedBy,
+            ToManagerId = toManagerId,
+            AssignedTo = toManagerId,
+            Level = level,
+            Status = EscalationStatus.Pending,
+            ActionRequired = actionRequired,
+            EmployeeId = employeeId,
+            NextEscalationTime = DateTime.UtcNow.AddHours(WarningThresholds.EscalationActionWindowHours),
+            DocumentUploaded = false,
+            CreatedBy = performedBy,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var created = await _repository.CreateAsync(escalation);
+
+        _logger.LogInformation("Escalation {EscalationId} created at level {Level}, assigned to {AssignedTo}",
+            created.Id, created.Level, created.AssignedTo);
+
+        return created;
+    }
+
+    /// <summary>
+    /// Creates a new escalation from an exception ID (simplified path).
+    /// </summary>
     public async Task<Escalation> CreateEscalationAsync(Guid exceptionId, string createdBy)
     {
         _logger.LogInformation("Creating escalation for exception {ExceptionId}, created by {CreatedBy}",
@@ -33,11 +85,16 @@ public class EscalationService : IEscalationService
         {
             Id = Guid.NewGuid(),
             ExceptionId = exceptionId,
-            CurrentLevel = EscalationLevel.ManagerLevel1,
-            AssignedTo = "ManagerLevel1", // TODO: Map to actual manager ID
+            WarningLetterId = Guid.Empty,
+            FromManagerId = createdBy,
+            ToManagerId = "ManagerLevel1",
+            AssignedTo = "ManagerLevel1",
+            Level = 1,
             Status = EscalationStatus.Pending,
+            ActionRequired = "Review and act on attendance exception",
+            EmployeeId = string.Empty,
             CreatedAt = DateTime.UtcNow,
-            NextEscalationTime = _rules.CalculateNextEscalationTime(EscalationLevel.ManagerLevel1, DateTime.UtcNow),
+            NextEscalationTime = DateTime.UtcNow.AddHours(WarningThresholds.EscalationActionWindowHours),
             DocumentUploaded = false,
             CreatedBy = createdBy
         };
@@ -45,7 +102,7 @@ public class EscalationService : IEscalationService
         var created = await _repository.CreateAsync(escalation);
 
         _logger.LogInformation("Escalation {EscalationId} created at level {Level}, assigned to {AssignedTo}",
-            created.Id, created.CurrentLevel, created.AssignedTo);
+            created.Id, created.Level, created.AssignedTo);
 
         return created;
     }
@@ -69,7 +126,7 @@ public class EscalationService : IEscalationService
             throw new KeyNotFoundException($"Escalation {id} not found");
         }
 
-        escalation.Status = EscalationStatus.Acknowledged;
+        escalation.Status = EscalationStatus.Accepted;
         escalation.AcknowledgedAt = DateTime.UtcNow;
         escalation.UpdatedBy = acknowledgedBy;
         escalation.UpdatedAt = DateTime.UtcNow;
@@ -112,11 +169,11 @@ public class EscalationService : IEscalationService
             throw new KeyNotFoundException($"Escalation {id} not found");
         }
 
-        var nextLevel = _rules.GetNextLevel(escalation.CurrentLevel);
-        if (nextLevel == null)
+        var nextLevel = escalation.Level + 1;
+        if (nextLevel > WarningThresholds.MaxEscalationLevel)
         {
-            _logger.LogWarning("No higher escalation level found for escalation {EscalationId}", id);
-            escalation.Status = EscalationStatus.AutoClosed;
+            _logger.LogWarning("Max escalation level reached for escalation {EscalationId}", id);
+            escalation.Status = EscalationStatus.Closed;
             escalation.AutoClosedAt = DateTime.UtcNow;
             escalation.UpdatedBy = escalatedBy;
             escalation.UpdatedAt = DateTime.UtcNow;
@@ -124,18 +181,17 @@ public class EscalationService : IEscalationService
             return escalation;
         }
 
-        escalation.CurrentLevel = nextLevel.Value;
-        escalation.AssignedTo = nextLevel.Value.ToString();
+        escalation.Level = nextLevel;
         escalation.Status = EscalationStatus.Escalated;
         escalation.EscalatedAt = DateTime.UtcNow;
-        escalation.NextEscalationTime = _rules.CalculateNextEscalationTime(nextLevel.Value, DateTime.UtcNow);
+        escalation.NextEscalationTime = DateTime.UtcNow.AddHours(WarningThresholds.EscalationActionWindowHours);
         escalation.UpdatedBy = escalatedBy;
         escalation.UpdatedAt = DateTime.UtcNow;
 
         await _repository.UpdateAsync(escalation);
 
-        _logger.LogInformation("Escalation {EscalationId} escalated to level {Level}, assigned to {AssignedTo}",
-            id, nextLevel.Value, escalation.AssignedTo);
+        _logger.LogInformation("Escalation {EscalationId} escalated to level {Level}",
+            id, nextLevel);
 
         return escalation;
     }
@@ -155,9 +211,9 @@ public class EscalationService : IEscalationService
         escalation.UpdatedAt = DateTime.UtcNow;
 
         // Auto-close when document is uploaded
-        if (escalation.Status != EscalationStatus.Resolved)
+        if (escalation.Status != EscalationStatus.ActionTaken)
         {
-            escalation.Status = EscalationStatus.AutoClosed;
+            escalation.Status = EscalationStatus.Closed;
             escalation.AutoClosedAt = DateTime.UtcNow;
         }
 
@@ -177,7 +233,7 @@ public class EscalationService : IEscalationService
             throw new KeyNotFoundException($"Escalation {id} not found");
         }
 
-        escalation.Status = EscalationStatus.Resolved;
+        escalation.Status = EscalationStatus.ActionTaken;
         escalation.ResolvedAt = DateTime.UtcNow;
         escalation.UpdatedBy = resolvedBy;
         escalation.UpdatedAt = DateTime.UtcNow;
