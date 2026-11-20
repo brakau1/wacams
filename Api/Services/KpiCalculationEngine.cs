@@ -330,8 +330,8 @@ public class KpiCalculationEngine
     public async Task<int> GetOpenCorrectiveActionsCountAsync(string? departmentId = null)
     {
         var query = _context.CorrectiveActions
-            .Where(ca => ca.Status != DisciplinaryActionResult.Dismissed && 
-                        ca.Status != DisciplinaryActionResult.Completed);
+            .Where(ca => ca.Status != nameof(DisciplinaryActionResult.Dismissed) && 
+                        ca.Status != nameof(DisciplinaryActionResult.Completed));
 
         if (!string.IsNullOrEmpty(departmentId))
         {
@@ -348,12 +348,12 @@ public class KpiCalculationEngine
     {
         var query = _context.Escalations
             .Where(e => e.Status == EscalationStatus.Pending || 
-                       e.Status == EscalationStatus.Acknowledged || 
+                       e.Status == EscalationStatus.Accepted || 
                        e.Status == EscalationStatus.ActionTaken);
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(e => e.Exception.DepartmentId == departmentId);
+            query = query.Where(e => e.Employee!.DepartmentId == departmentId);
         }
 
         return await query.CountAsync();

@@ -16,6 +16,7 @@ public class WacamDbContext : DbContext
     public DbSet<AttendanceException> AttendanceExceptions => Set<AttendanceException>();
     public DbSet<WarningLetter> WarningLetters => Set<WarningLetter>();
     public DbSet<Escalation> Escalations => Set<Escalation>();
+    public DbSet<CorrectiveAction> CorrectiveActions => Set<CorrectiveAction>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<SystemSettings> SystemSettings => Set<SystemSettings>();
 
@@ -103,6 +104,20 @@ public class WacamDbContext : DbContext
             .WithMany(wl => wl.Escalations)
             .HasForeignKey(e => e.WarningLetterId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // CorrectiveAction
+        modelBuilder.Entity<CorrectiveAction>()
+            .HasOne(ca => ca.Employee)
+            .WithMany()
+            .HasForeignKey(ca => ca.EmployeeId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // AttendanceException.Department relationship
+        modelBuilder.Entity<AttendanceException>()
+            .HasOne(ae => ae.Department)
+            .WithMany()
+            .HasForeignKey(ae => ae.DepartmentId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         // Department hierarchy
         modelBuilder.Entity<Department>()

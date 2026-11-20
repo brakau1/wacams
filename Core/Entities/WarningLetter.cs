@@ -110,4 +110,10 @@ public class WarningLetter
     /// Navigation property — collection of escalations triggered by this warning.
     /// </summary>
     public ICollection<Escalation> Escalations { get; set; } = new List<Escalation>();
+
+    /// <summary>
+    /// Escalation level associated with this warning (1 = first escalation, 2 = second, etc.).
+    /// Used for analytics and reporting.
+    /// </summary>
+    public int EscalationLevel { get; set; }
 }

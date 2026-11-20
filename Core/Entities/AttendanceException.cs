@@ -150,4 +150,14 @@ public class AttendanceException
     /// Foreign key to the corrective action (if any) resulting from this exception.
     /// </summary>
     public Guid? CorrectiveActionId { get; set; }
+
+    /// <summary>
+    /// Foreign key to the department where this exception occurred.
+    /// </summary>
+    public Guid? DepartmentId { get; set; }
+
+    /// <summary>
+    /// Navigation property — the department where this exception occurred.
+    /// </summary>
+    public Department? Department { get; set; }
 }
