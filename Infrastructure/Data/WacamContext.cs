@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Entities.GIS;
 
 namespace WACAMS.Infrastructure.Data;
 
@@ -36,6 +37,15 @@ public class WacamContext : DbContext
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
     public DbSet<NotificationPreference> NotificationPreferences => Set<NotificationPreference>();
+
+    // GIS Integration entities
+    public DbSet<GISEmployee> GISEmployees => Set<GISEmployee>();
+    public DbSet<GISAttendanceRecord> GISAttendanceRecords => Set<GISAttendanceRecord>();
+    public DbSet<GISClockTransaction> GISClockTransactions => Set<GISClockTransaction>();
+    public DbSet<GISShiftSchedule> GISShiftSchedules => Set<GISShiftSchedule>();
+    public DbSet<GISShiftCancellation> GISShiftCancellations => Set<GISShiftCancellation>();
+    public DbSet<GISLeaveRecord> GISLeaveRecords => Set<GISLeaveRecord>();
+    public DbSet<GISSyncLog> GISSyncLogs => Set<GISSyncLog>();
 
     #endregion
 
