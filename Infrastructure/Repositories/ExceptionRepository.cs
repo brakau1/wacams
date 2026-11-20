@@ -10,9 +10,9 @@ namespace Infrastructure.Repositories;
 /// </summary>
 public class ExceptionRepository : IExceptionRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly WacamContext _context;
 
-    public ExceptionRepository(ApplicationDbContext context)
+    public ExceptionRepository(WacamContext context)
     {
         _context = context;
     }

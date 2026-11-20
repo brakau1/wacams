@@ -1,6 +1,6 @@
-using WACAMS.Core.Disciplinary.Interfaces;
+using WACAMS.Core.Disciplinary.Services;
 using WACAMS.Core.Disciplinary.Models;
-using WACAMS.Core.Escalations.Interfaces;
+using WACAMS.Core.Escalations.Services;
 using WACAMS.Core.Exceptions.DTOs;
 using WACAMS.Core.Exceptions.Interfaces;
 using WACAMS.Core.Exceptions.Models;

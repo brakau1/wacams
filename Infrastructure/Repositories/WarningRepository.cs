@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Constants;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
 using WACAMS.Infrastructure.Data;
 
@@ -62,7 +63,7 @@ public class WarningRepository : Repository<WarningLetter>, IWarningRepository
     }
 
     /// <inheritdoc />
-    public async Task<Dictionary<Core.Enums.WarningType, int>> CountActiveWarningsAsync(
+    public async Task<Dictionary<WarningType, int>> CountActiveWarningsAsync(
         string employeeId, CancellationToken cancellationToken = default)
     {
         var cutoffDate = DateTime.UtcNow.Date.AddDays(-Core.Constants.WarningThresholds.ActiveWarningValidityDays);

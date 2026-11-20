@@ -1,5 +1,6 @@
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
+using WACAMS.Core.Escalations.Models;
 
 namespace Infrastructure.Services;
 
