@@ -10,6 +10,7 @@ using Wacam.Api.Middleware;
 using Wacam.Api.Policies;
 using Wacam.Api.Services;
 using WACAMS.Core.Interfaces;
+using WACAMS.Core.Disciplinary.Services;
 using WACAMS.Infrastructure.Services;
 using WACAMS.Infrastructure.Services.NotificationChannels;
 

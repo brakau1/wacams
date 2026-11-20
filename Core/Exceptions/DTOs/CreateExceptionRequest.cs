@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using WACAMS.Core.Exceptions.Models;
 
 namespace WACAMS.Core.Exceptions.DTOs;
 

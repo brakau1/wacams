@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Logging;
 using WACAMS.Core.Disciplinary.Models;
+using WACAMS.Core.Disciplinary.Services;
 using WACAMS.Infrastructure.Pdf;
 using WACAMS.Infrastructure.Storage;
 
-namespace WACAMS.Core.Disciplinary.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Service implementation for generating corrective action form PDFs
