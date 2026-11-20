@@ -1,0 +1,54 @@
+name: Railway Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      continue-on-error: true
+
+    - name: Publish
+      run: dotnet publish src/backend/WACAMS.Api/WACAMS.Api.csproj --configuration Release --output ./publish --no-build
+
+    - name: Verify publish output
+      run: |
+        ls -la ./publish
+        test -f ./publish/WACAMS.Api.dll || exit 1
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: wacams-backend-rc1
+        path: ./publish
+        retention-days: 30
+
+    - name: Deploy to Railway
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      uses: bervProject/railway-deploy@main
+      with:
+        railway_token: ${{ secrets.RAILWAY_TOKEN }}
+        service: wacams-backend
+      continue-on-error: true
