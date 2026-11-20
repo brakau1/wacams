@@ -6,7 +6,7 @@ using WACAMS.Core.Interfaces;
 using WACAMS.Core.Services;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Domain service implementing IWarningGenerationService.

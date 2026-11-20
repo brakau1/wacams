@@ -5,7 +5,7 @@ using WACAMS.Core.Entities;
 using WACAMS.Core.Interfaces;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Generic CRUD implementation of IRepository&lt;T&gt; using EF Core.

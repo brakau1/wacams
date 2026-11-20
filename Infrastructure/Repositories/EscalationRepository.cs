@@ -3,7 +3,7 @@ using WACAMS.Core.Escalations.Interfaces;
 using WACAMS.Core.Escalations.Models;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Repository implementation for escalation data access

@@ -1,7 +1,7 @@
 using WACAMS.Core.Constants;
 using WACAMS.Core.Services;
 
-namespace Infrastructure.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Domain service implementing IAttendanceCalculationService.

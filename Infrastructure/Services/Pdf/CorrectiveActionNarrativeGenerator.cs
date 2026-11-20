@@ -1,6 +1,6 @@
 using WACAMS.Core.Disciplinary.Models;
 
-namespace Infrastructure.Services.Pdf;
+namespace WACAMS.Infrastructure.Services.Pdf;
 
 /// <summary>
 /// Auto-generates professional narratives for corrective action forms

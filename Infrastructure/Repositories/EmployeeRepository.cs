@@ -4,7 +4,7 @@ using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Specialized repository for Employee entity operations.

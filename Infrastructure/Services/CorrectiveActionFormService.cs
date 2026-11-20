@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using WACAMS.Core.Disciplinary.Models;
 using WACAMS.Core.Disciplinary.Services;
 using WACAMS.Core.Interfaces;
-using Infrastructure.Services.Pdf;
+using WACAMS.Infrastructure.Services.Pdf;
 
 namespace WACAMS.Infrastructure.Services;
 

@@ -1,6 +1,6 @@
 using WACAMS.Core.RulesEngine.Models;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Interface for attendance exception repository

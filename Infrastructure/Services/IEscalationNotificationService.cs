@@ -3,7 +3,7 @@ using WACAMS.Core.Escalations.Models;
 
 using Escalation = WACAMS.Core.Escalations.Models.Escalation;
 
-namespace Infrastructure.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Interface for sending escalation notifications

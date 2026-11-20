@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
 
-namespace Infrastructure.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Template engine for rendering notification content with placeholders

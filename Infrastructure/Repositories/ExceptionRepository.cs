@@ -3,7 +3,7 @@ using WACAMS.Core.Exceptions.Interfaces;
 using WACAMS.Core.Exceptions.Models;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Repository implementation for attendance exceptions

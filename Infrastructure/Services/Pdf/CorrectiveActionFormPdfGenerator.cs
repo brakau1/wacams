@@ -2,7 +2,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace Infrastructure.Services.Pdf;
+namespace WACAMS.Infrastructure.Services.Pdf;
 
 /// <summary>
 /// Data model for corrective action form PDF generation

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.RulesEngine.Models;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Repository implementation for attendance exceptions

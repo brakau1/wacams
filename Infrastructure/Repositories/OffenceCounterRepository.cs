@@ -3,7 +3,7 @@ using WACAMS.Core.Disciplinary.Models;
 using WACAMS.Core.Disciplinary.Repositories;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Repository implementation for offence counters

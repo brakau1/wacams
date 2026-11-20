@@ -6,7 +6,7 @@ using WACAMS.Core.DTOs;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
 
-namespace Infrastructure.Services.NotificationChannels;
+namespace WACAMS.Infrastructure.Services.NotificationChannels;
 
 /// <summary>
 /// Email notification channel implementation

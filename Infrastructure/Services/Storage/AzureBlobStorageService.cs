@@ -4,7 +4,7 @@ using Azure.Storage.Sas;
 using Microsoft.Extensions.Logging;
 using WACAMS.Core.Interfaces;
 
-namespace Infrastructure.Services.Storage;
+namespace WACAMS.Infrastructure.Services.Storage;
 
 /// <summary>
 /// Azure Blob Storage implementation of file storage service

@@ -7,7 +7,7 @@ using WACAMS.Core.Interfaces;
 using WACAMS.Infrastructure.Data;
 using WACAMS.Infrastructure.Services;
 
-namespace Infrastructure.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Main notification service that orchestrates template rendering, channel routing, and delivery

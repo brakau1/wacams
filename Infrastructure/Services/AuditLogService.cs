@@ -4,7 +4,7 @@ using WACAMS.Core.Entities;
 using WACAMS.Core.Interfaces;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Domain service implementing IAuditLogService.

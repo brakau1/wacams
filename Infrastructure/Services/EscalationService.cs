@@ -3,7 +3,7 @@ using WACAMS.Core.Escalations.Interfaces;
 using WACAMS.Core.Escalations.Models;
 using WACAMS.Core.Escalations.Rules;
 
-namespace Infrastructure.Services;
+namespace WACAMS.Infrastructure.Services;
 
 /// <summary>
 /// Service implementation for escalation workflow management

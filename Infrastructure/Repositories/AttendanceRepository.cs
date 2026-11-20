@@ -3,7 +3,7 @@ using WACAMS.Core.Entities;
 using WACAMS.Core.Interfaces;
 using WACAMS.Infrastructure.Data;
 
-namespace Infrastructure.Repositories;
+namespace WACAMS.Infrastructure.Repositories;
 
 /// <summary>
 /// Specialized repository for AttendanceRecord operations with analytics capabilities.
