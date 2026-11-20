@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Logging;
-using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Escalations.Models;
+
+using Escalation = WACAMS.Core.Escalations.Models.Escalation;
 
 namespace Infrastructure.Services;
 

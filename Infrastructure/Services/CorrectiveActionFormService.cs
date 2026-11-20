@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
 using WACAMS.Core.Disciplinary.Models;
 using WACAMS.Core.Disciplinary.Services;
-using WACAMS.Infrastructure.Pdf;
-using WACAMS.Infrastructure.Storage;
+using WACAMS.Core.Interfaces;
+using Infrastructure.Services.Pdf;
 
 namespace WACAMS.Infrastructure.Services;
 
