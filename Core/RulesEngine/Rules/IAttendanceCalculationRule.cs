@@ -1,3 +1,5 @@
+using WACAMS.Core.RulesEngine.Models;
+
 namespace WACAMS.Core.RulesEngine.Rules;
 
 /// <summary>

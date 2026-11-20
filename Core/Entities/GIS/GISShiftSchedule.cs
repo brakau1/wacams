@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace WACAMS.Api.Integration.GIS.Models;
 
@@ -35,6 +36,6 @@ public class GISShiftSchedule
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    [Index(nameof(EmployeeId), nameof(ScheduleDate), IsUnique = true)]
+    [Index(nameof(EmployeeId), nameof(ScheduleDate))]
     public string UniqueKey => $"{EmployeeId}_{ScheduleDate:yyyy-MM-dd}";
 }
