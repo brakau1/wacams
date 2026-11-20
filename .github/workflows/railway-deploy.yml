@@ -31,12 +31,12 @@ jobs:
       continue-on-error: true
 
     - name: Publish
-      run: dotnet publish src/backend/WACAMS.Api/WACAMS.Api.csproj --configuration Release --output ./publish --no-build
+      run: dotnet publish Api/Api.csproj --configuration Release --output ./publish --no-build
 
     - name: Verify publish output
       run: |
         ls -la ./publish
-        test -f ./publish/WACAMS.Api.dll || exit 1
+        test -f ./publish/Api.dll || exit 1
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
