@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WACAMS.Api.Data;
-using WACAMS.Api.Integration.GIS.DTOs;
-using WACAMS.Api.Integration.GIS.Repositories;
+using WACAMS.Infrastructure.Data;
+using WACAMS.Infrastructure.DTOs.GIS;
+using WACAMS.Infrastructure.Repositories.GIS;
 
-namespace WACAMS.Api.Integration.GIS.Services;
+namespace WACAMS.Infrastructure.Services.GIS;
 
 /// <summary>
 /// GIS Integration Service Implementation
@@ -13,12 +13,12 @@ namespace WACAMS.Api.Integration.GIS.Services;
 public class GISIntegrationService : IGISIntegrationService
 {
     private readonly IGISIntegrationRepository _repository;
-    private readonly WacamDbContext _context;
+    private readonly WacamContext _context;
     private readonly ILogger<GISIntegrationService> _logger;
 
     public GISIntegrationService(
         IGISIntegrationRepository repository,
-        WacamDbContext context,
+        WacamContext context,
         ILogger<GISIntegrationService> logger)
     {
         _repository = repository;

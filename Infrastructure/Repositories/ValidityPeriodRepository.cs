@@ -10,9 +10,9 @@ namespace Infrastructure.Repositories;
 /// </summary>
 public class ValidityPeriodRepository : IValidityPeriodRepository
 {
-    private readonly WacamDbContext _context;
+    private readonly WacamContext _context;
 
-    public ValidityPeriodRepository(WacamDbContext context)
+    public ValidityPeriodRepository(WacamContext context)
     {
         _context = context;
     }

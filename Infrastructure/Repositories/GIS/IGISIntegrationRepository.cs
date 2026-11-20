@@ -1,6 +1,6 @@
-using WACAMS.Api.Integration.GIS.DTOs;
+using WACAMS.Infrastructure.DTOs.GIS;
 
-namespace WACAMS.Api.Integration.GIS.Repositories;
+namespace WACAMS.Infrastructure.Repositories.GIS;
 
 /// <summary>
 /// GIS Integration Repository Interface

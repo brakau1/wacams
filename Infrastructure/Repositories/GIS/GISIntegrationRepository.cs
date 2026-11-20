@@ -1,18 +1,18 @@
 using Microsoft.EntityFrameworkCore;
-using WACAMS.Api.Data;
-using WACAMS.Api.Integration.GIS.DTOs;
-using WACAMS.Api.Integration.GIS.Models;
+using WACAMS.Infrastructure.Data;
+using WACAMS.Infrastructure.DTOs.GIS;
+using WACAMS.Core.Entities.GIS;
 
-namespace WACAMS.Api.Integration.GIS.Repositories;
+namespace WACAMS.Infrastructure.Repositories.GIS;
 
 /// <summary>
 /// GIS Integration Repository Implementation
 /// </summary>
 public class GISIntegrationRepository : IGISIntegrationRepository
 {
-    private readonly WacamDbContext _context;
+    private readonly WacamContext _context;
 
-    public GISIntegrationRepository(WacamDbContext context)
+    public GISIntegrationRepository(WacamContext context)
     {
         _context = context;
     }

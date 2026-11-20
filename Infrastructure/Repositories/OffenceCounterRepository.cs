@@ -10,9 +10,9 @@ namespace Infrastructure.Repositories;
 /// </summary>
 public class OffenceCounterRepository : IOffenceCounterRepository
 {
-    private readonly WacamDbContext _context;
+    private readonly WacamContext _context;
 
-    public OffenceCounterRepository(WacamDbContext context)
+    public OffenceCounterRepository(WacamContext context)
     {
         _context = context;
     }

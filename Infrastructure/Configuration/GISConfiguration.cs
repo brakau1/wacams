@@ -1,4 +1,4 @@
-namespace WACAMS.Api.Integration.GIS.Configuration;
+namespace WACAMS.Infrastructure.Configuration;
 
 /// <summary>
 /// GIS iWork Integration Configuration

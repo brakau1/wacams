@@ -9,9 +9,9 @@ namespace Infrastructure.Repositories;
 /// </summary>
 public class AttendanceExceptionRepository : IAttendanceExceptionRepository
 {
-    private readonly WacamDbContext _context;
+    private readonly WacamContext _context;
 
-    public AttendanceExceptionRepository(WacamDbContext context)
+    public AttendanceExceptionRepository(WacamContext context)
     {
         _context = context;
     }

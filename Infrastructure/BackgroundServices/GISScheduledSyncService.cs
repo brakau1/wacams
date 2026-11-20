@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using WACAMS.Api.DTOs.GIS;
+using WACAMS.Infrastructure.DTOs.GIS;
 using WACAMS.Infrastructure.Services.GIS;
 
 namespace WACAMS.Infrastructure.BackgroundServices;

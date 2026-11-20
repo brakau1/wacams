@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WACAMS.Api.Integration.GIS.Models;
+namespace WACAMS.Core.Entities.GIS;
 
 /// <summary>
 /// GIS Shift Cancellation Entity

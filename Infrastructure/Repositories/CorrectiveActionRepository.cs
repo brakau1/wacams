@@ -10,9 +10,9 @@ namespace Infrastructure.Repositories;
 /// </summary>
 public class CorrectiveActionRepository : ICorrectiveActionRepository
 {
-    private readonly WacamDbContext _context;
+    private readonly WacamContext _context;
 
-    public CorrectiveActionRepository(WacamDbContext context)
+    public CorrectiveActionRepository(WacamContext context)
     {
         _context = context;
     }

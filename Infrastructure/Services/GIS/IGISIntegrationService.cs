@@ -1,6 +1,6 @@
-using WACAMS.Api.Integration.GIS.DTOs;
+using WACAMS.Infrastructure.DTOs.GIS;
 
-namespace WACAMS.Api.Integration.GIS.Services;
+namespace WACAMS.Infrastructure.Services.GIS;
 
 /// <summary>
 /// GIS Integration Service Interface

@@ -10,9 +10,9 @@ namespace Infrastructure.Repositories;
 /// </summary>
 public class EscalationRepository : IEscalationRepository
 {
-    private readonly WacamDbContext _context;
+    private readonly WacamContext _context;
 
-    public EscalationRepository(WacamDbContext context)
+    public EscalationRepository(WacamContext context)
     {
         _context = context;
     }

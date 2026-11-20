@@ -1,4 +1,4 @@
-using WACAMS.Core.Entities.Disciplinary;
+using WACAMS.Core.Disciplinary.Models;
 
 namespace Infrastructure.Services.Pdf;
 
