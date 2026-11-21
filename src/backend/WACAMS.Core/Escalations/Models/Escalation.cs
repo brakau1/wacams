@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Core.Escalations.Models;
 
@@ -72,6 +73,6 @@ public class Escalation
     public DateTime? UpdatedAt { get; set; }
 
     // Navigation properties
-    public virtual Exceptions.Models.AttendanceException? Exception { get; set; }
+    public virtual AttendanceException? Exception { get; set; }
     public virtual ICollection<EscalationHistory> History { get; set; } = new List<EscalationHistory>();
 }
