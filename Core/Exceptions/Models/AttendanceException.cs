@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
 
 namespace WACAMS.Core.Exceptions.Models;
 
