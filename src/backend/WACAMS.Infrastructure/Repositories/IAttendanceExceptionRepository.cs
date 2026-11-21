@@ -1,4 +1,4 @@
-using WACAMS.Core.RulesEngine.Models;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Infrastructure.Repositories;
 
