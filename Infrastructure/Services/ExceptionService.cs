@@ -3,6 +3,7 @@ using WACAMS.Core.Disciplinary.Models;
 using WACAMS.Core.Services;
 using WACAMS.Core.Exceptions.DTOs;
 using WACAMS.Core.Exceptions.Interfaces;
+using WACAMS.Core.Exceptions.Models;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Entities;
 using WACAMS.Infrastructure.Data;
