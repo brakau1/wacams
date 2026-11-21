@@ -20,10 +20,10 @@ public class CorrectiveActionNarrativeGenerator
         var situation = GenerateSituationDescription(offenceType, employeeName, department, issuedDate);
         var reasons = GenerateReasonsSection(offenceType, employeeName);
         var causes = GenerateCausesSection(offenceType);
-        var action = GenerateActionTaken(offenceType, offenceNumber);
+        var actionTaken = GenerateActionTaken(offenceType, offenceNumber);
         var sanction = GenerateRecommendedSanction(offenceType, offenceNumber, action.Level);
         
-        return (situation, reasons, causes, action, sanction);
+        return (situation, reasons, causes, actionTaken, sanction);
     }
     
     /// <summary>

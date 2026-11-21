@@ -37,12 +37,12 @@ public class AttendanceException
     }
 
     /// <summary>
-    /// Current processing status of the exception (alias for InvestigationStatus).
+    /// Current approval status of the exception (alias for ApprovalStatus).
     /// </summary>
-    public InvestigationStatus Status
+    public ApprovalStatus Status
     {
-        get => InvestigationStatus;
-        set => InvestigationStatus = value;
+        get => ApprovalStatus;
+        set => ApprovalStatus = value;
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public class AttendanceException
     /// <summary>
     /// Approval status for the exception (Pending, Approved, Rejected).
     /// </summary>
-    public ApprovalStatus ApprovalStatus { get; set; } = ApprovalStatus.Pending;
+    public WACAMS.Core.Enums.ApprovalStatus ApprovalStatus { get; set; } = WACAMS.Core.Enums.ApprovalStatus.Pending;
 
     /// <summary>
     /// Foreign key to the corrective action (if any) resulting from this exception.
@@ -160,4 +160,70 @@ public class AttendanceException
     /// Navigation property — the department where this exception occurred.
     /// </summary>
     public Department? Department { get; set; }
+
+    /// <summary>
+    /// Exception category (EarlyDeparture, UnplannedAbsenteeism, etc.).
+    /// </summary>
+    public Exceptions.Models.ExceptionCategory Category { get; set; }
+
+    /// <summary>
+    /// Alias for ExpectedClockIn.
+    /// </summary>
+    public TimeSpan? ScheduledClockIn
+    {
+        get => ExpectedClockIn;
+        set => ExpectedClockIn = value;
+    }
+
+    /// <summary>
+    /// Alias for ExpectedClockOut.
+    /// </summary>
+    public TimeSpan? ScheduledClockOut
+    {
+        get => ExpectedClockOut;
+        set => ExpectedClockOut = value;
+    }
+
+    /// <summary>
+    /// Alias for LostProductionMinutes.
+    /// </summary>
+    public int LostMinutes
+    {
+        get => LostProductionMinutes;
+        set => LostProductionMinutes = value;
+    }
+
+    /// <summary>
+    /// Lost hours (computed).
+    /// </summary>
+    public decimal LostHours => Math.Round(LostProductionMinutes / 60.0m, 2);
+
+    /// <summary>
+    /// Employee ID of the person who approved this exception.
+    /// </summary>
+    [MaxLength(50)]
+    public string? ApprovedBy { get; set; }
+
+    /// <summary>
+    /// Date when the exception was approved/rejected.
+    /// </summary>
+    public DateTime? ApprovalDate { get; set; }
+
+    /// <summary>
+    /// Comments provided during approval/rejection.
+    /// </summary>
+    [MaxLength(1000)]
+    public string? ApprovalComments { get; set; }
+
+    /// <summary>
+    /// URL to supporting documentation.
+    /// </summary>
+    [MaxLength(500)]
+    public string? SupportingDocumentUrl { get; set; }
+
+    /// <summary>
+    /// Employee ID of the person who last updated this record.
+    /// </summary>
+    [MaxLength(50)]
+    public string? UpdatedBy { get; set; }
 }

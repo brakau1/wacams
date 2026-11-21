@@ -11,5 +11,7 @@ public enum OffenceType
     MissingClockIn,
     MissingClockOut,
     AWOL,
-    UnauthorizedAbsence
+    UnauthorizedAbsence,
+    UnscheduledClockIn,
+    UnscheduledClockOut
 }

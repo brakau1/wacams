@@ -3,7 +3,8 @@ using WACAMS.Core.Disciplinary.Models;
 using WACAMS.Core.Services;
 using WACAMS.Core.Exceptions.DTOs;
 using WACAMS.Core.Exceptions.Interfaces;
-using WACAMS.Core.Exceptions.Models;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Entities;
 using WACAMS.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -37,7 +38,7 @@ public class ExceptionService : IExceptionService
         _logger.LogInformation("Creating attendance exception for employee {EmployeeId} on {Date}", 
             request.EmployeeId, request.ExceptionDate);
 
-        var exception = new AttendanceException
+        var exception = new WACAMS.Core.Entities.AttendanceException
         {
             Id = Guid.NewGuid(),
             EmployeeId = request.EmployeeId,
@@ -50,7 +51,7 @@ public class ExceptionService : IExceptionService
             ActualClockOut = request.ActualClockOut,
             LostMinutes = request.LostMinutes,
             SupportingDocumentUrl = request.SupportingDocumentUrl,
-            Status = ApprovalStatus.Pending,
+            Status = WACAMS.Core.Enums.ApprovalStatus.Pending,
             CreatedBy = request.CreatedBy,
             CreatedAt = DateTime.UtcNow
         };
@@ -98,12 +99,12 @@ public class ExceptionService : IExceptionService
             throw new KeyNotFoundException($"Exception with id {exceptionId} not found");
         }
 
-        if (exception.Status != ApprovalStatus.Pending)
+        if (exception.Status != WACAMS.Core.Enums.ApprovalStatus.Pending)
         {
             throw new InvalidOperationException($"Exception {exceptionId} is not in pending status");
         }
 
-        exception.Status = ApprovalStatus.Approved;
+        exception.Status = WACAMS.Core.Enums.ApprovalStatus.Approved;
         exception.ApprovedBy = approvedBy;
         exception.ApprovalDate = DateTime.UtcNow;
         exception.ApprovalComments = comments;
@@ -139,12 +140,12 @@ public class ExceptionService : IExceptionService
             throw new KeyNotFoundException($"Exception with id {exceptionId} not found");
         }
 
-        if (exception.Status != ApprovalStatus.Pending)
+        if (exception.Status != WACAMS.Core.Enums.ApprovalStatus.Pending)
         {
             throw new InvalidOperationException($"Exception {exceptionId} is not in pending status");
         }
 
-        exception.Status = ApprovalStatus.Rejected;
+        exception.Status = WACAMS.Core.Enums.ApprovalStatus.Rejected;
         exception.ApprovedBy = rejectedBy;
         exception.ApprovalDate = DateTime.UtcNow;
         exception.ApprovalComments = comments;

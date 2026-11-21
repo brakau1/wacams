@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using WACAMS.Core.RulesEngine.Models;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Entities;
 using WACAMS.Infrastructure.Data;
 
 namespace WACAMS.Infrastructure.Repositories;
@@ -27,7 +28,7 @@ public class AttendanceExceptionRepository : IAttendanceExceptionRepository
         var query = _context.Set<AttendanceException>()
             .Where(e => e.ExceptionDate.Date == date.Date);
 
-        if (!string.IsNullOrEmpty(departmentId))
+        if (!string.IsNullOrEmpty(departmentId) && Guid.TryParse(departmentId, out var deptGuid))
         {
             // Join with employees to filter by department
             query = query.Join(
@@ -36,7 +37,7 @@ public class AttendanceExceptionRepository : IAttendanceExceptionRepository
                 emp => emp.EmployeeId,
                 (e, emp) => new { Exception = e, Employee = emp }
             )
-            .Where(x => x.Employee.DepartmentId == departmentId)
+            .Where(x => x.Employee.DepartmentId == deptGuid)
             .Select(x => x.Exception);
         }
 
@@ -82,8 +83,8 @@ public class AttendanceExceptionRepository : IAttendanceExceptionRepository
     {
         return await _context.Set<AttendanceException>()
             .Where(e => e.EmployeeId == employeeId 
-                     && e.ExceptionType == exceptionType 
-                     && e.Status == ExceptionStatus.Approved)
+                     && e.ExceptionType.ToString() == exceptionType 
+                     && e.Status == InvestigationStatus.Investigated)
             .CountAsync();
     }
 }
