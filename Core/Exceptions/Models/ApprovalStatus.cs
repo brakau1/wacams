@@ -1,4 +1,4 @@
-namespace WACAMS.Core.Exceptions.Models;
+namespace WACAMS.Core.Enums;
 
 /// <summary>
 /// Approval status for attendance exceptions
