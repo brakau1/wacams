@@ -84,7 +84,7 @@ public class AttendanceExceptionRepository : IAttendanceExceptionRepository
         return await _context.Set<AttendanceException>()
             .Where(e => e.EmployeeId == employeeId 
                      && e.ExceptionType.ToString() == exceptionType 
-                     && e.Status == InvestigationStatus.Investigated)
+                     && e.Status == ApprovalStatus.Approved)
             .CountAsync();
     }
 }

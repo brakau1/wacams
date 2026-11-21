@@ -127,6 +127,12 @@ public class AttendanceException
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
+    /// Employee ID of the person who created this record.
+    /// </summary>
+    [MaxLength(50)]
+    public string CreatedBy { get; set; } = string.Empty;
+
+    /// <summary>
     /// Record last update timestamp.
     /// </summary>
     public DateTime? UpdatedAt { get; set; }
