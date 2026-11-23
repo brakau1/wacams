@@ -39,7 +39,7 @@ public class AttendanceException
     /// <summary>
     /// Current approval status of the exception (alias for ApprovalStatus).
     /// </summary>
-    public ApprovalStatus Status
+    public WACAMS.Core.Enums.ApprovalStatus Status
     {
         get => ApprovalStatus;
         set => ApprovalStatus = value;
