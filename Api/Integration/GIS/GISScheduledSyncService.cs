@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WACAMS.Api.Integration.GIS.DTOs;
+using WACAMS.Infrastructure.Services.GIS;
 
 namespace WACAMS.Api.Integration.GIS.BackgroundServices;
 
@@ -60,7 +61,7 @@ public class GISScheduledSyncService : BackgroundService
         _logger.LogInformation("Starting scheduled sync cycle");
 
         using var scope = _serviceProvider.CreateScope();
-        var gisService = scope.ServiceProvider.GetRequiredService<Services.IGISIntegrationService>();
+        var gisService = scope.ServiceProvider.GetRequiredService<IGISIntegrationService>();
 
         var now = DateTime.UtcNow;
         var syncDate = now.Date;
