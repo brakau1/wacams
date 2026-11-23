@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Core.Disciplinary.Models;
+using WACAMS.Core.Disciplinary.Repositories;
 using WACAMS.Core.Disciplinary.Services;
 
 namespace Wacam.Api.Controllers;
