@@ -3,18 +3,18 @@ using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
 
-namespace WACAMS.Api.Services;
+namespace Wacam.Api.Services;
 
 /// <summary>
 /// Engine for calculating attendance KPIs across different time periods and scopes
 /// </summary>
 public class KpiCalculationEngine
 {
-    private readonly WACAMS.Api.Data.WacamDbContext _context;
+    private readonly Wacam.Api.Data.WacamDbContext _context;
     private readonly ILogger<KpiCalculationEngine> _logger;
 
     public KpiCalculationEngine(
-        WACAMS.Api.Data.WacamDbContext context,
+        Wacam.Api.Data.WacamDbContext context,
         ILogger<KpiCalculationEngine> logger)
     {
         _context = context;

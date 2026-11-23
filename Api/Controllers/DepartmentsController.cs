@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wacam.Api.DTOs;
+using Wacam.Api.Middleware;
 using Wacam.Api.Services;
 
 namespace Wacam.Api.Controllers;

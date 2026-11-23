@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wacam.Api.DTOs;
+using Wacam.Api.Middleware;
 using Wacam.Api.Services;
 using WACAMS.Core.Entities;
 

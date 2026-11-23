@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Entities;
+using Wacam.Api.Middleware;
 using Wacam.Api.Services;
 
 namespace Wacam.Api.Controllers;

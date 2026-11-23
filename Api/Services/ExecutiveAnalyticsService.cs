@@ -77,7 +77,7 @@ public class ExecutiveAnalyticsService
                 var deptLate = deptRecords.Count(r => r.Status == AttendanceStatus.Late);
                 var deptLostMinutes = deptRecords.Sum(r => r.LateMinutes + r.EarlyMinutes);
 
-                return new DepartmentPerformanceDto
+                return new DepartmentPerformanceAnalyticsDto
                 {
                     DepartmentId = g.Key,
                     DepartmentName = g.First().Employee?.Department?.Name ?? "Unknown",
@@ -178,10 +178,10 @@ public class ExecutiveAnalyticsDto
     public int ExceptionCount { get; set; }
     public int EscalationCount { get; set; }
     public int WarningCount { get; set; }
-    public List<DepartmentPerformanceDto> DepartmentPerformance { get; set; } = new();
+    public List<DepartmentPerformanceAnalyticsDto> DepartmentPerformance { get; set; } = new();
 }
 
-public class DepartmentPerformanceDto
+public class DepartmentPerformanceAnalyticsDto
 {
     public Guid? DepartmentId { get; set; }
     public string DepartmentName { get; set; } = string.Empty;
