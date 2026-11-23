@@ -467,3 +467,15 @@ public class SuperAdminProtectionDto
         "All modification attempts must be audit logged"
     };
 }
+
+public class EmployeeAccessOverrideDto
+{
+    public Guid Id { get; set; }
+    public string EmployeeId { get; set; } = string.Empty;
+    public string PermissionName { get; set; } = string.Empty;
+    public string GrantedBy { get; set; } = string.Empty;
+    public string? Reason { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ExpiresAt { get; set; }
+}

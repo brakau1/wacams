@@ -510,34 +510,34 @@ public class SuperAdminService
             request.Role, request.Module, adminEmployeeId);
     }
 
-    private bool GetDefaultViewPermission(Role role, string module)
+    private bool GetDefaultViewPermission(WACAMS.Core.Enums.Role role, string module)
     {
-        return role >= Role.User;
+        return role >= WACAMS.Core.Enums.Role.User;
     }
 
-    private bool GetDefaultCreatePermission(Role role, string module)
+    private bool GetDefaultCreatePermission(WACAMS.Core.Enums.Role role, string module)
     {
-        return role >= Role.Supervisor && module != "System";
+        return role >= WACAMS.Core.Enums.Role.Supervisor && module != "System";
     }
 
-    private bool GetDefaultEditPermission(Role role, string module)
+    private bool GetDefaultEditPermission(WACAMS.Core.Enums.Role role, string module)
     {
-        return role >= Role.Manager && module != "System";
+        return role >= WACAMS.Core.Enums.Role.Manager && module != "System";
     }
 
-    private bool GetDefaultDeletePermission(Role role, string module)
+    private bool GetDefaultDeletePermission(WACAMS.Core.Enums.Role role, string module)
     {
-        return role >= Role.Admin && module != "System";
+        return role >= WACAMS.Core.Enums.Role.Admin && module != "System";
     }
 
-    private bool GetDefaultApprovePermission(Role role, string module)
+    private bool GetDefaultApprovePermission(WACAMS.Core.Enums.Role role, string module)
     {
-        return role >= Role.Supervisor && (module == "Exceptions" || module == "Warnings" || module == "Escalations");
+        return role >= WACAMS.Core.Enums.Role.Supervisor && (module == "Exceptions" || module == "Warnings" || module == "Escalations");
     }
 
-    private bool GetDefaultExportPermission(Role role, string module)
+    private bool GetDefaultExportPermission(WACAMS.Core.Enums.Role role, string module)
     {
-        return role >= Role.Manager;
+        return role >= WACAMS.Core.Enums.Role.Manager;
     }
 
     #endregion

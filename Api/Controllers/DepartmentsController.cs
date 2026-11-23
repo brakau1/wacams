@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WACAMS.Core.Entities;
+using Wacam.Api.Data;
 using Wacam.Api.DTOs;
 using Wacam.Api.Middleware;
 using Wacam.Api.Services;
