@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace WACAMS.Api.Controllers;
+namespace Wacam.Api.Controllers;
 
 /// <summary>
 /// Enhanced health check endpoints for deployment monitoring

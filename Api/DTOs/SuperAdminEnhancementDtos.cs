@@ -355,6 +355,21 @@ public class TrendDataPoint
     public double Value { get; set; }
 }
 
+// ===== Bulk Operation Result DTO =====
+
+public class BulkOperationResultDto
+{
+    public string OperationType { get; set; } = string.Empty;
+    public int TotalRecords { get; set; }
+    public int SuccessCount { get; set; }
+    public int ErrorCount { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public string? ErrorMessage { get; set; }
+    public string InitiatedBy { get; set; } = string.Empty;
+    public DateTime StartedAt { get; set; }
+    public DateTime? CompletedAt { get; set; }
+}
+
 // ===== GIS Administration DTOs =====
 
 public class GisConnectionStatusDto

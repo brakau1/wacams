@@ -4,7 +4,7 @@ using WACAMS.Core.DTOs;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
 
-namespace WACAMS.Api.Controllers;
+namespace Wacam.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

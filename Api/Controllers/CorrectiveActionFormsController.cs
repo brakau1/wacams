@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WACAMS.Core.Disciplinary.Models;
 using WACAMS.Core.Disciplinary.Services;
 
-namespace WACAMS.Api.Controllers;
+namespace Wacam.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

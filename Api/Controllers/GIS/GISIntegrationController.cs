@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.Integration.GIS.DTOs;
 using WACAMS.Infrastructure.Services.GIS;
 
-namespace WACAMS.Api.Controllers.GIS;
+namespace Wacam.Api.Controllers.GIS;
 
 /// <summary>
 /// GIS iWork Integration Controller
