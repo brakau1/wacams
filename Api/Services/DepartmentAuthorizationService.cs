@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Wacam.Api.Data;
+using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
 
 namespace Wacam.Api.Services;
