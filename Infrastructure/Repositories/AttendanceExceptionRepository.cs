@@ -38,7 +38,7 @@ public class AttendanceExceptionRepository : IAttendanceExceptionRepository
                 emp => emp.EmployeeId,
                 (e, emp) => new { Exception = e, Employee = emp }
             )
-            .Where(x => x.Employee.DepartmentId == departmentId)
+            .Where(x => x.Employee.DepartmentId == Guid.Parse(departmentId))
             .Select(x => x.Exception);
         }
 

@@ -250,8 +250,8 @@ public class ExceptionService : IExceptionService
             ExceptionCategory.UnplannedAbsenteeism => OffenceType.UnplannedAbsence,
             ExceptionCategory.MissingClockIn => OffenceType.MissingClockIn,
             ExceptionCategory.MissingClockOut => OffenceType.MissingClockOut,
-            ExceptionCategory.UnscheduledClockIn => OffenceType.UnscheduledClockIn,
-            ExceptionCategory.UnscheduledClockOut => OffenceType.UnscheduledClockOut,
+            ExceptionCategory.UnscheduledClockIn => OffenceType.LateArrival,
+            ExceptionCategory.UnscheduledClockOut => OffenceType.EarlyDeparture,
             _ => OffenceType.UnplannedAbsence // Default fallback
         };
     }
