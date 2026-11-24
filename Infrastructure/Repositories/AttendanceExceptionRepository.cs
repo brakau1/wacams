@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
-using WACAMS.Core.Exceptions.Models;
 using WACAMS.Infrastructure.Data;
+using ApprovalStatus = WACAMS.Core.Exceptions.Models.ApprovalStatus;
 
 namespace WACAMS.Infrastructure.Repositories;
 
