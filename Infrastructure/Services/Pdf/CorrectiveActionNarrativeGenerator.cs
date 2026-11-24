@@ -10,20 +10,20 @@ public class CorrectiveActionNarrativeGenerator
     /// <summary>
     /// Generates all narrative sections for a corrective action form
     /// </summary>
-    public (string situation, string reasons, string causes, string action, string sanction) 
-        GenerateNarratives(CorrectiveAction action, string employeeName, string department)
+    public (string situation, string reasons, string causes, string actionTaken, string sanction) 
+        GenerateNarratives(CorrectiveAction correctiveAction, string employeeName, string department)
     {
-        var offenceType = action.OffenceType;
-        var offenceNumber = action.OffenceNumber;
-        var issuedDate = action.IssuedAt.ToString("dd MMM yyyy");
+        var offenceType = correctiveAction.OffenceType;
+        var offenceNumber = correctiveAction.OffenceNumber;
+        var issuedDate = correctiveAction.IssuedAt.ToString("dd MMM yyyy");
         
         var situation = GenerateSituationDescription(offenceType, employeeName, department, issuedDate);
         var reasons = GenerateReasonsSection(offenceType, employeeName);
         var causes = GenerateCausesSection(offenceType);
-        var action = GenerateActionTaken(offenceType, offenceNumber);
-        var sanction = GenerateRecommendedSanction(offenceType, offenceNumber, action.Level);
+        var actionTaken = GenerateActionTaken(offenceType, offenceNumber);
+        var sanction = GenerateRecommendedSanction(offenceType, offenceNumber, correctiveAction.Level);
         
-        return (situation, reasons, causes, action, sanction);
+        return (situation, reasons, causes, actionTaken, sanction);
     }
     
     /// <summary>

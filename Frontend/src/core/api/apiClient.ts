@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import { ApiError, ApiResponse } from './types'
+import { isMockMode, handleMockRequest } from '@/mocks/mockHandler'
 
 // ─── Axios Instance ────────────────────────────────────────────────────────
 
@@ -10,6 +11,34 @@ const apiClient = axios.create({
     'Content-Type': 'application/json'
   }
 })
+
+// ─── Mock Mode Adapter ──────────────────────────────────────────────────────
+
+if (isMockMode()) {
+  console.log('[WACAMS] Running in MOCK MODE - all API calls will be intercepted')
+  
+  apiClient.defaults.adapter = async (config: InternalAxiosRequestConfig): Promise<AxiosResponse> => {
+    try {
+      const mockResponse = await handleMockRequest(config)
+      return {
+        data: mockResponse,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config
+      }
+    } catch (error: any) {
+      if (error.response) {
+        const axiosError = new Error(error.response.data?.message || 'Mock error') as AxiosError
+        axiosError.config = config
+        axiosError.request = {}
+        axiosError.response = error.response
+        throw axiosError
+      }
+      throw error
+    }
+  }
+}
 
 // ─── Token Storage ─────────────────────────────────────────────────────────
 

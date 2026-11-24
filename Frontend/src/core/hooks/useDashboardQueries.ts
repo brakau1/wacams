@@ -1,6 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { get } from '@/core/api/apiClient'
 import { ENDPOINTS } from '@/core/api/endpoints'
+
+// Helper to extract data from response (handles both wrapped ApiResponse and unwrapped)
+function extractData<T>(response: any): T {
+  if (response && typeof response === 'object' && 'data' in response && response.data !== undefined && response.data !== null) {
+    return response.data as T
+  }
+  return response as T
+}
 import type {
   DepartmentKPI,
   TrendPoint,
@@ -48,7 +56,7 @@ export function useDashboardKPI() {
     queryKey: dashboardKeys.kpi(),
     queryFn: async () => {
       const response = await get<DashboardKPIData>(ENDPOINTS.reports.dashboardKPI)
-      return response.data ?? response as unknown as DashboardKPIData
+      return extractData<DashboardKPIData>(response)
     },
     staleTime: 60_000, // 1 minute
     refetchInterval: 60_000, // Auto-refresh every 60s
@@ -71,7 +79,7 @@ export function useManagerDashboard() {
     queryKey: dashboardKeys.manager(),
     queryFn: async () => {
       const response = await get<ManagerDashboardData>(ENDPOINTS.reports.managerDashboard)
-      return response.data ?? response as unknown as ManagerDashboardData
+      return extractData<ManagerDashboardData>(response)
     },
     staleTime: 60_000,
     refetchInterval: 60_000,
@@ -85,7 +93,7 @@ export function useHRCommandCentre() {
     queryKey: dashboardKeys.hrCommandCentre(),
     queryFn: async () => {
       const response = await get<HRCommandCentreData>(ENDPOINTS.reports.hrCommandCentre)
-      return response.data ?? response as unknown as HRCommandCentreData
+      return extractData<HRCommandCentreData>(response)
     },
     staleTime: 60_000,
     refetchInterval: 60_000,
@@ -99,7 +107,7 @@ export function useExecutiveSummary() {
     queryKey: dashboardKeys.executive.summary(),
     queryFn: async () => {
       const response = await get<ExecutiveSummary>(ENDPOINTS.executiveDashboard.summary)
-      return response.data ?? response as unknown as ExecutiveSummary
+      return extractData<ExecutiveSummary>(response)
     },
     staleTime: 30_000, // 30s — more frequent for exec view
     refetchInterval: 30_000,
@@ -111,7 +119,7 @@ export function useExecutiveHeatmap() {
     queryKey: dashboardKeys.executive.heatmap(),
     queryFn: async () => {
       const response = await get<DepartmentHeatmap[]>(ENDPOINTS.executiveDashboard.heatmap)
-      return response.data ?? response as unknown as DepartmentHeatmap[]
+      return extractData<DepartmentHeatmap[]>(response)
     },
     staleTime: 30_000,
     refetchInterval: 30_000,
@@ -123,7 +131,7 @@ export function useExecutiveLeaderboard() {
     queryKey: dashboardKeys.executive.leaderboard(),
     queryFn: async () => {
       const response = await get<DepartmentLeaderboard[]>(ENDPOINTS.executiveDashboard.leaderboard)
-      return response.data ?? response as unknown as DepartmentLeaderboard[]
+      return extractData<DepartmentLeaderboard[]>(response)
     },
     staleTime: 30_000,
     refetchInterval: 30_000,
@@ -148,7 +156,7 @@ export function useAttendanceList(date?: string, departmentId?: string) {
     queryFn: async () => {
       const url = ENDPOINTS.attendance.getByDate(date || new Date().toISOString().split('T')[0], departmentId)
       const response = await get<AttendanceRecord[]>(url)
-      return response.data ?? response as unknown as AttendanceRecord[]
+      return extractData<AttendanceRecord[]>(response)
     },
     staleTime: 30_000,
     refetchInterval: 60_000,
@@ -174,7 +182,7 @@ export function useExceptions(status?: string) {
         ? `${ENDPOINTS.exceptions.list}?status=${status}`
         : ENDPOINTS.exceptions.list
       const response = await get<AttendanceException[]>(url)
-      return response.data ?? response as unknown as AttendanceException[]
+      return extractData<AttendanceException[]>(response)
     },
     staleTime: 30_000,
     refetchInterval: 60_000,
@@ -200,7 +208,7 @@ export function useWarnings(status?: string) {
         ? `${ENDPOINTS.warnings.list}?status=${status}`
         : ENDPOINTS.warnings.list
       const response = await get<WarningLetter[]>(url)
-      return response.data ?? response as unknown as WarningLetter[]
+      return extractData<WarningLetter[]>(response)
     },
     staleTime: 30_000,
   })
@@ -222,8 +230,9 @@ export function useEmployees() {
     queryKey: employeeKeys.list(),
     queryFn: async () => {
       const response = await get<{ items: Employee[] }>(ENDPOINTS.employees.list)
-      const data = response.data ?? response
-      return (data as any).items ?? data ?? []
+      const data = extractData<{ items: Employee[] } | Employee[]>(response)
+      if (Array.isArray(data)) return data
+      return (data as any)?.items ?? []
     },
     staleTime: 60_000,
   })
@@ -234,7 +243,7 @@ export function useEmployee(id: string) {
     queryKey: employeeKeys.byId(id),
     queryFn: async () => {
       const response = await get<Employee>(ENDPOINTS.employees.getById(id))
-      return response.data ?? response as unknown as Employee
+      return extractData<Employee>(response)
     },
     enabled: !!id,
     staleTime: 60_000,
@@ -246,7 +255,7 @@ export function useEmployeeExceptions(employeeId: string) {
     queryKey: [...exceptionKeys.all, 'employee', employeeId],
     queryFn: async () => {
       const response = await get<AttendanceException[]>(ENDPOINTS.exceptions.getByEmployee(employeeId))
-      return response.data ?? response as unknown as AttendanceException[]
+      return extractData<AttendanceException[]>(response)
     },
     enabled: !!employeeId,
     staleTime: 30_000,
@@ -258,7 +267,7 @@ export function useEmployeeWarnings(employeeId: string) {
     queryKey: [...warningKeys.all, 'employee', employeeId],
     queryFn: async () => {
       const response = await get<WarningLetter[]>(ENDPOINTS.warnings.getByEmployee(employeeId))
-      return response.data ?? response as unknown as WarningLetter[]
+      return extractData<WarningLetter[]>(response)
     },
     enabled: !!employeeId,
     staleTime: 30_000,
@@ -270,7 +279,7 @@ export function useWarning(id: string) {
     queryKey: warningKeys.byId(id),
     queryFn: async () => {
       const response = await get<WarningLetter>(ENDPOINTS.warnings.getById(id))
-      return response.data ?? response as unknown as WarningLetter
+      return extractData<WarningLetter>(response)
     },
     enabled: !!id,
     staleTime: 30_000,

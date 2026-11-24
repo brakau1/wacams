@@ -23,6 +23,8 @@ import { useDashboardKPI } from '@/core/hooks/useDashboardQueries'
 export default function DashboardPage() {
   const { data, isLoading, isError, error, refetch, isFetching } = useDashboardKPI()
 
+  console.log('[DashboardPage] isLoading:', isLoading, 'isError:', isError, 'data:', data)
+
   if (isLoading) {
     return (
       <div className="space-y-6">

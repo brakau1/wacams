@@ -3,10 +3,12 @@ using WACAMS.Core.Disciplinary.Models;
 using WACAMS.Core.Services;
 using WACAMS.Core.Exceptions.DTOs;
 using WACAMS.Core.Exceptions.Interfaces;
-using WACAMS.Core.Exceptions.Models;
+using WACAMS.Core.Entities;
 using WACAMS.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ApprovalStatus = WACAMS.Core.Exceptions.Models.ApprovalStatus;
+using ExceptionCategory = WACAMS.Core.Exceptions.Models.ExceptionCategory;
 
 namespace WACAMS.Infrastructure.Services;
 
@@ -50,7 +52,7 @@ public class ExceptionService : IExceptionService
             ActualClockOut = request.ActualClockOut,
             LostMinutes = request.LostMinutes,
             SupportingDocumentUrl = request.SupportingDocumentUrl,
-            Status = ApprovalStatus.Pending,
+            ApprovalStatus = ApprovalStatus.Pending,
             CreatedBy = request.CreatedBy,
             CreatedAt = DateTime.UtcNow
         };
@@ -98,12 +100,12 @@ public class ExceptionService : IExceptionService
             throw new KeyNotFoundException($"Exception with id {exceptionId} not found");
         }
 
-        if (exception.Status != ApprovalStatus.Pending)
+        if (exception.ApprovalStatus != ApprovalStatus.Pending)
         {
             throw new InvalidOperationException($"Exception {exceptionId} is not in pending status");
         }
 
-        exception.Status = ApprovalStatus.Approved;
+        exception.ApprovalStatus = ApprovalStatus.Approved;
         exception.ApprovedBy = approvedBy;
         exception.ApprovalDate = DateTime.UtcNow;
         exception.ApprovalComments = comments;
@@ -139,12 +141,12 @@ public class ExceptionService : IExceptionService
             throw new KeyNotFoundException($"Exception with id {exceptionId} not found");
         }
 
-        if (exception.Status != ApprovalStatus.Pending)
+        if (exception.ApprovalStatus != ApprovalStatus.Pending)
         {
             throw new InvalidOperationException($"Exception {exceptionId} is not in pending status");
         }
 
-        exception.Status = ApprovalStatus.Rejected;
+        exception.ApprovalStatus = ApprovalStatus.Rejected;
         exception.ApprovedBy = rejectedBy;
         exception.ApprovalDate = DateTime.UtcNow;
         exception.ApprovalComments = comments;
@@ -191,7 +193,7 @@ public class ExceptionService : IExceptionService
             return false;
         }
 
-        if (exception.Status != ApprovalStatus.Pending)
+        if (exception.ApprovalStatus != ApprovalStatus.Pending)
         {
             throw new InvalidOperationException($"Cannot delete exception {id} - only pending exceptions can be deleted");
         }
@@ -226,7 +228,7 @@ public class ExceptionService : IExceptionService
             ActualClockOut = exception.ActualClockOut?.ToString(@"hh\:mm"),
             LostMinutes = exception.LostMinutes,
             LostHours = exception.LostHours,
-            Status = exception.Status.ToString(),
+            Status = exception.ApprovalStatus.ToString(),
             ApprovedBy = exception.ApprovedBy,
             ApproverName = approverName,
             ApprovalDate = exception.ApprovalDate,

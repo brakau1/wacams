@@ -11,6 +11,7 @@ import { User, Role, LoginRequest, ApiResponse } from '@/core/api/types'
 import { getAccessToken, setAccessToken, setRefreshToken, clearTokens, removeAccessToken } from '@/core/api/apiClient'
 import { ENDPOINTS } from '@/core/api/endpoints'
 import apiClient from '@/core/api/apiClient'
+import { isMockMode } from '@/mocks/mockHandler'
 
 interface AuthState {
   user: User | null
@@ -43,6 +44,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Check if user is already logged in on mount
   useEffect(() => {
+    // Auto-login in mock mode
+    if (isMockMode()) {
+      setState({
+        user: {
+          id: '1',
+          email: 'dev@wacams.local',
+          firstName: 'Development',
+          lastName: 'User',
+          displayName: 'Development User',
+          employeeId: 'DEV001',
+          roleId: '1',
+          roleName: 'SuperAdmin',
+          departmentId: '5',
+          departmentName: 'Administration',
+          managerId: null,
+          isActive: true,
+          lastLoginAt: new Date().toISOString(),
+          createdAt: '2024-01-01T00:00:00Z',
+          updatedAt: new Date().toISOString()
+        } as User,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null
+      })
+      return
+    }
+
     const token = getAccessToken()
     if (token) {
       refreshUser()
@@ -55,8 +83,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }))
       const response = await apiClient.get<ApiResponse<User>>(ENDPOINTS.auth.me)
-      const userData = response.data ?? response
-      const user = 'data' in userData ? userData.data : (userData as User)
+      // Response interceptor unwraps {success, data} → response.data is already the user
+      const user = response.data as unknown as User
       
       setState({
         user: user as User,
@@ -82,8 +110,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ENDPOINTS.auth.login,
         credentials
       )
-      const result = response.data ?? response
-      const data = 'data' in result ? result.data : result as { accessToken: string; refreshToken: string; user: User }
+      // Response interceptor unwraps {success, data} → response.data is already the payload
+      const data = response.data as unknown as { accessToken: string; refreshToken: string; user: User }
       
       setAccessToken(data.accessToken)
       setRefreshToken(data.refreshToken)

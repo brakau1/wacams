@@ -38,8 +38,8 @@ export function ProtectedRoute({
     return <Navigate to={`/${redirectTo}?${searchParams}`} replace />
   }
 
-  // Check role requirement
-  if (requiredRole && !hasRole(requiredRole)) {
+  // Check role requirement (empty array = any authenticated user, no role check needed)
+  if (requiredRole && requiredRole.length > 0 && !hasRole(requiredRole)) {
     // Redirect to dashboard or a forbidden page
     return <Navigate to="/dashboard" replace />
   }

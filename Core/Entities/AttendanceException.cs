@@ -151,4 +151,64 @@ public class AttendanceException
     /// Foreign key to the corrective action (if any) resulting from this exception.
     /// </summary>
     public Guid? CorrectiveActionId { get; set; }
+
+    /// <summary>
+    /// Exception category for approval workflow.
+    /// </summary>
+    public ExceptionCategory Category { get; set; }
+
+    /// <summary>
+    /// Employee ID who approved the exception.
+    /// </summary>
+    [MaxLength(50)]
+    public string? ApprovedBy { get; set; }
+
+    /// <summary>
+    /// Date when the exception was approved/rejected.
+    /// </summary>
+    public DateTime? ApprovalDate { get; set; }
+
+    /// <summary>
+    /// Comments from the approver.
+    /// </summary>
+    [MaxLength(1000)]
+    public string? ApprovalComments { get; set; }
+
+    /// <summary>
+    /// URL to supporting documentation.
+    /// </summary>
+    [MaxLength(500)]
+    public string? SupportingDocumentUrl { get; set; }
+
+    /// <summary>
+    /// Employee ID who created the record.
+    /// </summary>
+    [MaxLength(50)]
+    public string CreatedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Employee ID who last updated the record.
+    /// </summary>
+    [MaxLength(50)]
+    public string? UpdatedBy { get; set; }
+
+    /// <summary>
+    /// Scheduled clock-in time for the shift.
+    /// </summary>
+    public TimeSpan? ScheduledClockIn { get; set; }
+
+    /// <summary>
+    /// Scheduled clock-out time for the shift.
+    /// </summary>
+    public TimeSpan? ScheduledClockOut { get; set; }
+
+    /// <summary>
+    /// Total lost minutes due to the exception.
+    /// </summary>
+    public int LostMinutes { get; set; }
+
+    /// <summary>
+    /// Total lost hours (computed from LostMinutes).
+    /// </summary>
+    public decimal LostHours => Math.Round(LostMinutes / 60.0m, 2);
 }

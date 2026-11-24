@@ -2,7 +2,7 @@ import { useAuth } from '@/core/auth/useAuth'
 import { useTheme } from '@/core/theme/ThemeProvider'
 import { Bell, Sun, Moon, LogOut, Menu, User } from 'lucide-react'
 import { useState } from 'react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 interface HeaderProps {
   onMenuClick: () => void
@@ -58,8 +58,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
           </button>
 
           {/* User dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
               <button className="flex items-center gap-2 p-2 rounded-md hover:bg-muted transition-colors">
                 <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                   <span className="text-xs font-bold text-primary-foreground">
@@ -71,28 +71,28 @@ export default function Header({ onMenuClick }: HeaderProps) {
                   <p className="text-xs text-muted-foreground leading-none mt-1">{user?.employeeId}</p>
                 </div>
               </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content align="end" className="w-56">
+              <DropdownMenu.Label>My Account</DropdownMenu.Label>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item className="cursor-pointer">
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
+              </DropdownMenu.Item>
+              <DropdownMenu.Item className="cursor-pointer">
                 <Bell className="mr-2 h-4 w-4" />
                 <span>Notifications</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item
                 className="cursor-pointer text-destructive focus:text-destructive"
                 onClick={logout}
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </div>
       </div>
     </header>

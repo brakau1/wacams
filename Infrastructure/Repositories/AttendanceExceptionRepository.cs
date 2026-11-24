@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using WACAMS.Core.RulesEngine.Models;
+using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions.Models;
 using WACAMS.Infrastructure.Data;
 
 namespace WACAMS.Infrastructure.Repositories;
@@ -82,8 +84,8 @@ public class AttendanceExceptionRepository : IAttendanceExceptionRepository
     {
         return await _context.Set<AttendanceException>()
             .Where(e => e.EmployeeId == employeeId 
-                     && e.ExceptionType == exceptionType 
-                     && e.Status == ExceptionStatus.Approved)
+                     && e.ExceptionType.ToString() == exceptionType 
+                     && e.ApprovalStatus == ApprovalStatus.Approved)
             .CountAsync();
     }
 }
