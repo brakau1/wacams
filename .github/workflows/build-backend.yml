@@ -2,12 +2,14 @@ name: Build WACAMS Backend
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, production-recovery ]
     paths:
       - 'Api/**'
       - 'Core/**'
       - 'Infrastructure/**'
       - '.github/workflows/build-backend.yml'
+  pull_request:
+    branches: [ main, master, production-recovery ]
   workflow_dispatch:
 
 jobs:
