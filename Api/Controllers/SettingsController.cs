@@ -44,7 +44,6 @@ public class SettingsController : ControllerBase
             Key = s.Key,
             Value = s.Value,
             Description = s.Description,
-            DataType = "string",
             UpdatedAt = s.UpdatedAt
         }).ToList();
 
@@ -71,7 +70,6 @@ public class SettingsController : ControllerBase
             Key = setting.Key,
             Value = setting.Value,
             Description = setting.Description,
-            DataType = "string",
             UpdatedAt = setting.UpdatedAt
         });
     }
@@ -108,10 +106,9 @@ public class SettingsController : ControllerBase
         return Ok(new SettingDto
         {
             Id = setting.Id,
-            Key = setting.SettingKey,
-            Value = setting.SettingValue,
+            Key = setting.Key,
+            Value = setting.Value,
             Description = setting.Description,
-            DataType = setting.DataType,
             UpdatedAt = setting.UpdatedAt
         });
     }
@@ -129,14 +126,11 @@ public class SettingsController : ControllerBase
 
         foreach (var item in request.Settings)
         {
-            var setting = await _context.SystemSettings.FirstOrDefaultAsync(s => s.SettingKey == item.Key);
+            var setting = await _context.SystemSettings.FirstOrDefaultAsync(s => s.Key == item.Key);
             if (setting is null)
                 continue;
 
-            if (!ValidateDataType(item.Value, setting.DataType))
-                continue; // Skip invalid updates
-
-            setting.SettingValue = item.Value;
+            setting.Value = item.Value;
             setting.UpdatedAt = DateTime.UtcNow;
             updatedCount++;
         }
@@ -171,11 +165,10 @@ public class SettingsController : ControllerBase
 
 public record SettingDto
 {
-    public int Id { get; init; }
+    public Guid Id { get; init; }
     public required string Key { get; init; }
     public required string Value { get; init; }
     public string? Description { get; init; }
-    public required string DataType { get; init; }
     public DateTime? UpdatedAt { get; init; }
 }
 

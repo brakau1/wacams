@@ -129,7 +129,7 @@ public class WarningService
         await _context.SaveChangesAsync();
 
         await _auditService.LogActionAsync(
-            actorId: issuedBy,
+            performedBy: issuedBy,
             action: "GenerateWarning",
             entityType: "WarningLetter",
             entityId: warningLetter.Id.ToString(),
@@ -204,7 +204,7 @@ public class WarningService
         await _context.SaveChangesAsync();
 
         await _auditService.LogActionAsync(
-            actorId: warning.IssuedBy,
+            performedBy: warning.IssuedBy,
             action: "UploadSignedForm",
             entityType: "WarningLetter",
             entityId: warningId.ToString(),
@@ -235,7 +235,7 @@ public class WarningService
         await _context.SaveChangesAsync();
 
         await _auditService.LogActionAsync(
-            actorId: employeeId,
+            performedBy: employeeId,
             action: "AcknowledgeWarning",
             entityType: "WarningLetter",
             entityId: warningId.ToString(),

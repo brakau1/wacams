@@ -36,7 +36,7 @@ public class EscalationService
         string? employeeId = null,
         string? status = null,
         int? level = null,
-        int? departmentId = null,
+        Guid? departmentId = null,
         int page = 1,
         int pageSize = 50)
     {
@@ -115,7 +115,7 @@ public class EscalationService
     /// Auto-create an escalation when FinalWrittenWarning is generated.
     /// Creates escalation at Level 1 (direct supervisor).
     /// </summary>
-    public async Task AutoCreateEscalationAsync(int warningLetterId, string employeeId)
+    public async Task AutoCreateEscalationAsync(Guid warningLetterId, string employeeId, string issuedBy)
     {
         var warningLetter = await _context.WarningLetters
             .Include(wl => wl.Employee)
@@ -156,7 +156,7 @@ public class EscalationService
         await _context.SaveChangesAsync();
 
         await _auditService.LogActionAsync(
-            actorId: null,
+            performedBy: issuedBy,
             action: "AutoEscalationCreated",
             entityType: "Escalation",
             entityId: escalation.Id.ToString(),
@@ -181,7 +181,7 @@ public class EscalationService
     /// Progress an escalation — either acknowledge at current level or escalate to next level.
     /// If resolved, mark as Resolved. Otherwise increment Level and assign to next manager in chain.
     /// </summary>
-    public async Task<EscalationDto> ProgressEscalationAsync(int escalationId, ProgressEscalationRequest request, string actedBy)
+    public async Task<EscalationDto> ProgressEscalationAsync(Guid escalationId, ProgressEscalationRequest request, string actedBy)
     {
         var escalation = await _context.Escalations
             .Include(e => e.Employee)
@@ -221,7 +221,7 @@ public class EscalationService
         var oldLevel = escalation.Level - (escalation.Status == "Resolved" ? 0 : 1);
         var status = escalation.Status;
         await _auditService.LogActionAsync(
-            actorId: actedBy,
+            performedBy: actedBy,
             action: "ProgressEscalation",
             entityType: "Escalation",
             entityId: escalationId.ToString(),
@@ -269,7 +269,7 @@ public class EscalationService
                 await _context.SaveChangesAsync();
 
                 await _auditService.LogActionAsync(
-                    actorId: "system",
+                    performedBy: "system",
                     action: "AutoEscalationTimeout",
                     entityType: "Escalation",
                     entityId: esc.Id.ToString(),
