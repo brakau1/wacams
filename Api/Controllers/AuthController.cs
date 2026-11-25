@@ -4,6 +4,7 @@ using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
 using WACAMS.Api.Middleware;
 using WACAMS.Api.Utils;
+using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
 
 namespace WACAMS.Api.Controllers;
 
