@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
-using WACAMS.Api.Middleware;
 using WACAMS.Api.Services;
 
 namespace WACAMS.Api.Controllers;
@@ -40,11 +39,11 @@ public class AttendanceController : ControllerBase
             var result = await _attendanceService.ClockInAsync(request);
             return Ok(result);
         }
-        catch (NotFoundException ex)
+        catch (Middleware.NotFoundException ex)
         {
             return NotFound(new { error = "NotFound", message = ex.Message });
         }
-        catch (ConflictException ex)
+        catch (Middleware.ConflictException ex)
         {
             return Conflict(new { error = "AlreadyClockedIn", message = ex.Message });
         }
@@ -66,11 +65,11 @@ public class AttendanceController : ControllerBase
             var result = await _attendanceService.ClockOutAsync(request);
             return Ok(result);
         }
-        catch (NotFoundException ex)
+        catch (Middleware.NotFoundException ex)
         {
             return NotFound(new { error = "NotFound", message = ex.Message });
         }
-        catch (ConflictException ex)
+        catch (Middleware.ConflictException ex)
         {
             return Conflict(new { error = "AlreadyClockedOut", message = ex.Message });
         }
@@ -128,7 +127,7 @@ public class AttendanceController : ControllerBase
             var report = await _attendanceService.GetIndividualReportAsync(employeeId, startDate, endDate);
             return Ok(report);
         }
-        catch (NotFoundException ex)
+        catch (Middleware.NotFoundException ex)
         {
             return NotFound(new { error = "NotFound", message = ex.Message });
         }

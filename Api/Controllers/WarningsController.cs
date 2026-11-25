@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
-using WACAMS.Api.Middleware;
 using WACAMS.Api.Services;
 using WACAMS.Core.Exceptions;
 
