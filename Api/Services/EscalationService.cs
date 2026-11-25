@@ -339,11 +339,11 @@ public class EscalationService
             // Get manager details
             var manager = await _context.Employees
                 .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.EmployeeId == escalation.ResponsibleManagerId);
+                .FirstOrDefaultAsync(e => e.EmployeeId == escalation.AssignedTo);
 
             if (manager == null)
             {
-                _logger.LogWarning("Manager {ManagerId} not found for escalation notification", escalation.ResponsibleManagerId);
+                _logger.LogWarning("Manager {ManagerId} not found for escalation notification", escalation.AssignedTo);
                 return;
             }
 
@@ -360,8 +360,8 @@ public class EscalationService
 
             var request = new CreateNotificationRequest
             {
-                RecipientEmployeeId = escalation.ResponsibleManagerId,
-                EventType = NotificationEventType.EscalationRequired,
+                RecipientEmployeeId = escalation.AssignedTo,
+                EventType = NotificationEventType.Escalation,
                 Subject = $"Escalation Level {escalation.Level} - {employee.DisplayName}",
                 Body = $"An attendance issue has been escalated to Level {escalation.Level}. Employee: {employee.DisplayName}. Please review immediately.",
                 Priority = NotificationPriority.High,
@@ -374,7 +374,7 @@ public class EscalationService
                     ["EmployeeId"] = employee.EmployeeId,
                     ["DepartmentName"] = employee.Department?.Name ?? "Unknown",
                     ["EscalationLevel"] = escalation.Level.ToString(),
-                    ["WarningType"] = escalation.WarningLetter?.WarningType ?? "Unknown",
+                    ["WarningType"] = escalation.WarningLetter?.Type.ToString() ?? "Unknown",
                     ["AppUrl"] = "http://localhost:5173",
                     ["EscalationId"] = escalation.Id.ToString()
                 }
