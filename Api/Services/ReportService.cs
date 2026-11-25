@@ -3,6 +3,7 @@ using WACAMS.Api.Controllers;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
 
 namespace WACAMS.Api.Services;
 
@@ -188,10 +189,10 @@ public class ReportService
             query = query.Where(wl => wl.EmployeeId == employeeId);
 
         if (startDate.HasValue)
-            query = query.Where(wl => wl.IssueDate >= startDate.Value.Date);
+            query = query.Where(wl => wl.DateIssued >= startDate.Value.Date);
 
         if (endDate.HasValue)
-            query = query.Where(wl => wl.IssueDate <= endDate.Value.Date.AddDays(1).AddTicks(-1));
+            query = query.Where(wl => wl.DateIssued <= endDate.Value.Date.AddDays(1).AddTicks(-1));
 
         var warnings = await query.OrderByDescending(wl => wl.IssueDate).ToListAsync();
 
@@ -201,9 +202,9 @@ public class ReportService
         foreach (var warning in warnings)
         {
             csvLines.Add($"{warning.Id},{warning.EmployeeId},{EscapeCsv(warning.Employee?.DisplayName ?? "")}," +
-                $"{EscapeCsv(warning.Employee?.Department?.Name ?? "")},{warning.Exception?.ExceptionType ?? ""}," +
-                $"{warning.WarningType},{warning.IssueDate:yyyy-MM-dd HH:mm},{EscapeCsv(warning.Description)}," +
-                $"{warning.IssuedBy},{warning.SignedFormPath ?? ""},{warning.Acknowledged}");
+                $"{EscapeCsv(warning.Employee?.Department?.Name ?? "")},{warning.Exception?.ExceptionType.ToString() ?? ""}," +
+                $"{warning.Type},{warning.DateIssued:yyyy-MM-dd HH:mm},{EscapeCsv(warning.Reason)}," +
+                $"{warning.IssuedBy},{warning.SignedFilePath ?? ""},{warning.Signed}");
         }
 
         return string.Join("\n", csvLines);
@@ -226,7 +227,7 @@ public class ReportService
 
         return exceptions
             .GroupBy(ae => ae.ExceptionType)
-            .Select(g => new { Type = g.Key, Count = g.Count() })
+            .Select(g => new { Type = g.Key.ToString(), Count = g.Count() })
             .ToDictionary(x => x.Type, x => x.Count);
     }
 
@@ -242,7 +243,7 @@ public class ReportService
 
         var counts = await _context.WarningLetters
             .Where(wl => wl.EmployeeId == employeeId)
-            .GroupBy(wl => wl.WarningType)
+            .GroupBy(wl => wl.Type)
             .Select(g => new { Type = g.Key, Count = g.Count() })
             .ToListAsync();
 
@@ -252,10 +253,10 @@ public class ReportService
             DisplayName = employee.DisplayName,
             DepartmentName = employee.Department?.Name ?? string.Empty,
             TotalWarnings = counts.Sum(c => c.Count),
-            CounsellingCount = counts.FirstOrDefault(c => c.Type == "Counselling")?.Count ?? 0,
-            VerbalWarningCount = counts.FirstOrDefault(c => c.Type == "VerbalWarning")?.Count ?? 0,
-            WrittenWarningCount = counts.FirstOrDefault(c => c.Type == "WrittenWarning")?.Count ?? 0,
-            FinalWrittenWarningCount = counts.FirstOrDefault(c => c.Type == "FinalWrittenWarning")?.Count ?? 0
+            CounsellingCount = counts.FirstOrDefault(c => c.Type == WarningType.Counselling)?.Count ?? 0,
+            VerbalWarningCount = counts.FirstOrDefault(c => c.Type == WarningType.VerbalWarning)?.Count ?? 0,
+            WrittenWarningCount = counts.FirstOrDefault(c => c.Type == WarningType.WrittenWarning)?.Count ?? 0,
+            FinalWrittenWarningCount = counts.FirstOrDefault(c => c.Type == WarningType.FinalWrittenWarning)?.Count ?? 0
         };
 
         return summary;
@@ -407,18 +408,18 @@ public class ReportService
             DisplayName = e.Employee?.DisplayName ?? e.EmployeeId,
             DepartmentId = e.Employee?.DepartmentId.ToString() ?? "",
             DepartmentName = e.Employee?.Department?.Name ?? "Unknown",
-            ExceptionType = e.ExceptionType,
+            ExceptionType = e.ExceptionType.ToString(),
             Date = e.Date.ToString("yyyy-MM-dd"),
             Description = e.Description ?? "",
             LostProductionMinutes = e.LostProductionMinutes,
             Status = e.Status.ToString(),
-            AssignedTo = e.AssignedToManagerId,
+            AssignedTo = null,
             AssignedToName = null,
-            InvestigatorNotes = null,
-            InvestigatedAt = null,
-            InvestigatedBy = null,
+            InvestigatorNotes = e.InvestigationNotes,
+            InvestigatedAt = e.InvestigatedAt,
+            InvestigatedBy = e.InvestigatedBy,
             CreatedAt = e.CreatedAt.ToString("o"),
-            UpdatedAt = e.UpdatedAt.ToString("o")
+            UpdatedAt = e.UpdatedAt?.ToString("o") ?? ""
         }).ToList();
     }
 
@@ -517,21 +518,20 @@ public class ReportService
         var totalLostMinutes = monthRecords.Sum(r => r.LateMinutes + r.EarlyMinutes);
         var lostProductionHours = (int)Math.Round(totalLostMinutes / 60.0);
 
-        // Open warnings
+        // Open warnings (not yet acknowledged)
         var openWarnings = await _context.WarningLetters
-            .Where(w => w.Status == WarningStatus.Issued || w.Status == WarningStatus.Acknowledged)
+            .Where(w => !w.Signed)
             .CountAsync();
 
         // Final warnings
         var finalWarnings = await _context.WarningLetters
-            .Where(w => w.WarningType == "FinalWrittenWarning" &&
-                       (w.Status == WarningStatus.Issued || w.Status == WarningStatus.Acknowledged))
+            .Where(w => w.Type == WarningType.FinalWrittenWarning && !w.Signed)
             .CountAsync();
 
         // AWOL cases (month-to-date)
         var awolCases = await _context.AttendanceExceptions
             .Where(e => e.Date >= monthStart.Date && e.Date <= today.Date &&
-                       e.ExceptionType == "AWOL")
+                       e.ExceptionType == ExceptionType.AWOL)
             .CountAsync();
 
         // Active escalations
@@ -643,7 +643,7 @@ public class ReportService
             .GroupBy(e => e.ExceptionType)
             .Select(g => new ExceptionAnalysisDto
             {
-                ExceptionType = g.Key,
+                ExceptionType = g.Key.ToString(),
                 Count = g.Count(),
                 Percentage = Math.Round((double)g.Count() / totalCount * 100, 1),
                 LostMinutes = g.Sum(e => e.LostProductionMinutes)
@@ -672,8 +672,8 @@ public class ReportService
             DisplayName = employee.DisplayName,
             Date = record.Date,
             ShiftCode = record.ShiftCode,
-            ClockIn = record.ClockInTime,
-            ClockOut = record.ClockOutTime,
+            ClockIn = record.ClockInTime?.TimeOfDay,
+            ClockOut = record.ClockOutTime?.TimeOfDay,
             IsLate = record.Status == WACAMS.Core.Enums.AttendanceStatus.Late,
             MinutesLate = record.LateMinutes,
             IsEarlyDeparture = record.Status == WACAMS.Core.Enums.AttendanceStatus.EarlyDeparture,
