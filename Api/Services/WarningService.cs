@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
+using WACAMS.Api.Middleware;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -38,7 +38,7 @@ public class WarningService
     /// </summary>
     public async Task<(List<WarningLetterDto> Warnings, int TotalCount)> ListAsync(
         string? employeeId = null,
-        int? departmentId = null,
+        Guid? departmentId = null,
         string? warningType = null,
         DateTime? startDate = null,
         DateTime? endDate = null,

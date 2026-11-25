@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -18,14 +19,14 @@ using WACAMS.Core.Disciplinary.Services;
 using WACAMS.Infrastructure.Services;
 using WACAMS.Infrastructure.Services.NotificationChannels;
 
-namespace Wacam.Api;
+namespace WACAMS.Api;
 
 /// <summary>
 /// Application startup — DI, middleware pipeline, auth, CORS, Swagger, health checks.
 /// </summary>
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -174,7 +175,7 @@ public class Program
         builder.Services.Configure<WhatsAppSettings>(builder.Configuration.GetSection("Notification:WhatsApp"));
 
         builder.Services.AddSingleton<TemplateEngine>();
-        builder.Services.AddScoped<INotificationService, NotificationService>();
+        builder.Services.AddScoped<INotificationService, WACAMS.Api.Services.NotificationService>();
         builder.Services.AddScoped<INotificationChannel, EmailNotificationChannel>();
         builder.Services.AddScoped<INotificationChannel, TeamsNotificationChannel>();
         builder.Services.AddScoped<INotificationChannel, SmsNotificationChannel>();
@@ -228,7 +229,6 @@ public class Program
         {
             var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
             await PermissionSeeder.SeedAsync(context);
-            await NotificationTemplateSeeder.SeedAsync(context);
             await AdminUserSeeder.SeedAsync(context);
         }
 
@@ -252,7 +252,7 @@ public class Program
         // 4.5. DEV-ONLY: Bypass authentication — inject fake development user
         if (app.Environment.IsDevelopment())
         {
-            app.UseMiddleware<Api.Middleware.DevelopmentUserMiddleware>();
+            app.UseMiddleware<DevelopmentUserMiddleware>();
         }
 
         // 5. Authorization
