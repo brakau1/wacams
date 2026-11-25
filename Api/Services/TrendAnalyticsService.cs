@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using WACAMS.Core.Enums;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Trend analytics service — multi-period trend analysis for attendance, absenteeism, lost production,

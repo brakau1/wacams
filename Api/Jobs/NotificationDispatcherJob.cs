@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
 
-namespace Wacam.Api.Jobs;
+namespace WACAMS.Api.Jobs;
 
 /// <summary>
 /// Hourly job: Dispatch pending notifications to users.

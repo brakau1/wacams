@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Wacam.Api.Filters;
+namespace WACAMS.Api.Filters;
 
 /// <summary>
 /// Action filter that validates ModelState and returns a consistent error response.

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.Data;
+namespace WACAMS.Api.Data;
 
 /// <summary>
 /// EF Core DbContext for PostgreSQL database.

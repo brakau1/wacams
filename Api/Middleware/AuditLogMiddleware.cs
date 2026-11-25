@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.Middleware;
+namespace WACAMS.Api.Middleware;
 
 /// <summary>
 /// Auto-logs HTTP requests/responses for audit trail.

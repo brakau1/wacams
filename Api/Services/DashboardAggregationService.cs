@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using System.Runtime.Caching;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Dashboard aggregation service with multi-layer caching for optimal performance.

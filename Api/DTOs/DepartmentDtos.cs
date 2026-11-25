@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace Wacam.Api.DTOs;
+namespace WACAMS.Api.DTOs;
 
 public class DepartmentDto
 {

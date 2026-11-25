@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.Data.SeedData;
+namespace WACAMS.Api.Data.SeedData;
 
 /// <summary>
 /// Seeds permissions, roles, and role-permission mappings based on the RBAC matrix.

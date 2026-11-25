@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Wacam.Api.Services;
-using Wacam.Api.DTOs;
+using WACAMS.Api.Services;
+using WACAMS.Api.DTOs;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// SuperAdmin API endpoints for GIS integration administration.

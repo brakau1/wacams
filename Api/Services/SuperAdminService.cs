@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
-using Wacam.Api.DTOs;
+using WACAMS.Api.Data;
+using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
-using Wacam.Api.Utils;
+using WACAMS.Api.Utils;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// SuperAdmin service for managing users, roles, access control, and employee overrides.

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Wacam.Api.Services;
+using WACAMS.Api.Services;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// Report endpoints — attendance summary, department summary, individual report, export CSV/PDF.

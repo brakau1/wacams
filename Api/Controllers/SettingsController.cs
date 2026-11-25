@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Entities;
-using Wacam.Api.Services;
+using WACAMS.Api.Services;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// System settings endpoints — get/update configuration (grace period, thresholds, shift configs).

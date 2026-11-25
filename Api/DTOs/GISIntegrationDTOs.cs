@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Wacam.Api.DTOs;
+namespace WACAMS.Api.DTOs;
 
 /// <summary>
 /// DTO for GIS integration settings (safe for API responses - excludes encrypted values).

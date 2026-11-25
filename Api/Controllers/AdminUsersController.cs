@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Wacam.Api.DTOs;
+using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
-using Wacam.Api.Services;
+using WACAMS.Api.Services;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// API endpoints for managing admin users who have full system access regardless of their role.

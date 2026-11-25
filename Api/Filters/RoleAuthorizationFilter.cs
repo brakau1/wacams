@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Wacam.Api.Middleware;
+using WACAMS.Api.Middleware;
 
-namespace Wacam.Api.Filters;
+namespace WACAMS.Api.Filters;
 
 /// <summary>
 /// Attribute to enforce role requirement on endpoints beyond standard [Authorize].

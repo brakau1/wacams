@@ -1,4 +1,4 @@
-namespace Wacam.Api.Utils;
+namespace WACAMS.Api.Utils;
 
 /// <summary>
 /// Timezone-aware date calculations and shift time boundary helpers.

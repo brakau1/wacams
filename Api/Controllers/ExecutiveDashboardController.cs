@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Enums;
 using WACAMS.Infrastructure.Data;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// Executive Dashboard — real-time KPIs, department heatmap, and leaderboard.

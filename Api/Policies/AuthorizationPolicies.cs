@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace Wacam.Api.Policies;
+namespace WACAMS.Api.Policies;
 
 /// <summary>
 /// Defines authorization policies for permission-based access control.

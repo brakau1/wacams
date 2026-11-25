@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using WACAMS.Core.Enums;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Department analytics — department-level performance metrics, comparisons, and health scoring.

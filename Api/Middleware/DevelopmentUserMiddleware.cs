@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Api.Middleware;
+namespace WACAMS.Api.Middleware;
 
 /// <summary>
 /// Development-only middleware that injects a fake authenticated user into every request.

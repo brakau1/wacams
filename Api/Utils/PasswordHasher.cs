@@ -1,6 +1,6 @@
 using BCrypt.Net;
 
-namespace Wacam.Api.Utils;
+namespace WACAMS.Api.Utils;
 
 /// <summary>
 /// BCrypt password hashing utility — never stores plain text passwords.

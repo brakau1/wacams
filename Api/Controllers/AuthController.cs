@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Wacam.Api.DTOs;
-using Wacam.Api.Services;
+using WACAMS.Api.DTOs;
+using WACAMS.Api.Services;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// Authentication endpoints — login, register, refresh-token, logout.

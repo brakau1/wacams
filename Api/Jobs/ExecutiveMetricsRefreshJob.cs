@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 
-namespace Wacam.Api.Jobs;
+namespace WACAMS.Api.Jobs;
 
 /// <summary>
 /// Hourly job: Refresh executive-level metrics and strategic KPIs.

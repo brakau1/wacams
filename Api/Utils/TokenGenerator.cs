@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Wacam.Api.Utils;
+namespace WACAMS.Api.Utils;
 
 /// <summary>
 /// JWT token creation with claims (employeeId, role, displayName).

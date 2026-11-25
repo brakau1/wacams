@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Wacam.Api.DTOs;
-using Wacam.Api.Services;
+using WACAMS.Api.DTOs;
+using WACAMS.Api.Services;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// Attendance endpoints — clock in/out, daily/weekly/monthly stats, exception reporting.

@@ -1,4 +1,4 @@
-namespace Wacam.Api.Extensions;
+namespace WACAMS.Api.Extensions;
 
 /// <summary>
 /// CORS policy configuration — development allows all origins, production restricts to approved domains.

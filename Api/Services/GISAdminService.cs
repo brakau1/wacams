@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
-using Wacam.Api.DTOs;
+using WACAMS.Api.Data;
+using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Service for GIS integration administration.

@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
-using Wacam.Api.DTOs;
+using WACAMS.Api.Data;
+using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Core.DTOs;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Hierarchical escalation following managerId chain, auto-create on final warning.

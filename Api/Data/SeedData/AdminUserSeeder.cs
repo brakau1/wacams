@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.Data.SeedData;
+namespace WACAMS.Api.Data.SeedData;
 
 /// <summary>
 /// Seeds the initial SuperAdmin user account.

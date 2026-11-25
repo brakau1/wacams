@@ -3,12 +3,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
-using Wacam.Api.Data;
-using Wacam.Api.Data.SeedData;
-using Wacam.Api.Extensions;
-using Wacam.Api.Middleware;
-using Wacam.Api.Policies;
-using Wacam.Api.Services;
+using WACAMS.Api.Data;
+using WACAMS.Api.Data.SeedData;
+using WACAMS.Api.Extensions;
+using WACAMS.Api.Middleware;
+using WACAMS.Api.Policies;
+using WACAMS.Api.Services;
 using WACAMS.Core.Interfaces;
 using WACAMS.Core.Disciplinary.Services;
 using WACAMS.Infrastructure.Services;
@@ -195,12 +195,12 @@ public class Program
         });
 
         // ── Background Jobs ──
-        builder.Services.AddHostedService<Wacam.Api.Jobs.EscalationMonitorJob>();
-        builder.Services.AddHostedService<Wacam.Api.Jobs.AttendanceExceptionMonitorJob>();
-        builder.Services.AddHostedService<Wacam.Api.Jobs.CorrectiveActionExpiryJob>();
-        builder.Services.AddHostedService<Wacam.Api.Jobs.AttendanceKpiRefreshJob>();
-        builder.Services.AddHostedService<Wacam.Api.Jobs.ExecutiveMetricsRefreshJob>();
-        builder.Services.AddHostedService<Wacam.Api.Jobs.NotificationDispatcherJob>();
+        builder.Services.AddHostedService<WACAMS.Api.Jobs.EscalationMonitorJob>();
+        builder.Services.AddHostedService<WACAMS.Api.Jobs.AttendanceExceptionMonitorJob>();
+        builder.Services.AddHostedService<WACAMS.Api.Jobs.CorrectiveActionExpiryJob>();
+        builder.Services.AddHostedService<WACAMS.Api.Jobs.AttendanceKpiRefreshJob>();
+        builder.Services.AddHostedService<WACAMS.Api.Jobs.ExecutiveMetricsRefreshJob>();
+        builder.Services.AddHostedService<WACAMS.Api.Jobs.NotificationDispatcherJob>();
 
         // ── Analytics Services ──
         builder.Services.AddScoped<DashboardAggregationService>();

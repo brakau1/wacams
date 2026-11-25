@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Wacam.Api.Filters;
+namespace WACAMS.Api.Filters;
 
 /// <summary>
 /// Attribute to enforce permission requirement on endpoints.

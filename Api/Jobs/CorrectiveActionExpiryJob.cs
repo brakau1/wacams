@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.Jobs;
+namespace WACAMS.Api.Jobs;
 
 /// <summary>
 /// Hourly job: Expire corrective actions past their validity period.

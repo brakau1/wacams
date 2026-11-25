@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
+using WACAMS.Api.Data;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Corrective action analytics — disciplinary trend analysis, threshold tracking, and warning pattern detection.

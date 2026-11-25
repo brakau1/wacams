@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WACAMS.Api.DTOs.GIS;
+using WACAMS.Api.Integration.GIS.DTOs;
 using WACAMS.Infrastructure.Services.GIS;
 
 namespace WACAMS.Api.Controllers.GIS;

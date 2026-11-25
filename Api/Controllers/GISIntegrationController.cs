@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Wacam.Api.DTOs;
-using Wacam.Api.Services;
+using WACAMS.Api.DTOs;
+using WACAMS.Api.Services;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.Controllers;
+namespace WACAMS.Api.Controllers;
 
 /// <summary>
 /// GIS Integration API endpoints.

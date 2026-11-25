@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Wacam.Api.Data;
-using Wacam.Api.DTOs;
+using WACAMS.Api.Data;
+using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
-using Wacam.Api.Utils;
+using WACAMS.Api.Utils;
 
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Clock in/out logic, late/early calculation, auto-exception detection.

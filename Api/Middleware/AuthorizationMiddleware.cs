@@ -1,7 +1,7 @@
-using Wacam.Api.Filters;
-using Wacam.Api.Utils;
+using WACAMS.Api.Filters;
+using WACAMS.Api.Utils;
 
-namespace Wacam.Api.Middleware;
+namespace WACAMS.Api.Middleware;
 
 /// <summary>
 /// Post-authz check for RBAC enforcement per endpoint.

@@ -1,6 +1,6 @@
-using Wacam.Api.Services;
+using WACAMS.Api.Services;
 
-namespace Wacam.Api.Extensions;
+namespace WACAMS.Api.Extensions;
 
 /// <summary>
 /// Registers all application services (controllers, auth, business services).

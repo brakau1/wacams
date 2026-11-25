@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Wacam.Api.DTOs;
+namespace WACAMS.Api.DTOs;
 
 // ===== Permission Template DTOs =====
 

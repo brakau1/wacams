@@ -1,4 +1,4 @@
-namespace Wacam.Api.Services;
+namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Email/push notification stubs for escalations and warnings.

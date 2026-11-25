@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using WACAMS.Core.Entities;
 
-namespace Wacam.Api.DTOs;
+namespace WACAMS.Api.DTOs;
 
 #region User Management DTOs
 

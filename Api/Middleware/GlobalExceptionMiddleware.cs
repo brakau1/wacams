@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 
-namespace Wacam.Api.Middleware;
+namespace WACAMS.Api.Middleware;
 
 /// <summary>
 /// Catch-all exception handling middleware with consistent error response format.
