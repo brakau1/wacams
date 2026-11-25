@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Middleware;
 using WACAMS.Api.Services;
+using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
 
 namespace WACAMS.Api.Controllers;
 
