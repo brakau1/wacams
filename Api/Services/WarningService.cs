@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -57,21 +59,21 @@ public class WarningService
             query = query.Where(wl => wl.Employee!.DepartmentId == departmentId.Value);
 
         if (!string.IsNullOrWhiteSpace(warningType))
-            query = query.Where(wl => wl.WarningType == warningType);
+            query = query.Where(wl => wl.Type.ToString() == warningType);
 
         if (startDate.HasValue)
-            query = query.Where(wl => wl.IssueDate >= startDate.Value.Date);
+            query = query.Where(wl => wl.DateIssued >= startDate.Value.Date);
 
         if (endDate.HasValue)
-            query = query.Where(wl => wl.IssueDate <= endDate.Value.Date.AddDays(1).AddTicks(-1));
+            query = query.Where(wl => wl.DateIssued <= endDate.Value.Date.AddDays(1).AddTicks(-1));
 
         if (acknowledged.HasValue)
-            query = query.Where(wl => wl.Acknowledged == acknowledged.Value);
+            query = query.Where(wl => wl.Signed == acknowledged.Value);
 
         var totalCount = await query.CountAsync();
 
         var warnings = await query
-            .OrderByDescending(wl => wl.IssueDate)
+            .OrderByDescending(wl => wl.DateIssued)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -94,9 +96,10 @@ public class WarningService
             throw new NotFoundException($"Exception with ID {request.ExceptionId} not found for employee {request.EmployeeId}.");
 
         // Core business rule: NO disciplinary action until investigation is complete
-        if (exception.Status != "Investigated" && exception.Status != "Closed")
+        if (exception.InvestigationStatus != InvestigationStatus.Investigated && 
+            exception.InvestigationStatus != InvestigationStatus.Closed)
             throw new InvalidOperationException(
-                $"Cannot generate warning. Exception status is '{exception.Status}'. " +
+                $"Cannot generate warning. Exception status is '{exception.InvestigationStatus}'. " +
                 "Disciplinary action requires the exception to be in 'Investigated' or 'Closed' status.");
 
         // Validate warning type
@@ -115,9 +118,9 @@ public class WarningService
         {
             EmployeeId = request.EmployeeId,
             ExceptionId = request.ExceptionId,
-            WarningType = request.WarningType,
-            IssueDate = DateTime.UtcNow,
-            Description = request.Description.Trim(),
+            Type = Enum.Parse<WarningType>(request.WarningType),
+            DateIssued = DateTime.UtcNow,
+            Reason = request.Description.Trim(),
             IssuedBy = issuedBy,
             CreatedAt = DateTime.UtcNow
         };
@@ -131,10 +134,10 @@ public class WarningService
             entityType: "WarningLetter",
             entityId: warningLetter.Id.ToString(),
             httpEndpoint: "POST /api/warnings/generate",
-            changesJson: $"{{\"EmployeeId\":\"{warningLetter.EmployeeId}\",\"Type\":\"{warningLetter.WarningType}\",\"ExceptionId\":{warningLetter.ExceptionId},\"IssuedBy\":\"{issuedBy}\"}}");
+            changesJson: $"{{\"EmployeeId\":\"{warningLetter.EmployeeId}\",\"Type\":\"{warningLetter.Type}\",\"ExceptionId\":{warningLetter.ExceptionId},\"IssuedBy\":\"{issuedBy}\"}}");
 
         _logger.LogInformation("Warning generated: Type={Type}, Employee={EmployeeId}, Id={Id}",
-            warningLetter.WarningType, warningLetter.EmployeeId, warningLetter.Id);
+            warningLetter.Type, warningLetter.EmployeeId, warningLetter.Id);
 
         // ── AUTO-ESCALATION: When FinalWrittenWarning is generated ──
         if (request.WarningType == "FinalWrittenWarning")
@@ -154,7 +157,7 @@ public class WarningService
         try
         {
             await _notificationService.NotifyWarningGeneratedAsync(
-                warningLetter.EmployeeId, warningLetter.WarningType, warningLetter.Id, issuedBy);
+                warningLetter.EmployeeId, warningLetter.Type.ToString(), warningLetter.Id, issuedBy);
         }
         catch (Exception ex)
         {
@@ -168,7 +171,7 @@ public class WarningService
     /// Upload a signed warning form (PDF) via multipart/form-data.
     /// Saves to wwwroot/signatures/{employeeId}_{warningId}_{timestamp}.pdf
     /// </summary>
-    public async Task<string> UploadSignedFormAsync(int warningId, IFormFile file)
+    public async Task<string> UploadSignedFormAsync(Guid warningId, IFormFile file)
     {
         var warning = await _context.WarningLetters.FindAsync(warningId);
         if (warning is null)
@@ -196,7 +199,7 @@ public class WarningService
 
         // Store relative path in DB
         var relativePath = $"/signatures/{fileName}";
-        warning.SignedFormPath = relativePath;
+        warning.SignedFilePath = relativePath;
         warning.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
@@ -216,7 +219,7 @@ public class WarningService
     /// <summary>
     /// Mark a warning as acknowledged by the employee.
     /// </summary>
-    public async Task<WarningLetterDto> AcknowledgeAsync(int warningId, string employeeId)
+    public async Task<WarningLetterDto> AcknowledgeAsync(Guid warningId, string employeeId)
     {
         var warning = await _context.WarningLetters
             .Include(wl => wl.Exception)
@@ -226,7 +229,7 @@ public class WarningService
         if (warning is null)
             throw new NotFoundException($"Warning with ID {warningId} not found for employee {employeeId}.");
 
-        warning.Acknowledged = true;
+        warning.Signed = true;
         warning.AcknowledgedAt = DateTime.UtcNow;
         warning.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
@@ -251,8 +254,8 @@ public class WarningService
     {
         var warnings = await _context.WarningLetters
             .Where(wl => wl.EmployeeId == employeeId)
-            .GroupBy(wl => wl.WarningType)
-            .Select(g => new { Type = g.Key, Count = g.Count() })
+            .GroupBy(wl => wl.Type)
+            .Select(g => new { Type = g.Key.ToString(), Count = g.Count() })
             .ToListAsync();
 
         return warnings.ToDictionary(w => w.Type, w => w.Count);
@@ -300,13 +303,13 @@ public class WarningService
             DisplayName = warning.Employee?.DisplayName ?? string.Empty,
             DepartmentName = warning.Employee?.Department?.Name ?? string.Empty,
             ExceptionId = warning.ExceptionId,
-            ExceptionType = exception.ExceptionType,
-            WarningType = warning.WarningType,
-            IssueDate = warning.IssueDate,
-            Description = warning.Description,
+            ExceptionType = exception.ExceptionType.ToString(),
+            WarningType = warning.Type.ToString(),
+            IssueDate = warning.DateIssued,
+            Description = warning.Reason,
             IssuedBy = issuerName,
-            SignedFormPath = warning.SignedFormPath,
-            Acknowledged = warning.Acknowledged,
+            SignedFormPath = warning.SignedFilePath,
+            Acknowledged = warning.Signed,
             AcknowledgedAt = warning.AcknowledgedAt,
             CreatedAt = warning.CreatedAt
         };

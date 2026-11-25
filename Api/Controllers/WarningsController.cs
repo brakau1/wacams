@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
+using WACAMS.Api.Middleware;
 using WACAMS.Api.Services;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
@@ -33,7 +35,7 @@ public class WarningsController : ControllerBase
     [ProducesResponseType(typeof((List<WarningLetterDto>, int)), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(
         [FromQuery] string? employeeId,
-        [FromQuery] Guid? departmentId,
+        [FromQuery] int? departmentId,
         [FromQuery] string? warningType,
         [FromQuery] DateTime? startDate,
         [FromQuery] DateTime? endDate,
@@ -86,12 +88,12 @@ public class WarningsController : ControllerBase
     /// POST /api/warnings/{id}/upload-signed — Upload a signed warning form PDF.
     /// Multipart/form-data file upload to wwwroot/signatures/.
     /// </summary>
-    [HttpPost("{id:int}/upload-signed")]
+    [HttpPost("{id:guid}/upload-signed")]
     [Authorize]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)] // Returns relative path
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UploadSignedForm(int id)
+    public async Task<IActionResult> UploadSignedForm(Guid id)
     {
         var file = Request.Form.Files["file"];
 
@@ -113,11 +115,11 @@ public class WarningsController : ControllerBase
     /// <summary>
     /// PUT /api/warnings/{id}/acknowledge — Mark a warning as acknowledged by the employee.
     /// </summary>
-    [HttpPut("{id:int}/acknowledge")]
+    [HttpPut("{id:guid}/acknowledge")]
     [Authorize]
     [ProducesResponseType(typeof(WarningLetterDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Acknowledge(int id)
+    public async Task<IActionResult> Acknowledge(Guid id)
     {
         var employeeId = User.FindFirst("employeeId")?.Value
             ?? throw new InvalidOperationException("No employeeId in claims.");

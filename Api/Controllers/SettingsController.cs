@@ -41,10 +41,10 @@ public class SettingsController : ControllerBase
         var result = settings.Select(s => new SettingDto
         {
             Id = s.Id,
-            Key = s.SettingKey,
-            Value = s.SettingValue,
+            Key = s.Key,
+            Value = s.Value,
             Description = s.Description,
-            DataType = s.DataType,
+            DataType = "string",
             UpdatedAt = s.UpdatedAt
         }).ToList();
 
@@ -61,17 +61,17 @@ public class SettingsController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetByKey(string key)
     {
-        var setting = await _context.SystemSettings.FirstOrDefaultAsync(s => s.SettingKey == key);
+        var setting = await _context.SystemSettings.FirstOrDefaultAsync(s => s.Key == key);
         if (setting is null)
             return NotFound(new { error = "NotFound", message = $"Setting with key '{key}' not found." });
 
         return Ok(new SettingDto
         {
             Id = setting.Id,
-            Key = setting.SettingKey,
-            Value = setting.SettingValue,
+            Key = setting.Key,
+            Value = setting.Value,
             Description = setting.Description,
-            DataType = setting.DataType,
+            DataType = "string",
             UpdatedAt = setting.UpdatedAt
         });
     }
@@ -86,16 +86,12 @@ public class SettingsController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(string key, [FromBody] UpdateSettingRequest request)
     {
-        var setting = await _context.SystemSettings.FirstOrDefaultAsync(s => s.SettingKey == key);
+        var setting = await _context.SystemSettings.FirstOrDefaultAsync(s => s.Key == key);
         if (setting is null)
             return NotFound(new { error = "NotFound", message = $"Setting with key '{key}' not found." });
 
-        // Validate data type
-        if (!ValidateDataType(request.Value, setting.DataType))
-            return BadRequest(new { error = "InvalidValue", message = $"Value must be of type '{setting.DataType}'." });
-
-        var oldValue = setting.SettingValue;
-        setting.SettingValue = request.Value;
+        var oldValue = setting.Value;
+        setting.Value = request.Value;
         setting.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 

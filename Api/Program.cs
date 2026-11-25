@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -6,6 +9,7 @@ using System.Text;
 using WACAMS.Api.Data;
 using WACAMS.Api.Data.SeedData;
 using WACAMS.Api.Extensions;
+using WACAMS.Api.Filters;
 using WACAMS.Api.Middleware;
 using WACAMS.Api.Policies;
 using WACAMS.Api.Services;
@@ -30,7 +34,7 @@ public class Program
             .ReadFrom.Configuration(builder.Configuration)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.File("logs/wacam-.txt", rollingEnabled: true, fileSizeLimitBytes: 10_485_760, retainedFileCountLimit: 30)
+            .WriteTo.File("logs/wacam-.txt", rollingInterval: Serilog.RollingInterval.Day, fileSizeLimitBytes: 10_485_760, retainedFileCountLimit: 30)
             .CreateLogger();
 
         builder.Host.UseSerilog();
