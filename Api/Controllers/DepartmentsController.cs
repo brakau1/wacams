@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
+using WACAMS.Core.Entities;
 
 namespace WACAMS.Api.Controllers;
 

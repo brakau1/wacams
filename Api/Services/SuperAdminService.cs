@@ -4,6 +4,7 @@ using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
 using WACAMS.Api.Utils;
+using Role = WACAMS.Core.Enums.Role;
 
 namespace WACAMS.Api.Services;
 

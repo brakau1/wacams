@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WACAMS.Api.Data;
-using System.Runtime.Caching;
 
 namespace WACAMS.Api.Services;
 

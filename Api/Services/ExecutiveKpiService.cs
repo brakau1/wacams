@@ -263,12 +263,4 @@ public record ExecutiveKpiDto
     public List<string> StrategicInsights { get; init; } = new();
 }
 
-public record DepartmentPerformanceDto
-{
-    public Guid DepartmentId { get; init; }
-    public string DepartmentName { get; init; } = string.Empty;
-    public double AttendanceRate { get; init; }
-    public int TotalExceptions { get; init; }
-    public int TotalLostMinutes { get; init; }
-    public double TotalLostHours { get; init; }
-}
+// DepartmentPerformanceDto defined in ExecutiveAnalyticsService.cs

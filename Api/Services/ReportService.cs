@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WACAMS.Api.Controllers;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
