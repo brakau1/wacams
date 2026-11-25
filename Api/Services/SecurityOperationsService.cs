@@ -385,10 +385,10 @@ public class SecurityOperationsService
             queryable = queryable.Where(e => e.EmployeeId == query.EmployeeId);
 
         if (query.FromDate.HasValue)
-            queryable = queryable.Where(e => e.Timestamp >= query.FromDate.Value);
+            queryable = queryable.Where(e => e.OccurredAt >= query.FromDate.Value);
 
         if (query.ToDate.HasValue)
-            queryable = queryable.Where(e => e.Timestamp <= query.ToDate.Value);
+            queryable = queryable.Where(e => e.OccurredAt <= query.ToDate.Value);
 
         if (query.IsAcknowledged.HasValue)
             queryable = queryable.Where(e => e.IsAcknowledged == query.IsAcknowledged.Value);
@@ -396,7 +396,7 @@ public class SecurityOperationsService
         var totalCount = await queryable.CountAsync();
 
         var events = await queryable
-            .OrderByDescending(e => e.Timestamp)
+            .OrderByDescending(e => e.OccurredAt)
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
             .Select(e => new SecurityEventDto
@@ -412,7 +412,8 @@ public class SecurityOperationsService
                 IsAcknowledged = e.IsAcknowledged,
                 AcknowledgedBy = e.AcknowledgedBy,
                 AcknowledgedAt = e.AcknowledgedAt,
-                Timestamp = e.Timestamp
+                Timestamp = e.OccurredAt,
+                EmployeeName = e.Employee != null ? e.Employee.DisplayName : null
             })
             .ToListAsync();
 

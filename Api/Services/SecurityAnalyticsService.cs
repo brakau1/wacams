@@ -196,7 +196,7 @@ public class SecurityAnalyticsService
 
         var today = DateTime.UtcNow.Date;
         var actionsToday = await _context.AuditLogs
-            .CountAsync(a => a.Timestamp >= today);
+            .CountAsync(a => a.PerformedAt >= today);
 
         var actionsByType = await _context.AuditLogs
             .GroupBy(a => a.Action)
@@ -213,7 +213,7 @@ public class SecurityAnalyticsService
             var monthStart = startOfMonth.AddMonths(-i);
             var monthEnd = monthStart.AddMonths(1);
             var count = await _context.AuditLogs
-                .CountAsync(a => a.Timestamp >= monthStart && a.Timestamp < monthEnd);
+                .CountAsync(a => a.PerformedAt >= monthStart && a.PerformedAt < monthEnd);
 
             trend.Add(new TrendDataPoint
             {
@@ -242,7 +242,7 @@ public class SecurityAnalyticsService
         var startOfMonth = new DateTime(now.Year, now.Month, 1);
 
         var changesThisMonth = await _context.AuditLogs
-            .CountAsync(a => a.Timestamp >= startOfMonth && permissionActions.Contains(a.Action));
+            .CountAsync(a => a.PerformedAt >= startOfMonth && permissionActions.Contains(a.Action));
 
         var changesByType = await _context.AuditLogs
             .Where(a => permissionActions.Contains(a.Action))
@@ -257,7 +257,7 @@ public class SecurityAnalyticsService
             var monthStart = startOfMonth.AddMonths(-i);
             var monthEnd = monthStart.AddMonths(1);
             var count = await _context.AuditLogs
-                .CountAsync(a => a.Timestamp >= monthStart && a.Timestamp < monthEnd && permissionActions.Contains(a.Action));
+                .CountAsync(a => a.PerformedAt >= monthStart && a.PerformedAt < monthEnd && permissionActions.Contains(a.Action));
 
             trend.Add(new TrendDataPoint
             {
