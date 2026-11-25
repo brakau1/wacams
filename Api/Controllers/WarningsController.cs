@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
-using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
+using WACAMS.Api.Middleware;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
 
 namespace WACAMS.Api.Controllers;
@@ -35,7 +35,7 @@ public class WarningsController : ControllerBase
     [ProducesResponseType(typeof((List<WarningLetterDto>, int)), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(
         [FromQuery] string? employeeId,
-        [FromQuery] int? departmentId,
+        [FromQuery] Guid? departmentId,
         [FromQuery] string? warningType,
         [FromQuery] DateTime? startDate,
         [FromQuery] DateTime? endDate,

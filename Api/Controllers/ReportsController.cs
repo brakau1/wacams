@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Controllers;
 
@@ -75,7 +76,7 @@ public class ReportsController : ControllerBase
     public async Task<IActionResult> ExportCsv(
         [FromQuery] DateTime startDate,
         [FromQuery] DateTime endDate,
-        [FromQuery] Guid? departmentId)
+        [FromQuery] int? departmentId)
     {
         if (startDate > endDate)
             return BadRequest(new { error = "InvalidRange", message = "startDate must be before endDate." });
@@ -115,7 +116,7 @@ public class ReportsController : ControllerBase
     public async Task<IActionResult> GetExceptionBreakdown(
         [FromQuery] DateTime startDate,
         [FromQuery] DateTime endDate,
-        [FromQuery] Guid? departmentId)
+        [FromQuery] int? departmentId)
     {
         if (startDate > endDate)
             return BadRequest(new { error = "InvalidRange", message = "startDate must be before endDate." });

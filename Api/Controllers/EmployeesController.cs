@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Controllers;
 
@@ -31,7 +32,7 @@ public class EmployeesController : ControllerBase
     [ProducesResponseType(typeof((List<EmployeeDto>, int)), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(
         [FromQuery] string? searchKeyword,
-        [FromQuery] Guid? departmentId,
+        [FromQuery] int? departmentId,
         [FromQuery] bool? isActive,
         [FromQuery] string? role,
         [FromQuery] int page = 1,

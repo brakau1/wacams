@@ -114,6 +114,29 @@ public class AuditService
         return logs.Select(MapToDto).ToList();
     }
 
+    /// <summary>
+    /// Extended audit log method used by bulk services.
+    /// </summary>
+    public async Task LogAsync(
+        string action,
+        string performedBy,
+        string entityType,
+        string entityId,
+        string? description = null,
+        string? changesJson = null,
+        object? additionalData = null,
+        string? initiatedBy = null)
+    {
+        var actualPerformer = initiatedBy ?? performedBy;
+        var json = changesJson;
+        if (additionalData != null)
+        {
+            json = System.Text.Json.JsonSerializer.Serialize(additionalData);
+        }
+
+        await LogActionAsync(actualPerformer, action, entityType, entityId, description, json);
+    }
+
     private static AuditLogDto MapToDto(AuditLog log)
     {
         return new AuditLogDto

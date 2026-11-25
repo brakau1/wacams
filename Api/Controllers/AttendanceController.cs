@@ -84,7 +84,7 @@ public class AttendanceController : ControllerBase
     [ProducesResponseType(typeof(List<AttendanceRecordDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDaily(
         [FromQuery] DateTime date,
-        [FromQuery] Guid? departmentId)
+        [FromQuery] int? departmentId)
     {
         var records = await _attendanceService.GetDailyAsync(date, departmentId);
         return Ok(records);
@@ -101,7 +101,7 @@ public class AttendanceController : ControllerBase
     public async Task<IActionResult> GetSummary(
         [FromQuery] DateTime startDate,
         [FromQuery] DateTime endDate,
-        [FromQuery] Guid? departmentId)
+        [FromQuery] int? departmentId)
     {
         if (startDate > endDate)
             return BadRequest(new { error = "InvalidRange", message = "startDate must be before endDate." });

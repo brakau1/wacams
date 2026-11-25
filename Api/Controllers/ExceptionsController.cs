@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Controllers;
 
@@ -36,7 +37,7 @@ public class ExceptionsController : ControllerBase
         [FromQuery] DateTime? endDate,
         [FromQuery] string? exceptionType,
         [FromQuery] string? status,
-        [FromQuery] Guid? departmentId,
+        [FromQuery] int? departmentId,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 50)
     {

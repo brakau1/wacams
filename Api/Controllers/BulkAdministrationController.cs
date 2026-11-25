@@ -120,7 +120,7 @@ public class BulkAdministrationController : ControllerBase
         try
         {
             var initiatedBy = GetCurrentEmployeeId();
-            var result = await _bulkAdminService.BulkAssignDepartmentAsync(request.EmployeeIds, request.DepartmentName, initiatedBy);
+            var result = await _bulkAdminService.BulkAssignDepartmentAsync(request.EmployeeIds, request.DepartmentId.ToString(), initiatedBy);
             
             if (result.Status == "Failed")
             {
