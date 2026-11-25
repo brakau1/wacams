@@ -1,0 +1,236 @@
+build	Set up job	﻿2026-11-25T02:11:16.1995124Z Current runner version: '2.338.2'
+build	Set up job	2026-11-25T02:11:16.2021797Z ##[group]Runner Image Provisioner
+build	Set up job	2026-11-25T02:11:16.2022694Z Hosted Compute Agent
+build	Set up job	2026-11-25T02:11:16.2023370Z Version: 20261111.635
+build	Set up job	2026-11-25T02:11:16.2024061Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+build	Set up job	2026-11-25T02:11:16.2024780Z Build Date: 2026-11-11T01:49:01Z
+build	Set up job	2026-11-25T02:11:16.2025526Z Worker ID: {d31fdcf8-be38-4e21-b66b-01229cd88ca2}
+build	Set up job	2026-11-25T02:11:16.2026232Z Region: eastus2
+build	Set up job	2026-11-25T02:11:16.2026764Z Cloud: Azure
+build	Set up job	2026-11-25T02:11:16.2027385Z ##[endgroup]
+build	Set up job	2026-11-25T02:11:16.2029202Z ##[group]Operating System
+build	Set up job	2026-11-25T02:11:16.2030019Z Ubuntu
+build	Set up job	2026-11-25T02:11:16.2030546Z 26.04.1
+build	Set up job	2026-11-25T02:11:16.2031039Z LTS
+build	Set up job	2026-11-25T02:11:16.2031666Z ##[endgroup]
+build	Set up job	2026-11-25T02:11:16.2032226Z ##[group]Runner Image
+build	Set up job	2026-11-25T02:11:16.2032859Z Image: ubuntu-26.04
+build	Set up job	2026-11-25T02:11:16.2033442Z Version: 20261116.202.1
+build	Set up job	2026-11-25T02:11:16.2034531Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.202/images/ubuntu/Ubuntu2604-Readme.md
+build	Set up job	2026-11-25T02:11:16.2036387Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.202
+build	Set up job	2026-11-25T02:11:16.2037395Z ##[endgroup]
+build	Set up job	2026-11-25T02:11:16.2038770Z ##[group]GITHUB_TOKEN Permissions
+build	Set up job	2026-11-25T02:11:16.2041317Z Contents: read
+build	Set up job	2026-11-25T02:11:16.2041987Z Metadata: read
+build	Set up job	2026-11-25T02:11:16.2042549Z Packages: read
+build	Set up job	2026-11-25T02:11:16.2043187Z ##[endgroup]
+build	Set up job	2026-11-25T02:11:16.2046021Z Secret source: Actions
+build	Set up job	2026-11-25T02:11:16.2047057Z Cache mode: write
+build	Set up job	2026-11-25T02:11:16.2048409Z Prepare workflow directory
+build	Set up job	2026-11-25T02:11:16.2497297Z Prepare all required actions
+build	Set up job	2026-11-25T02:11:16.2571940Z Getting action download info
+build	Set up job	2026-11-25T02:11:16.4498784Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+build	Set up job	2026-11-25T02:11:16.5474625Z Download action repository 'actions/setup-dotnet@v4' (SHA:67a3573c9a986a3f9c594539f4ab511d57bb3ce9)
+build	Set up job	2026-11-25T02:11:16.7409306Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+build	Set up job	2026-11-25T02:11:16.9248491Z Complete job name: build
+build	Checkout code	﻿2026-11-25T02:11:17.0168946Z ##[group]Run actions/checkout@v4
+build	Checkout code	2026-11-25T02:11:17.0169887Z with:
+build	Checkout code	2026-11-25T02:11:17.0170329Z   repository: brakau1/wacams
+build	Checkout code	2026-11-25T02:11:17.0174423Z   token: ***
+build	Checkout code	2026-11-25T02:11:17.0174851Z   ssh-strict: true
+build	Checkout code	2026-11-25T02:11:17.0175286Z   ssh-user: git
+build	Checkout code	2026-11-25T02:11:17.0175723Z   persist-credentials: true
+build	Checkout code	2026-11-25T02:11:17.0176202Z   clean: true
+build	Checkout code	2026-11-25T02:11:17.0176645Z   sparse-checkout-cone-mode: true
+build	Checkout code	2026-11-25T02:11:17.0177166Z   fetch-depth: 1
+build	Checkout code	2026-11-25T02:11:17.0177593Z   fetch-tags: false
+build	Checkout code	2026-11-25T02:11:17.0178168Z   show-progress: true
+build	Checkout code	2026-11-25T02:11:17.0178615Z   lfs: false
+build	Checkout code	2026-11-25T02:11:17.0179022Z   submodules: false
+build	Checkout code	2026-11-25T02:11:17.0179466Z   set-safe-directory: true
+build	Checkout code	2026-11-25T02:11:17.0179979Z   allow-unsafe-pr-checkout: false
+build	Checkout code	2026-11-25T02:11:17.0180735Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.2887781Z Syncing repository: brakau1/wacams
+build	Checkout code	2026-11-25T02:11:17.2891126Z ##[group]Getting Git version info
+build	Checkout code	2026-11-25T02:11:17.2892558Z Working directory is '/home/runner/work/wacams/wacams'
+build	Checkout code	2026-11-25T02:11:17.2894734Z [command]/usr/bin/git version
+build	Checkout code	2026-11-25T02:11:17.2910161Z git version 2.56.1
+build	Checkout code	2026-11-25T02:11:17.2944750Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.2973385Z Temporarily overriding HOME='/home/runner/work/_temp/d24bc482-bd34-4d5e-b844-03b52b6156f5' before making global git config changes
+build	Checkout code	2026-11-25T02:11:17.2989272Z Adding repository directory to the temporary git global config as a safe directory
+build	Checkout code	2026-11-25T02:11:17.2993326Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/wacams/wacams
+build	Checkout code	2026-11-25T02:11:17.3060933Z Deleting the contents of '/home/runner/work/wacams/wacams'
+build	Checkout code	2026-11-25T02:11:17.3066448Z ##[group]Initializing the repository
+build	Checkout code	2026-11-25T02:11:17.3071747Z [command]/usr/bin/git init /home/runner/work/wacams/wacams
+build	Checkout code	2026-11-25T02:11:17.3197403Z hint: Using 'master' as the name for the initial branch. This default branch name
+build	Checkout code	2026-11-25T02:11:17.3199995Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+build	Checkout code	2026-11-25T02:11:17.3201524Z hint: to use in all of your new repositories, which will suppress this warning,
+build	Checkout code	2026-11-25T02:11:17.3202780Z hint: call:
+build	Checkout code	2026-11-25T02:11:17.3203373Z hint:
+build	Checkout code	2026-11-25T02:11:17.3204336Z hint: 	git config --global init.defaultBranch <name>
+build	Checkout code	2026-11-25T02:11:17.3205163Z hint:
+build	Checkout code	2026-11-25T02:11:17.3206046Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+build	Checkout code	2026-11-25T02:11:17.3208414Z hint: 'development'. The just-created branch can be renamed via this command:
+build	Checkout code	2026-11-25T02:11:17.3210193Z hint:
+build	Checkout code	2026-11-25T02:11:17.3211378Z hint: 	git branch -m <name>
+build	Checkout code	2026-11-25T02:11:17.3212743Z hint:
+build	Checkout code	2026-11-25T02:11:17.3214479Z hint: Disable this message with "git config set advice.defaultBranchName false"
+build	Checkout code	2026-11-25T02:11:17.3216931Z Initialized empty Git repository in /home/runner/work/wacams/wacams/.git/
+build	Checkout code	2026-11-25T02:11:17.3227128Z [command]/usr/bin/git remote add origin https://github.com/brakau1/wacams
+build	Checkout code	2026-11-25T02:11:17.3284305Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.3285806Z ##[group]Disabling automatic garbage collection
+build	Checkout code	2026-11-25T02:11:17.3289278Z [command]/usr/bin/git config --local gc.auto 0
+build	Checkout code	2026-11-25T02:11:17.3325487Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.3326812Z ##[group]Setting up auth
+build	Checkout code	2026-11-25T02:11:17.3333513Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	Checkout code	2026-11-25T02:11:17.3369051Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	Checkout code	2026-11-25T02:11:17.3842486Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	Checkout code	2026-11-25T02:11:17.3878778Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	Checkout code	2026-11-25T02:11:17.4157090Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+build	Checkout code	2026-11-25T02:11:17.4192409Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+build	Checkout code	2026-11-25T02:11:17.4471564Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+build	Checkout code	2026-11-25T02:11:17.4512442Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.4513896Z ##[group]Fetching the repository
+build	Checkout code	2026-11-25T02:11:17.4521540Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0cf98e5734683dc09fb4eb2519a64a680b05db3d:refs/remotes/origin/production-recovery
+build	Checkout code	2026-11-25T02:11:17.7785234Z From https://github.com/brakau1/wacams
+build	Checkout code	2026-11-25T02:11:17.7787769Z  * [new ref]         0cf98e5734683dc09fb4eb2519a64a680b05db3d -> origin/production-recovery
+build	Checkout code	2026-11-25T02:11:17.7793154Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.7795413Z ##[group]Determining the checkout info
+build	Checkout code	2026-11-25T02:11:17.7797895Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.7802582Z [command]/usr/bin/git sparse-checkout disable
+build	Checkout code	2026-11-25T02:11:17.7855823Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+build	Checkout code	2026-11-25T02:11:17.7886247Z ##[group]Checking out the ref
+build	Checkout code	2026-11-25T02:11:17.7893105Z [command]/usr/bin/git checkout --progress --force -B production-recovery refs/remotes/origin/production-recovery
+build	Checkout code	2026-11-25T02:11:17.8380526Z Switched to a new branch 'production-recovery'
+build	Checkout code	2026-11-25T02:11:17.8385653Z branch 'production-recovery' set up to track 'origin/production-recovery'.
+build	Checkout code	2026-11-25T02:11:17.8394007Z ##[endgroup]
+build	Checkout code	2026-11-25T02:11:17.8438315Z [command]/usr/bin/git log -1 --format=%H
+build	Checkout code	2026-11-25T02:11:17.8464389Z 0cf98e5734683dc09fb4eb2519a64a680b05db3d
+build	Setup .NET 8	﻿2026-11-25T02:11:17.8821067Z ##[group]Run actions/setup-dotnet@v4
+build	Setup .NET 8	2026-11-25T02:11:17.8822383Z with:
+build	Setup .NET 8	2026-11-25T02:11:17.8823292Z   dotnet-version: 8.0.x
+build	Setup .NET 8	2026-11-25T02:11:17.8824366Z   cache: false
+build	Setup .NET 8	2026-11-25T02:11:17.8825490Z ##[endgroup]
+build	Setup .NET 8	2026-11-25T02:11:18.0326693Z (node:2432) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+build	Setup .NET 8	2026-11-25T02:11:18.0330702Z (Use `node --trace-deprecation ...` to show where the warning was created)
+build	Setup .NET 8	2026-11-25T02:11:18.0352421Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+build	Setup .NET 8	2026-11-25T02:11:18.3156161Z dotnet-install: .NET Core Runtime with version '10.0.15' is already installed.
+build	Setup .NET 8	2026-11-25T02:11:18.3186877Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --channel 8.0
+build	Setup .NET 8	2026-11-25T02:11:18.5746024Z dotnet-install: .NET Core SDK with version '8.0.428' is already installed.
+build	Restore dependencies	﻿2026-11-25T02:11:18.5982650Z ##[group]Run dotnet restore Api/Api.csproj
+build	Restore dependencies	2026-11-25T02:11:18.5984145Z [36;1mdotnet restore Api/Api.csproj[0m
+build	Restore dependencies	2026-11-25T02:11:18.6025914Z shell: /usr/bin/bash -e {0}
+build	Restore dependencies	2026-11-25T02:11:18.6027047Z env:
+build	Restore dependencies	2026-11-25T02:11:18.6027926Z   DOTNET_ROOT: /usr/share/dotnet
+build	Restore dependencies	2026-11-25T02:11:18.6029333Z ##[endgroup]
+build	Restore dependencies	2026-11-25T02:11:24.5423304Z   Determining projects to restore...
+build	Restore dependencies	2026-11-25T02:11:27.0887355Z   Restored /home/runner/work/wacams/wacams/Core/Core.csproj (in 1.2 sec).
+build	Restore dependencies	2026-11-25T02:11:28.3891550Z /home/runner/work/wacams/wacams/Api/Api.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52
+build	Restore dependencies	2026-11-25T02:11:28.4645050Z   Restored /home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj (in 2.59 sec).
+build	Restore dependencies	2026-11-25T02:11:28.4686555Z   Restored /home/runner/work/wacams/wacams/Api/Api.csproj (in 2.59 sec).
+build	Build	﻿2026-11-25T02:11:28.5279606Z ##[group]Run dotnet build Api/Api.csproj --configuration Release --no-restore
+build	Build	2026-11-25T02:11:28.5280276Z [36;1mdotnet build Api/Api.csproj --configuration Release --no-restore[0m
+build	Build	2026-11-25T02:11:28.5314425Z shell: /usr/bin/bash -e {0}
+build	Build	2026-11-25T02:11:28.5314730Z env:
+build	Build	2026-11-25T02:11:28.5314959Z   DOTNET_ROOT: /usr/share/dotnet
+build	Build	2026-11-25T02:11:28.5315226Z ##[endgroup]
+build	Build	2026-11-25T02:11:29.4224248Z /home/runner/work/wacams/wacams/Api/Api.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52
+build	Build	2026-11-25T02:11:34.4300690Z ##[warning]/home/runner/work/wacams/wacams/Core/Interfaces/IUnitOfWork.cs(41,10): warning CS0108: 'IUnitOfWork.Dispose()' hides inherited member 'IDisposable.Dispose()'. Use the new keyword if hiding was intended. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4316052Z ##[warning]/home/runner/work/wacams/wacams/Core/RulesEngine/Rules/UnplannedAbsenteeismCalculationRule.cs(60,33): warning CS8629: Nullable value type may be null. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4320614Z ##[warning]/home/runner/work/wacams/wacams/Core/RulesEngine/Rules/UnplannedAbsenteeismCalculationRule.cs(60,62): warning CS8629: Nullable value type may be null. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4325006Z ##[warning]/home/runner/work/wacams/wacams/Core/RulesEngine/Rules/LostProductionCalculationRule.cs(60,33): warning CS8629: Nullable value type may be null. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4330899Z ##[warning]/home/runner/work/wacams/wacams/Core/Services/EscalationRules.cs(24,29): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern '0' is not covered. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4338340Z ##[warning]/home/runner/work/wacams/wacams/Core/Disciplinary/Services/AutoExpiryService.cs(77,47): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4344211Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(9,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4348607Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(14,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4352672Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(19,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4356833Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(25,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4361238Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(31,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4365303Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/WorkDuration.cs(9,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4369628Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/WorkDuration.cs(16,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4373802Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/WorkDuration.cs(22,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:34.4791002Z   Core -> /home/runner/work/wacams/wacams/Core/bin/Release/net8.0/Core.dll
+build	Build	2026-11-25T02:11:37.2778373Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Services/Storage/AzureBlobStorageService.cs(127,31): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2787767Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Services/Pdf/CorrectiveActionFormPdfGenerator.cs(123,13): warning CS0618: 'GridExtensions.Grid(IContainer, Action<GridDescriptor>)' is obsolete: 'This element has been deprecated since version 2022.11. Please use the Table element, or the combination of the Row and Column elements.' [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2796926Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Services/Pdf/CorrectiveActionFormPdfGenerator.cs(200,13): warning CS0618: 'GridExtensions.Grid(IContainer, Action<GridDescriptor>)' is obsolete: 'This element has been deprecated since version 2022.11. Please use the Table element, or the combination of the Row and Column elements.' [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2804079Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(71,25): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2809560Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(72,26): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2814276Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(73,31): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2818601Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(74,34): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2823360Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(75,34): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2826060Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(76,36): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2829965Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(95,21): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2833650Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(96,22): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2836130Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(97,27): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2839049Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(98,30): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2842246Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(99,30): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.2845041Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(100,32): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:37.4233402Z   Infrastructure -> /home/runner/work/wacams/wacams/Infrastructure/bin/Release/net8.0/Infrastructure.dll
+build	Build	2026-11-25T02:11:39.3479269Z ##[error]/home/runner/work/wacams/wacams/Api/Services/DashboardAggregationService.cs(19,22): error CS0246: The type or namespace name 'CacheItemPolicy' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3484438Z ##[error]/home/runner/work/wacams/wacams/Api/Integration/GIS/GISScheduledSyncService.cs(108,28): error CS0234: The type or namespace name 'GISSyncResultDTO' does not exist in the namespace 'WACAMS.Api.Services' (are you missing an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3489132Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/CorrectiveActionFormsController.cs(12,22): error CS0246: The type or namespace name 'ICorrectiveActionRepository' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3492636Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/CorrectiveActionFormsController.cs(17,9): error CS0246: The type or namespace name 'ICorrectiveActionRepository' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3495705Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/SettingsController.cs(20,22): error CS0246: The type or namespace name 'AuditService' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3499354Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/SettingsController.cs(23,55): error CS0246: The type or namespace name 'AuditService' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3579907Z 
+build	Build	2026-11-25T02:11:39.3586293Z Build FAILED.
+build	Build	2026-11-25T02:11:39.3586620Z 
+build	Build	2026-11-25T02:11:39.3590062Z /home/runner/work/wacams/wacams/Api/Api.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52
+build	Build	2026-11-25T02:11:39.3594868Z ##[warning]/home/runner/work/wacams/wacams/Core/Interfaces/IUnitOfWork.cs(41,10): warning CS0108: 'IUnitOfWork.Dispose()' hides inherited member 'IDisposable.Dispose()'. Use the new keyword if hiding was intended. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3600150Z ##[warning]/home/runner/work/wacams/wacams/Core/RulesEngine/Rules/UnplannedAbsenteeismCalculationRule.cs(60,33): warning CS8629: Nullable value type may be null. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3610634Z ##[warning]/home/runner/work/wacams/wacams/Core/RulesEngine/Rules/UnplannedAbsenteeismCalculationRule.cs(60,62): warning CS8629: Nullable value type may be null. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3614916Z ##[warning]/home/runner/work/wacams/wacams/Core/RulesEngine/Rules/LostProductionCalculationRule.cs(60,33): warning CS8629: Nullable value type may be null. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3620323Z ##[warning]/home/runner/work/wacams/wacams/Core/Services/EscalationRules.cs(24,29): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern '0' is not covered. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3627464Z ##[warning]/home/runner/work/wacams/wacams/Core/Disciplinary/Services/AutoExpiryService.cs(77,47): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3632617Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(9,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3636800Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(14,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3641307Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(19,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3645420Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(25,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3649630Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/AttendancePeriod.cs(31,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3653686Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/WorkDuration.cs(9,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3657449Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/WorkDuration.cs(16,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3661881Z ##[warning]/home/runner/work/wacams/wacams/Core/ValueObjects/WorkDuration.cs(22,5): warning CS1587: XML comment is not placed on a valid language element [/home/runner/work/wacams/wacams/Core/Core.csproj]
+build	Build	2026-11-25T02:11:39.3668524Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Services/Storage/AzureBlobStorageService.cs(127,31): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3676561Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Services/Pdf/CorrectiveActionFormPdfGenerator.cs(123,13): warning CS0618: 'GridExtensions.Grid(IContainer, Action<GridDescriptor>)' is obsolete: 'This element has been deprecated since version 2022.11. Please use the Table element, or the combination of the Row and Column elements.' [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3684970Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Services/Pdf/CorrectiveActionFormPdfGenerator.cs(200,13): warning CS0618: 'GridExtensions.Grid(IContainer, Action<GridDescriptor>)' is obsolete: 'This element has been deprecated since version 2022.11. Please use the Table element, or the combination of the Row and Column elements.' [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3690817Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(71,25): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3695792Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(72,26): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3701653Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(73,31): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3706129Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(74,34): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3710932Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(75,34): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3715376Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(76,36): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3719876Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(95,21): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3724353Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(96,22): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3728750Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(97,27): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3733134Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(98,30): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3737681Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(99,30): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3742175Z ##[warning]/home/runner/work/wacams/wacams/Infrastructure/Repositories/GIS/GISIntegrationRepository.cs(100,32): warning CS8601: Possible null reference assignment. [/home/runner/work/wacams/wacams/Infrastructure/Infrastructure.csproj]
+build	Build	2026-11-25T02:11:39.3747348Z ##[error]/home/runner/work/wacams/wacams/Api/Services/DashboardAggregationService.cs(19,22): error CS0246: The type or namespace name 'CacheItemPolicy' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3755832Z ##[error]/home/runner/work/wacams/wacams/Api/Integration/GIS/GISScheduledSyncService.cs(108,28): error CS0234: The type or namespace name 'GISSyncResultDTO' does not exist in the namespace 'WACAMS.Api.Services' (are you missing an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3761775Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/CorrectiveActionFormsController.cs(12,22): error CS0246: The type or namespace name 'ICorrectiveActionRepository' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3767483Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/CorrectiveActionFormsController.cs(17,9): error CS0246: The type or namespace name 'ICorrectiveActionRepository' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3773102Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/SettingsController.cs(20,22): error CS0246: The type or namespace name 'AuditService' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3778959Z ##[error]/home/runner/work/wacams/wacams/Api/Controllers/SettingsController.cs(23,55): error CS0246: The type or namespace name 'AuditService' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/wacams/wacams/Api/Api.csproj]
+build	Build	2026-11-25T02:11:39.3781571Z     30 Warning(s)
+build	Build	2026-11-25T02:11:39.3782012Z     6 Error(s)
+build	Build	2026-11-25T02:11:39.3782285Z 
+build	Build	2026-11-25T02:11:39.3782562Z Time Elapsed 00:00:10.60
+build	Build	2026-11-25T02:11:39.3903765Z ##[error]Process completed with exit code 1.
+build	Post Checkout code	﻿2026-11-25T02:11:39.4058585Z Post job cleanup.
+build	Post Checkout code	2026-11-25T02:11:39.4940850Z [command]/usr/bin/git version
+build	Post Checkout code	2026-11-25T02:11:39.4986930Z git version 2.56.1
+build	Post Checkout code	2026-11-25T02:11:39.5027349Z Temporarily overriding HOME='/home/runner/work/_temp/f15ed368-b89a-4f4f-abd3-945aac989f87' before making global git config changes
+build	Post Checkout code	2026-11-25T02:11:39.5028988Z Adding repository directory to the temporary git global config as a safe directory
+build	Post Checkout code	2026-11-25T02:11:39.5032931Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/wacams/wacams
+build	Post Checkout code	2026-11-25T02:11:39.5077060Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	Post Checkout code	2026-11-25T02:11:39.5121171Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	Post Checkout code	2026-11-25T02:11:39.5444298Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	Post Checkout code	2026-11-25T02:11:39.5508877Z http.https://github.com/.extraheader
+build	Post Checkout code	2026-11-25T02:11:39.5549822Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+build	Post Checkout code	2026-11-25T02:11:39.5566382Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	Post Checkout code	2026-11-25T02:11:39.5966526Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+build	Post Checkout code	2026-11-25T02:11:39.6005899Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+build	Complete job	﻿2026-11-25T02:11:39.6499907Z Cleaning up orphan processes
+build	Complete job	2026-11-25T02:11:39.6849852Z Terminate orphan process: pid (2662) (dotnet)
+build	Complete job	2026-11-25T02:11:39.6873591Z Terminate orphan process: pid (2725) (dotnet)
+build	Complete job	2026-11-25T02:11:39.7000310Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-dotnet@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
