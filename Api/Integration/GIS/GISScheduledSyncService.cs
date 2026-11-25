@@ -97,7 +97,7 @@ public class GISScheduledSyncService : BackgroundService
             {
                 var exceptions = await gisService.DetectExceptionsAsync(syncDate, cancellationToken);
                 _logger.LogInformation("Detected {Count} exceptions for today", exceptions.Count);
-                return new Services.GISSyncResultDTO { Success = true, RecordsProcessed = exceptions.Count };
+                return new GISSyncResultDTO { Success = true, RecordsProcessed = exceptions.Count };
             },
             "ExceptionDetection",
             cancellationToken);
@@ -106,7 +106,7 @@ public class GISScheduledSyncService : BackgroundService
     }
 
     private async Task ExecuteWithRetryAsync(
-        Func<Task<Services.GISSyncResultDTO>> action,
+        Func<Task<GISSyncResultDTO>> action,
         string operationName,
         CancellationToken cancellationToken)
     {
