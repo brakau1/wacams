@@ -104,11 +104,11 @@ public class WarningService
 
         // Validate warning type
         var validTypes = new[] { "Counselling", "VerbalWarning", "WrittenWarning", "FinalWrittenWarning" };
-        if (!validTypes.Contains(request.WarningType))
-            throw new ArgumentException($"Invalid warning type: '{request.WarningType}'. Must be one of: {string.Join(", ", validTypes)}");
+        if (!validTypes.Contains(request.Type))
+            throw new ArgumentException($"Invalid warning type: '{request.Type}'. Must be one of: {string.Join(", ", validTypes)}");
 
         // Validate progressive discipline order
-        await ValidateProgressiveDisciplineAsync(request.EmployeeId, request.WarningType);
+        await ValidateProgressiveDisciplineAsync(request.EmployeeId, request.Type);
 
         // Get issuing manager info
         var issuer = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == issuedBy);
@@ -118,7 +118,7 @@ public class WarningService
         {
             EmployeeId = request.EmployeeId,
             ExceptionId = request.ExceptionId,
-            Type = Enum.Parse<WarningType>(request.WarningType),
+            Type = Enum.Parse<WarningType>(request.Type),
             DateIssued = DateTime.UtcNow,
             Reason = request.Description.Trim(),
             IssuedBy = issuedBy,
@@ -140,7 +140,7 @@ public class WarningService
             warningLetter.Type, warningLetter.EmployeeId, warningLetter.Id);
 
         // ── AUTO-ESCALATION: When FinalWrittenWarning is generated ──
-        if (request.WarningType == "FinalWrittenWarning")
+        if (request.Type == "FinalWrittenWarning")
         {
             try
             {

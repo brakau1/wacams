@@ -3,6 +3,7 @@ using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Api.Utils;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -129,7 +130,7 @@ public class EmployeeService
             EmployeeId = request.EmployeeId.Trim(),
             DisplayName = request.DisplayName.Trim(),
             Email = request.Email.ToLowerInvariant().Trim(),
-            PhoneNumber = request.PhoneNumber?.Trim(),
+            PhoneNumber = request.Phone?.Trim(),
             ManagerId = request.ManagerId?.Trim(),
             DepartmentId = request.DepartmentId,
             Role = request.Role,
@@ -141,9 +142,7 @@ public class EmployeeService
         _context.Employees.Add(employee);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: null,
-            action: "CreateEmployee",
+        await _auditService.LogActionAsync(action: "CreateEmployee",
             entityType: "Employee",
             entityId: employee.Id.ToString(),
             httpEndpoint: "POST /api/employees",
@@ -172,7 +171,7 @@ public class EmployeeService
         {
             employee.DisplayName,
             employee.Email,
-            employee.PhoneNumber,
+            employee.Phone,
             employee.ManagerId,
             employee.DepartmentId,
             employee.Role,
@@ -184,8 +183,8 @@ public class EmployeeService
             employee.DisplayName = request.DisplayName.Trim();
         if (request.Email != null)
             employee.Email = request.Email.ToLowerInvariant().Trim();
-        if (request.PhoneNumber != null)
-            employee.PhoneNumber = request.PhoneNumber.Trim();
+        if (request.Phone != null)
+            employee.Phone = request.Phone.Trim();
         if (request.ManagerId != null)
         {
             // Validate manager exists
@@ -207,9 +206,7 @@ public class EmployeeService
         employee.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: null,
-            action: "UpdateEmployee",
+        await _auditService.LogActionAsync(action: "UpdateEmployee",
             entityType: "Employee",
             entityId: id.ToString(),
             httpEndpoint: $"PUT /api/employees/{id}",
@@ -217,7 +214,7 @@ public class EmployeeService
             {
                 employee.DisplayName,
                 employee.Email,
-                employee.PhoneNumber,
+                employee.Phone,
                 employee.ManagerId,
                 employee.DepartmentId,
                 employee.Role,
@@ -269,7 +266,7 @@ public class EmployeeService
                     EmployeeId = item.EmployeeId.Trim(),
                     DisplayName = item.DisplayName.Trim(),
                     Email = item.Email.ToLowerInvariant().Trim(),
-                    PhoneNumber = item.PhoneNumber?.Trim(),
+                    PhoneNumber = item.Phone?.Trim(),
                     ManagerId = item.ManagerId?.Trim(),
                     DepartmentId = item.DepartmentId,
                     Role = item.Role,
@@ -291,9 +288,7 @@ public class EmployeeService
             created = batch.Count;
         }
 
-        await _auditService.LogActionAsync(
-            actorId: null,
-            action: "BulkUploadEmployees",
+        await _auditService.LogActionAsync(action: "BulkUploadEmployees",
             entityType: "Employee",
             entityId: "bulk",
             httpEndpoint: "POST /api/employees/bulk",
@@ -402,7 +397,7 @@ public class EmployeeService
             EmployeeId = employee.EmployeeId,
             DisplayName = employee.DisplayName,
             Email = employee.Email,
-            PhoneNumber = employee.PhoneNumber,
+            PhoneNumber = employee.Phone,
             ManagerId = employee.ManagerId,
             ManagerName = employee.Manager?.DisplayName,
             DepartmentId = employee.DepartmentId,

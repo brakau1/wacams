@@ -224,9 +224,7 @@ public class GISIntegrationController : ControllerBase
     {
         var currentUser = User.FindFirst("employeeId")?.Value ?? "unknown";
 
-        await _auditService.LogActionAsync(
-            actorId: currentUser,
-            action: "ResetGISIntegrationSettings",
+        await _auditService.LogActionAsync(action: "ResetGISIntegrationSettings",
             entityType: "GISIntegrationSettings",
             entityId: "all",
             changesJson: "GIS integration settings reset"

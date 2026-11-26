@@ -65,14 +65,14 @@ public class AccessReviewService
         var lastPermissionChange = await _context.AuditLogs
             .Where(a => a.EntityId == employeeId && 
                        (a.Action == "PermissionChange" || a.Action == "RoleAssignment"))
-            .OrderByDescending(a => a.Timestamp)
+            .OrderByDescending(a => a.PerformedAt)
             .FirstOrDefaultAsync();
 
         var snapshot = new AccessReviewSnapshot
         {
             Id = Guid.NewGuid(),
             EmployeeId = employeeId,
-            DisplayName = $"{user.FirstName} {user.LastName}",
+            DisplayName = $"{user.DisplayName} {user}",
             Department = user.Department?.Name,
             Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? "User",
             AssignedPermissionsJson = System.Text.Json.JsonSerializer.Serialize(assignedPermissions),
@@ -81,7 +81,7 @@ public class AccessReviewService
             DepartmentScope = user.Department?.Name,
             LastLoginAt = lastLogin?.StartedAt,
             LastRoleChangeAt = lastRoleChange?.AssignedAt,
-            LastPermissionChangeAt = lastPermissionChange?.Timestamp,
+            LastPermissionChangeAt = lastPermissionChange?.PerformedAt,
             SnapshotDate = DateTime.UtcNow,
             CapturedBy = capturedBy,
             Reason = reason
@@ -203,13 +203,13 @@ public class AccessReviewService
         var lastPermissionChange = await _context.AuditLogs
             .Where(a => a.EntityId == employeeId && 
                        (a.Action == "PermissionChange" || a.Action == "RoleAssignment"))
-            .OrderByDescending(a => a.Timestamp)
+            .OrderByDescending(a => a.PerformedAt)
             .FirstOrDefaultAsync();
 
         return new UserAccessExplorerDto
         {
             EmployeeId = employeeId,
-            DisplayName = $"{user.FirstName} {user.LastName}",
+            DisplayName = $"{user.DisplayName} {user}",
             Department = user.Department?.Name,
             Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? "User",
             AssignedPermissions = assignedPermissions,
@@ -218,7 +218,7 @@ public class AccessReviewService
             DepartmentScope = user.Department?.Name,
             LastLoginAt = lastLogin?.StartedAt,
             LastRoleChangeAt = lastRoleChange?.AssignedAt,
-            LastPermissionChangeAt = lastPermissionChange?.Timestamp
+            LastPermissionChangeAt = lastPermissionChange?.PerformedAt
         };
     }
 
@@ -266,13 +266,13 @@ public class AccessReviewService
             var lastPermissionChange = await _context.AuditLogs
                 .Where(a => a.EntityId == user.EmployeeId && 
                            (a.Action == "PermissionChange" || a.Action == "RoleAssignment"))
-                .OrderByDescending(a => a.Timestamp)
+                .OrderByDescending(a => a.PerformedAt)
                 .FirstOrDefaultAsync();
 
             result.Add(new UserAccessExplorerDto
             {
                 EmployeeId = user.EmployeeId,
-                DisplayName = $"{user.FirstName} {user.LastName}",
+                DisplayName = $"{user.DisplayName} {user}",
                 Department = user.Department?.Name,
                 Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? "User",
                 AssignedPermissions = new Dictionary<string, Dictionary<string, bool>>(),
@@ -281,7 +281,7 @@ public class AccessReviewService
                 DepartmentScope = user.Department?.Name,
                 LastLoginAt = lastLogin?.StartedAt,
                 LastRoleChangeAt = lastRoleChange?.AssignedAt,
-                LastPermissionChangeAt = lastPermissionChange?.Timestamp
+                LastPermissionChangeAt = lastPermissionChange?.PerformedAt
             });
         }
 

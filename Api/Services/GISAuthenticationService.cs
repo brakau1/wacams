@@ -86,9 +86,7 @@ public class GISAuthenticationService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: updatedBy,
-            action: "UpdateGISIntegrationSettings",
+        await _auditService.LogActionAsync(action: "UpdateGISIntegrationSettings",
             entityType: "GISIntegrationSettings",
             entityId: settings.Id.ToString(),
             changesJson: $"Updated GIS integration settings"
@@ -154,9 +152,7 @@ public class GISAuthenticationService
 
             await _context.SaveChangesAsync();
 
-            await _auditService.LogActionAsync(
-                actorId: "system",
-                action: "GISAuthentication",
+            await _auditService.LogActionAsync(action: "GISAuthentication",
                 entityType: "GISIntegrationSettings",
                 entityId: settings.Id.ToString(),
                 changesJson: "GIS authentication successful"
@@ -300,9 +296,7 @@ public class GISAuthenticationService
                 await _context.SaveChangesAsync();
             }
 
-            await _auditService.LogActionAsync(
-                actorId: "system",
-                action: "GISConnectionTest",
+            await _auditService.LogActionAsync(action: "GISConnectionTest",
                 entityType: "GISIntegrationSettings",
                 entityId: settings?.Id.ToString() ?? "test",
                 changesJson: "GIS connection test successful"

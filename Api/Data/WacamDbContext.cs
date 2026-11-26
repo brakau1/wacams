@@ -207,7 +207,7 @@ public class WacamDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<SecurityEvent>()
-            .HasIndex(se => se.Timestamp);
+            .HasIndex(se => se.PerformedAt);
 
         modelBuilder.Entity<SecurityEvent>()
             .HasIndex(se => se.EventType);

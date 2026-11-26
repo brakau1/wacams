@@ -487,7 +487,7 @@ public class SecurityOperationsService
         {
             Id = s.Id,
             EmployeeId = s.EmployeeId,
-            EmployeeName = s.Employee != null ? $"{s.Employee.FirstName} {s.Employee.LastName}" : null,
+            EmployeeName = s.Employee != null ? $"{s.Employee.DisplayName} {s.Employee}" : null,
             IpAddress = s.IpAddress,
             UserAgent = s.UserAgent,
             StartedAt = s.StartedAt,

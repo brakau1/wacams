@@ -93,9 +93,7 @@ public class SettingsController : ControllerBase
         setting.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: User.FindFirst("employeeId")?.Value,
-            action: "UpdateSetting",
+        await _auditService.LogActionAsync(action: "UpdateSetting",
             entityType: "SystemSettings",
             entityId: key,
             httpEndpoint: $"PUT /api/settings/{key}",
@@ -137,9 +135,7 @@ public class SettingsController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: User.FindFirst("employeeId")?.Value,
-            action: "BulkUpdateSettings",
+        await _auditService.LogActionAsync(action: "BulkUpdateSettings",
             entityType: "SystemSettings",
             entityId: "bulk",
             httpEndpoint: "POST /api/settings/bulk-update",

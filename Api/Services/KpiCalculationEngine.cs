@@ -219,15 +219,15 @@ public class KpiCalculationEngine
     {
         var totalInvestigations = await _context.AttendanceExceptions
             .Where(e => e.Date >= startDate.Date && e.Date <= endDate.Date)
-            .Where(e => e.Status == ExceptionStatus.Investigated || 
-                       e.Status == ExceptionStatus.Closed)
+            .Where(e => e.Status == InvestigationStatus.Investigated || 
+                       e.Status == InvestigationStatus.Closed)
             .CountAsync();
 
         if (totalInvestigations == 0) return 0;
 
         var resolvedInvestigations = await _context.AttendanceExceptions
             .Where(e => e.Date >= startDate.Date && e.Date <= endDate.Date)
-            .Where(e => e.Status == ExceptionStatus.Closed)
+            .Where(e => e.Status == InvestigationStatus.Closed)
             .CountAsync();
 
         return Math.Round((decimal)resolvedInvestigations / totalInvestigations * 100, 2);
@@ -276,7 +276,7 @@ public class KpiCalculationEngine
     {
         var investigations = await _context.AttendanceExceptions
             .Where(e => e.Date >= startDate.Date && e.Date <= endDate.Date)
-            .Where(e => e.Status == ExceptionStatus.Closed && 
+            .Where(e => e.Status == InvestigationStatus.Closed && 
                        e.InvestigatedAt.HasValue)
             .Select(e => new { e.CreatedAt, e.InvestigatedAt })
             .ToListAsync();

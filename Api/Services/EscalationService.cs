@@ -5,6 +5,7 @@ using WACAMS.Core.Entities;
 using WACAMS.Core.DTOs;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -121,7 +122,7 @@ public class EscalationService
             .Include(wl => wl.Employee)
             .FirstOrDefaultAsync(wl => wl.Id == warningLetterId);
 
-        if (warningLetter is null || warningLetter.WarningType != "FinalWrittenWarning")
+        if (warningLetter is null || warningLetter.Type != "FinalWrittenWarning")
             return;
 
         var employee = warningLetter.Employee;
@@ -161,10 +162,10 @@ public class EscalationService
             entityType: "Escalation",
             entityId: escalation.Id.ToString(),
             httpEndpoint: "SYSTEM/AUTO-ESCALATION",
-            changesJson: $"{{\"WarningLetterId\":{warningLetterId},\"EmployeeId\":\"{employeeId}\",\"Level\":1,\"ResponsibleManagerId\":\"{escalation.ResponsibleManagerId}\"}}");
+            changesJson: $"{{\"WarningLetterId\":{warningLetterId},\"EmployeeId\":\"{employeeId}\",\"Level\":1,\"ResponsibleManagerId\":\"{escalation.AssignedTo}\"}}");
 
         _logger.LogInformation("Auto-escalation created: Id={Id}, Level=1, Manager={ManagerId}",
-            escalation.Id, escalation.ResponsibleManagerId);
+            escalation.Id, escalation.AssignedTo);
 
         // Notify the responsible manager
         try
@@ -210,7 +211,7 @@ public class EscalationService
         {
             // Move to next level
             escalation.Level = chain[escalation.Level].Level;
-            escalation.ResponsibleManagerId = chain[escalation.Level].ManagerId;
+            escalation.AssignedTo = chain[escalation.Level].ManagerId;
             escalation.Status = "Pending";
 
             await SendEscalationNotificationAsync(escalation);
@@ -262,7 +263,7 @@ public class EscalationService
                 {
                     var nextLevel = chain[esc.Level];
                     esc.Level = nextLevel.Level;
-                    esc.ResponsibleManagerId = nextLevel.ManagerId;
+                    esc.AssignedTo = nextLevel.ManagerId;
                     esc.Notes += Environment.NewLine + $"[AUTO] Escalated from Level {esc.Level - 1} to Level {nextLevel.Level} (Manager: {nextLevel.ManagerId}) due to 24-hour timeout.";
                 }
 
@@ -274,7 +275,7 @@ public class EscalationService
                     entityType: "Escalation",
                     entityId: esc.Id.ToString(),
                     httpEndpoint: "SYSTEM/AUTO-TIMEOUT",
-                    changesJson: $"{{\"Level\":{esc.Level},\"Status\":\"{esc.Status}\",\"ResponsibleManagerId\":\"{esc.ResponsibleManagerId}\"}}");
+                    changesJson: $"{{\"Level\":{esc.Level},\"Status\":\"{esc.Status}\",\"ResponsibleManagerId\":\"{esc.AssignedTo}\"}}");
 
                 _logger.LogInformation("Auto-escalated overdue EscalationId={Id} to Level {Level}", esc.Id, esc.Level);
 
@@ -392,10 +393,10 @@ public class EscalationService
 
     private static EscalationDto MapToDto(Escalation escalation)
     {
-        var managerName = escalation.ResponsibleManagerId;
-        if (!string.IsNullOrEmpty(escalation.ResponsibleManagerId))
+        var managerName = escalation.AssignedTo;
+        if (!string.IsNullOrEmpty(escalation.AssignedTo))
         {
-            var mgr = _context.Employees.AsNoTracking().FirstOrDefault(m => m.EmployeeId == escalation.ResponsibleManagerId);
+            var mgr = _context.Employees.AsNoTracking().FirstOrDefault(m => m.EmployeeId == escalation.AssignedTo);
             if (mgr != null) managerName = mgr.DisplayName;
         }
 
@@ -405,9 +406,9 @@ public class EscalationService
             EmployeeId = escalation.EmployeeId,
             DisplayName = escalation.Employee?.DisplayName ?? string.Empty,
             WarningLetterId = escalation.WarningLetterId,
-            WarningType = escalation.WarningLetter?.WarningType ?? string.Empty,
+            WarningType = escalation.WarningLetter?.Type ?? string.Empty,
             Level = escalation.Level,
-            ResponsibleManagerId = escalation.ResponsibleManagerId,
+            ResponsibleManagerId = escalation.AssignedTo,
             ResponsibleManagerName = managerName,
             Status = escalation.Status,
             Notes = escalation.Notes,

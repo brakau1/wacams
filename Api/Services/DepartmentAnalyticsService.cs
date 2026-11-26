@@ -61,7 +61,7 @@ public class DepartmentAnalyticsService
             .Select(g => new EmployeeRankingDto
             {
                 EmployeeId = g.Key,
-                EmployeeName = g.First().Employee?.FullName ?? "Unknown",
+                EmployeeName = g.First().Employee?.DisplayName ?? "Unknown",
                 AttendanceRate = g.Count > 0
                     ? Math.Round((double)g.Count(r => r.ClockInTime.HasValue) / g.Count() * 100, 2)
                     : 0,

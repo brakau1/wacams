@@ -4,6 +4,7 @@ using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -194,7 +195,7 @@ public class ReportService
         if (endDate.HasValue)
             query = query.Where(wl => wl.DateIssued <= endDate.Value.Date.AddDays(1).AddTicks(-1));
 
-        var warnings = await query.OrderByDescending(wl => wl.IssueDate).ToListAsync();
+        var warnings = await query.OrderByDescending(wl => wl.DateIssued).ToListAsync();
 
         var csvLines = new List<string>();
         csvLines.Add("WarningID,EmployeeID,DisplayName,Department,ExceptionType,WarningType,IssueDate,Description,IssuedBy,SignedFormPath,Acknowledged");

@@ -3,6 +3,7 @@ using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Api.Utils;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -281,7 +282,7 @@ public class AuthService
             EmployeeId = request.EmployeeId.Trim(),
             DisplayName = request.DisplayName.Trim(),
             Email = request.Email.ToLowerInvariant().Trim(),
-            PhoneNumber = request.PhoneNumber?.Trim(),
+            PhoneNumber = request.Phone?.Trim(),
             ManagerId = request.ManagerId?.Trim(),
             DepartmentId = request.DepartmentId,
             Role = request.Role,
@@ -390,7 +391,7 @@ public class AuthService
             EmployeeId = employee.EmployeeId,
             DisplayName = employee.DisplayName,
             Email = employee.Email,
-            PhoneNumber = employee.PhoneNumber,
+            PhoneNumber = employee.Phone,
             ManagerId = employee.ManagerId,
             DepartmentId = employee.DepartmentId,
             Role = employee.Role,

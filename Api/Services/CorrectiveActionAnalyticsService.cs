@@ -43,7 +43,7 @@ public class CorrectiveActionAnalyticsService
 
         // Warning type breakdown
         var warningTypeBreakdown = warnings
-            .GroupBy(w => w.WarningType)
+            .GroupBy(w => w.Type)
             .Select(g => new WarningTypeBreakdownDto
             {
                 WarningType = g.Key.ToString(),
@@ -84,7 +84,7 @@ public class CorrectiveActionAnalyticsService
             .Select(g => new RepeatOffenderDto
             {
                 EmployeeId = g.Key,
-                EmployeeName = g.First().Employee?.FullName ?? "Unknown",
+                EmployeeName = g.First().Employee?.DisplayName ?? "Unknown",
                 DepartmentName = g.First().Employee?.Department?.Name ?? "Unknown",
                 WarningCount = g.Count(),
                 MaxEscalationLevel = g.Max(w => w.EscalationLevel),

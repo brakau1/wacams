@@ -33,13 +33,13 @@ public class EscalationAnalyticsService
         var escalations = await query.ToListAsync();
 
         var totalEscalations = escalations.Count;
-        var openEscalations = escalations.Count(e => e.Status == EscalationStatus.Open);
-        var resolvedEscalations = escalations.Count(e => e.Status == EscalationStatus.Resolved);
+        var openEscalations = escalations.Count(e => e.Status == EscalationStatus.Pending);
+        var resolvedEscalations = escalations.Count(e => e.Status == EscalationStatus.Closed);
         var escalatedFurther = escalations.Count(e => e.Status == EscalationStatus.Escalated);
 
         // Average resolution time
         var resolvedWithTime = escalations
-            .Where(e => e.Status == EscalationStatus.Resolved && e.ResolvedAt.HasValue)
+            .Where(e => e.Status == EscalationStatus.Closed && e.ResolvedAt.HasValue)
             .ToList();
 
         var avgResolutionHours = resolvedWithTime.Count > 0
@@ -53,7 +53,7 @@ public class EscalationAnalyticsService
             {
                 Level = g.Key,
                 Count = g.Count(),
-                AvgResolutionHours = g.Where(e => e.Status == EscalationStatus.Resolved && e.ResolvedAt.HasValue)
+                AvgResolutionHours = g.Where(e => e.Status == EscalationStatus.Closed && e.ResolvedAt.HasValue)
                     .DefaultIfEmpty()
                     .Average(e => e?.ResolvedAt.HasValue == true ? (e.ResolvedAt.Value - e.CreatedAt).TotalHours : 0)
             })
@@ -68,7 +68,7 @@ public class EscalationAnalyticsService
                 DepartmentId = g.Key,
                 DepartmentName = g.First().Employee?.Department?.Name ?? "Unknown",
                 TotalEscalations = g.Count(),
-                OpenCount = g.Count(e => e.Status == EscalationStatus.Open),
+                OpenCount = g.Count(e => e.Status == EscalationStatus.Pending),
                 AvgLevel = g.Average(e => e.Level)
             })
             .OrderByDescending(d => d.TotalEscalations)
@@ -76,8 +76,8 @@ public class EscalationAnalyticsService
 
         // Manager response time
         var managerResponseTimes = escalations
-            .Where(e => e.AssignedToManagerId != null && e.ManagerRespondedAt.HasValue)
-            .GroupBy(e => e.AssignedToManagerId)
+            .Where(e => e.AssignedTo != null && e.ManagerRespondedAt.HasValue)
+            .GroupBy(e => e.AssignedTo)
             .Select(g => new ManagerResponseDto
             {
                 ManagerId = g.Key ?? "",
@@ -91,12 +91,12 @@ public class EscalationAnalyticsService
         // Overdue escalations (not responded within 24h)
         var now = DateTime.UtcNow;
         var overdueEscalations = escalations
-            .Where(e => e.Status == EscalationStatus.Open && (now - e.EscalatedAt).TotalHours > 24)
+            .Where(e => e.Status == EscalationStatus.Pending && (now - e.EscalatedAt).TotalHours > 24)
             .Select(e => new OverdueEscalationDto
             {
                 EscalationId = e.Id,
                 EmployeeId = e.EmployeeId,
-                EmployeeName = e.Employee?.FullName ?? "Unknown",
+                EmployeeName = e.Employee?.DisplayName ?? "Unknown",
                 Level = e.Level,
                 HoursOverdue = (int)(now - e.EscalatedAt).TotalHours - 24
             })

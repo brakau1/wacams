@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
+using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -129,8 +130,8 @@ public class ExceptionService
             ActualClockIn = request.ActualClockIn,
             ExpectedClockOut = request.ExpectedClockOut,
             ActualClockOut = request.ActualClockOut,
-            MinutesLate = request.MinutesLate,
-            MinutesEarly = request.MinutesEarly,
+            MinutesLate = request.LateMinutes,
+            MinutesEarly = request.EarlyMinutes,
             LostProductionMinutes = request.LostProductionMinutes,
             InvestigationStatus = WACAMS.Core.Enums.InvestigationStatus.Open,
             CreatedAt = DateTime.UtcNow
@@ -139,9 +140,7 @@ public class ExceptionService
         _context.AttendanceExceptions.Add(exception);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: null,
-            action: "CreateException",
+        await _auditService.LogActionAsync(action: "CreateException",
             entityType: "AttendanceException",
             entityId: exception.Id.ToString(),
             httpEndpoint: "POST /api/exceptions",
@@ -177,8 +176,8 @@ public class ExceptionService
             ActualClockIn = request.ActualClockIn,
             ExpectedClockOut = request.ExpectedClockOut,
             ActualClockOut = request.ActualClockOut,
-            MinutesLate = request.MinutesLate,
-            MinutesEarly = request.MinutesEarly,
+            MinutesLate = request.LateMinutes,
+            MinutesEarly = request.EarlyMinutes,
             LostProductionMinutes = request.LostProductionMinutes,
             InvestigationStatus = WACAMS.Core.Enums.InvestigationStatus.Open,
             CreatedAt = DateTime.UtcNow
@@ -215,9 +214,7 @@ public class ExceptionService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: investigatedBy,
-            action: "InvestigateException",
+        await _auditService.LogActionAsync(action: "InvestigateException",
             entityType: "AttendanceException",
             entityId: exceptionId.ToString(),
             httpEndpoint: $"PUT /api/exceptions/{exceptionId}/investigate",
@@ -254,9 +251,7 @@ public class ExceptionService
 
         if (count > 0)
         {
-            await _auditService.LogActionAsync(
-                actorId: investigatedBy,
-                action: "BulkInvestigateExceptions",
+            await _auditService.LogActionAsync(action: "BulkInvestigateExceptions",
                 entityType: "AttendanceException",
                 entityId: string.Join(",", exceptionIds),
                 httpEndpoint: "PUT /api/exceptions/bulk-investigate",
@@ -287,9 +282,7 @@ public class ExceptionService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: closedBy,
-            action: "CloseException",
+        await _auditService.LogActionAsync(action: "CloseException",
             entityType: "AttendanceException",
             entityId: exceptionId.ToString(),
             httpEndpoint: $"PUT /api/exceptions/{exceptionId}/close",
@@ -314,8 +307,8 @@ public class ExceptionService
             ActualClockIn = exception.ActualClockIn,
             ExpectedClockOut = exception.ExpectedClockOut,
             ActualClockOut = exception.ActualClockOut,
-            MinutesLate = exception.MinutesLate,
-            MinutesEarly = exception.MinutesEarly,
+            MinutesLate = exception.LateMinutes,
+            MinutesEarly = exception.EarlyMinutes,
             LostProductionMinutes = exception.LostProductionMinutes,
             InvestigationStatus = exception.InvestigationStatus,
             InvestigationNotes = exception.InvestigationNotes,

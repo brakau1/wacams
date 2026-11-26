@@ -84,7 +84,7 @@ public class NotificationDispatcherJob : BackgroundService
 
                     case NotificationChannel.SMS:
                         await notificationService.SendSmsNotificationAsync(
-                            notification.RecipientUser?.PhoneNumber ?? "",
+                            notification.RecipientUser?.Phone ?? "",
                             notification.Body ?? ""
                         );
                         break;

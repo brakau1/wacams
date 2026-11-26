@@ -27,15 +27,15 @@ public class GISAdminService
         // For now, return mock data. In Phase 4, this will integrate with actual GIS.
         var lastSync = await _context.AuditLogs
             .Where(a => a.Action.StartsWith("GISSync"))
-            .OrderByDescending(a => a.Timestamp)
+            .OrderByDescending(a => a.PerformedAt)
             .FirstOrDefaultAsync();
 
         return new GisConnectionStatusDto
         {
             IsConnected = false, // Will be updated in Phase 4
             Status = "Not Configured",
-            LastSyncAt = lastSync?.Timestamp,
-            LastSuccessfulSyncAt = lastSync?.Timestamp,
+            LastSyncAt = lastSync?.PerformedAt,
+            LastSuccessfulSyncAt = lastSync?.PerformedAt,
             FailedRecordsCount = 0,
             RetryQueueSize = 0,
             LastError = null
@@ -49,7 +49,7 @@ public class GISAdminService
     {
         var syncLogs = await _context.AuditLogs
             .Where(a => a.Action.StartsWith("GISSync"))
-            .OrderByDescending(a => a.Timestamp)
+            .OrderByDescending(a => a.PerformedAt)
             .Take(limit)
             .ToListAsync();
 
@@ -61,8 +61,8 @@ public class GISAdminService
             TotalRecords = 0, // Will be populated from Details JSON in Phase 4
             SuccessCount = 0,
             ErrorCount = 0,
-            StartedAt = log.Timestamp,
-            CompletedAt = log.Timestamp,
+            StartedAt = log.PerformedAt,
+            CompletedAt = log.PerformedAt,
             ErrorMessage = log.Details?.Contains("Failed") == true ? log.Details : null
         }).ToList();
     }

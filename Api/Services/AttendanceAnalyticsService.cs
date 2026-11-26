@@ -81,7 +81,7 @@ public class AttendanceAnalyticsService
             .Select(g => new LateOffenderDto
             {
                 EmployeeId = g.Key,
-                EmployeeName = g.First().Employee?.FullName ?? "Unknown",
+                EmployeeName = g.First().Employee?.DisplayName ?? "Unknown",
                 DepartmentName = g.First().Employee?.Department?.Name ?? "Unknown",
                 LateCount = g.Count(),
                 TotalLateMinutes = g.Sum(r => r.LateMinutes)
@@ -139,7 +139,7 @@ public class AttendanceAnalyticsService
                         anomalies.Add(new AttendanceAnomalyDto
                         {
                             EmployeeId = group.Key,
-                            EmployeeName = record.Employee?.FullName ?? "Unknown",
+                            EmployeeName = record.Employee?.DisplayName ?? "Unknown",
                             AnomalyType = "ConsecutiveLateArrivals",
                             Description = $"{consecutiveLate}+ consecutive late arrivals",
                             Severity = consecutiveLate >= 5 ? "High" : "Medium",
@@ -163,7 +163,7 @@ public class AttendanceAnalyticsService
                 anomalies.Add(new AttendanceAnomalyDto
                 {
                     EmployeeId = group.Key,
-                    EmployeeName = sorted.First().Employee?.FullName ?? "Unknown",
+                    EmployeeName = sorted.First().Employee?.DisplayName ?? "Unknown",
                     AnomalyType = "IncreasedLostTime",
                     Description = $"Lost time increased from {firstHalf}m to {secondHalf}m",
                     Severity = "Medium",

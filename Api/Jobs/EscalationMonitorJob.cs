@@ -54,7 +54,7 @@ public class EscalationMonitorJob : BackgroundService
         var staleEscalations = await context.Escalations
             .Include(e => e.Employee)
                 .ThenInclude(e => e!.Manager)
-            .Where(e => e.Status == EscalationStatus.Open && e.UpdatedAt < cutoff)
+            .Where(e => e.Status == EscalationStatus.Pending && e.UpdatedAt < cutoff)
             .ToListAsync();
 
         int escalatedCount = 0;
@@ -76,7 +76,7 @@ public class EscalationMonitorJob : BackgroundService
 
             // Escalate to next level
             escalation.Level++;
-            escalation.AssignedToManagerId = nextManager.Id;
+            escalation.AssignedTo = nextManager.Id;
             escalation.EscalatedAt = now;
             escalation.UpdatedAt = now;
             escalation.Status = EscalationStatus.Escalated;

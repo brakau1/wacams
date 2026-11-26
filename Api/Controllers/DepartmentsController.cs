@@ -94,9 +94,7 @@ public class DepartmentsController : ControllerBase
         _context.Departments.Add(dept);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: User.FindFirst("employeeId")?.Value,
-            action: "CreateDepartment",
+        await _auditService.LogActionAsync(action: "CreateDepartment",
             entityType: "Department",
             entityId: dept.Id.ToString(),
             httpEndpoint: "POST /api/departments",
@@ -144,9 +142,7 @@ public class DepartmentsController : ControllerBase
         dept.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(
-            actorId: User.FindFirst("employeeId")?.Value,
-            action: "UpdateDepartment",
+        await _auditService.LogActionAsync(action: "UpdateDepartment",
             entityType: "Department",
             entityId: id.ToString(),
             httpEndpoint: $"PUT /api/departments/{id}",
