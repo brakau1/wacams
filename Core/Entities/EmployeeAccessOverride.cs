@@ -128,4 +128,7 @@ public class EmployeeAccessOverride
     /// </summary>
     [ForeignKey("RevokedByEmployeeId")]
     public Employee? RevokedByEmployee { get; set; }
+
+    // Alias property for compatibility
+    public string PermissionName => OverrideRole;
 }

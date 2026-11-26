@@ -1,3 +1,4 @@
+using WACAMS.Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Wacam.Api.Controllers;
 using Wacam.Api.Data;

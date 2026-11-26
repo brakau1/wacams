@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using WACAMS.Core.Enums;
 
 namespace WACAMS.Core.Entities;
@@ -116,4 +117,16 @@ public class WarningLetter
     /// Used for analytics and reporting.
     /// </summary>
     public int EscalationLevel { get; set; }
+
+    // Alias properties for compatibility with code that references old property names
+    [NotMapped]
+    public string WarningType => Type.ToString();
+    [NotMapped]
+    public DateTime IssueDate => DateIssued;
+    [NotMapped]
+    public string Description => Reason;
+    [NotMapped]
+    public bool Acknowledged => Signed;
+    [NotMapped]
+    public string SignedFormPath => SignedFilePath ?? string.Empty;
 }

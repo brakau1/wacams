@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using WACAMS.Core.Enums;
 
 namespace WACAMS.Core.Entities;
@@ -112,6 +113,21 @@ public class AttendanceRecord
     /// Calculates total hours worked from clock-in and clock-out times.
     /// Handles overnight shifts by adding 24 hours if end time is before start time.
     /// </summary>
+    // Alias properties for compatibility
+    [NotMapped]
+    public DateTime? ClockIn => ClockInTime;
+    [NotMapped]
+    public DateTime? ClockOut => ClockOutTime;
+    [NotMapped]
+    public bool IsLate => LateMinutes > 0;
+    [NotMapped]
+    public int MinutesLate => LateMinutes;
+    [NotMapped]
+    public bool IsEarlyDeparture => EarlyMinutes > 0;
+    [NotMapped]
+    public int MinutesEarly => EarlyMinutes;
+
+
     private decimal CalculateTotalHours()
     {
         if (ClockInTime.HasValue && ClockOutTime.HasValue)

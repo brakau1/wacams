@@ -120,4 +120,7 @@ public class Notification
     /// </summary>
     [MaxLength(50)]
     public string? SenderEmployeeId { get; set; }
+
+    // Alias property for compatibility
+    public string RecipientUser => RecipientName ?? RecipientAddress;
 }

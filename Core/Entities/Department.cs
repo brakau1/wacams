@@ -59,6 +59,9 @@ public class Department
     /// </summary>
     public decimal TargetAttendancePercent { get; set; } = 95.0m;
 
+    // Alias property for compatibility
+    public decimal AttendanceTargetPercentage => TargetAttendancePercent;
+
     /// <summary>
     /// Record creation timestamp.
     /// </summary>

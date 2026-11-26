@@ -79,6 +79,11 @@ public class User
     /// </summary>
     public bool MustChangePassword { get; set; } = false;
 
+    // Alias properties for compatibility
+        public int? DepartmentId { get; set; }
+        public Department? Department { get; set; }
+        public DateTime? SignedAt { get; set; }
+
     /// <summary>
     /// Record creation timestamp.
     /// </summary>

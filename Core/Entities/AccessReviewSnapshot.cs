@@ -54,4 +54,8 @@ public class AccessReviewSnapshot
     public string? Reason { get; set; }
 
     public Employee? Employee { get; set; }
+
+    // Alias properties for compatibility
+    public DateTime SnapshotDate => SnapshotAt;
+    public int? DepartmentScope { get; set; }
 }

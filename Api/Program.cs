@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.FileProviders;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -6,7 +10,7 @@ using System.Text;
 using Wacam.Api.Data;
 using Wacam.Api.Data.SeedData;
 using Wacam.Api.Extensions;
-using Wacam.Api.Middleware;
+using WACAMS.Api.Middleware;
 using Wacam.Api.Policies;
 using Wacam.Api.Services;
 using WACAMS.Core.Interfaces;
@@ -138,7 +142,7 @@ public class Program
 
         // ── Health Checks ──
         builder.Services.AddHealthChecks()
-            .AddDbContextCheck<WacamDbContext>("Database");
+            .AddCheck<DatabaseHealthCheck>()("Database");
 
         // ── Register API Services ──
         builder.Services.AddApiServices();
@@ -189,10 +193,7 @@ public class Program
         builder.Services.ConfigureCors(builder.Environment);
 
         // ── File uploads ──
-        builder.Services.Configure<FormOptions>(options =>
-        {
-            options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
-        });
+        builder.Services.Configure<FormOptions>(o => { o.ValueLengthLimit = int.MaxValue; o.KeyLengthLimit = int.MaxValue; });
 
         // ── Background Jobs ──
         builder.Services.AddHostedService<Wacam.Api.Jobs.EscalationMonitorJob>();

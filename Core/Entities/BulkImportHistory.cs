@@ -69,4 +69,7 @@ public class BulkImportHistory
     public string? RolledBackBy { get; set; }
 
     public DateTime? RolledBackAt { get; set; }
+
+    // Alias property for compatibility
+    public DateTime ImportDate => StartedAt;
 }

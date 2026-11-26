@@ -30,7 +30,7 @@ public static class CorsExtensions
             };
 
             // Also read from config if available
-            var originsFromConfig = env.GetEnvironmentVariable("WACAMS_ALLOWED_ORIGINS");
+            var originsFromConfig = env.GetSection("Environment").GetValue<string>("") ?? ""WACAMS_ALLOWED_ORIGINS");
             if (!string.IsNullOrEmpty(originsFromConfig))
             {
                 allowedOrigins.AddRange(originsFromConfig.Split(';', StringSplitOptions.RemoveEmptyEntries));

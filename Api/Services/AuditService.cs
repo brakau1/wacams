@@ -143,3 +143,20 @@ public record AuditLogDto
     public string? ChangesJson { get; init; }
     public DateTime PerformedAt { get; init; }
 }
+
+        public async Task LogAsync(string action, string entityType, int entityId, string userId, string ipAddress, string details = null)
+        {
+            var log = new AuditLog
+            {
+                Action = action,
+                EntityType = entityType,
+                EntityId = entityId.ToString(),
+                UserId = userId,
+                IpAddress = ipAddress,
+                Details = details,
+                PerformedAt = DateTime.UtcNow
+            };
+            await _context.AuditLogs.AddAsync(log);
+            await _context.SaveChangesAsync();
+        }
+

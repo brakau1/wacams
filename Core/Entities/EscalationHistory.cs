@@ -39,4 +39,8 @@ public class EscalationHistory
 
     // Navigation property
     public virtual Escalation? Escalation { get; set; }
+
+    // Alias properties for compatibility
+    public int FromManagerId => FromLevel;
+    public int ToManagerId => ToLevel;
 }

@@ -1,3 +1,4 @@
+using WACAMS.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Wacam.Api.Data;
 

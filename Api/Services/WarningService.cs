@@ -1,3 +1,4 @@
+using WACAMS.Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Wacam.Api.Data;
 using Wacam.Api.DTOs;
@@ -81,7 +82,7 @@ public class WarningService
 
     /// <summary>
     /// Generate a warning letter from an attendedce exception.
-    /// GUARD: Exception must have Status == "Investigated" or "Closed" before any warning can be created.
+    /// GUARD: Exception must have Status == Core.Enums.InvestigationStatus.Investigated or "Closed" before any warning can be created.
     /// Auto-triggers escalation when FinalWrittenWarning is generated.
     /// </summary>
     public async Task<WarningLetterDto> GenerateWarningAsync(GenerateWarningRequest request, string issuedBy)
@@ -94,7 +95,7 @@ public class WarningService
             throw new NotFoundException($"Exception with ID {request.ExceptionId} not found for employee {request.EmployeeId}.");
 
         // Core business rule: NO disciplinary action until investigation is complete
-        if (exception.Status != "Investigated" && exception.Status != "Closed")
+        if (exception.Status != Core.Enums.InvestigationStatus.Investigated && exception.Status != "Closed")
             throw new InvalidOperationException(
                 $"Cannot generate warning. Exception status is '{exception.Status}'. " +
                 "Disciplinary action requires the exception to be in 'Investigated' or 'Closed' status.");
