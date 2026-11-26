@@ -1,19 +1,12 @@
-ï»¿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Enums;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Interfaces;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -136,7 +129,7 @@ public class EscalationService
         var employee = warningLetter.Employee;
         if (employee?.ManagerId is null)
         {
-            _logger.LogWarning("Cannot auto-create escalation for {EmployeeId} â€” no manager assigned.", employeeId);
+            _logger.LogWarning("Cannot auto-create escalation for {EmployeeId} — no manager assigned.", employeeId);
             return;
         }
 
@@ -187,7 +180,7 @@ public class EscalationService
     }
 
     /// <summary>
-    /// Progress an escalation â€” either acknowledge at current level or escalate to next level.
+    /// Progress an escalation — either acknowledge at current level or escalate to next level.
     /// If resolved, mark as Resolved. Otherwise increment Level and assign to next manager in chain.
     /// </summary>
     public async Task<EscalationDto> ProgressEscalationAsync(Guid escalationId, ProgressEscalationRequest request, string actedBy)
@@ -211,7 +204,7 @@ public class EscalationService
 
         if (chain.Count <= escalation.Level)
         {
-            // We've reached the top of the chain â€” resolve
+            // We've reached the top of the chain — resolve
             escalation.Status = EscalationStatus.Resolved;
             escalation.ResolvedAt = DateTime.UtcNow;
         }
@@ -262,10 +255,10 @@ public class EscalationService
 
                 if (chain.Count <= esc.Level)
                 {
-                    // Top of chain reached â€” resolve
+                    // Top of chain reached — resolve
                     esc.Status = EscalationStatus.Resolved;
                     esc.ResolvedAt = DateTime.UtcNow;
-                    esc.Notes += Environment.NewLine + "[AUTO] Reached end of escalation chain â€” resolved.";
+                    esc.Notes += Environment.NewLine + "[AUTO] Reached end of escalation chain — resolved.";
                 }
                 else
                 {

@@ -1,16 +1,13 @@
-ï»¿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Enums;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
 /// <summary>
-/// Aggregates data for dashboard views â€” executive, manager, supervisor, and employee levels.
+/// Aggregates data for dashboard views — executive, manager, supervisor, and employee levels.
 /// </summary>
 public class DashboardService
 {
@@ -29,7 +26,7 @@ public class DashboardService
     }
 
     /// <summary>
-    /// Get executive dashboard overview â€” high-level KPIs and alerts.
+    /// Get executive dashboard overview — high-level KPIs and alerts.
     /// </summary>
     public async Task<ExecutiveDashboardDto> GetExecutiveDashboardAsync()
     {
@@ -68,7 +65,7 @@ public class DashboardService
     }
 
     /// <summary>
-    /// Get manager dashboard â€” department-specific view with team details.
+    /// Get manager dashboard — department-specific view with team details.
     /// </summary>
     public async Task<ManagerDashboardDto> GetManagerDashboardAsync(Guid departmentId)
     {
@@ -137,7 +134,7 @@ public class DashboardService
     }
 
     /// <summary>
-    /// Get supervisor dashboard â€” team-specific view with direct reports.
+    /// Get supervisor dashboard — team-specific view with direct reports.
     /// </summary>
     public async Task<SupervisorDashboardDto> GetSupervisorDashboardAsync(string supervisorEmployeeId)
     {
@@ -239,7 +236,7 @@ public class DashboardService
     }
 
     /// <summary>
-    /// Get employee dashboard â€” personal attendance view.
+    /// Get employee dashboard — personal attendance view.
     /// </summary>
     public async Task<EmployeeDashboardDto> GetEmployeeDashboardAsync(string employeeId)
     {

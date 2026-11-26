@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WACAMS.Api.Data;
-using System.Security.Claims;
 using WACAMS.Core.Entities;
-using System.Security.Claims;
 
 namespace WACAMS.Api.Middleware;
 

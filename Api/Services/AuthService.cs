@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -38,7 +33,7 @@ public class AuthService
 
     /// <summary>
     /// Authenticate employee by EmployeeId and password. Returns JWT access + refresh tokens.
-    /// Enforces account lockout: 5 failed attempts within 30 minutes → 30-minute lockout.
+    /// Enforces account lockout: 5 failed attempts within 30 minutes ? 30-minute lockout.
     /// </summary>
     public async Task<LoginResponse> LoginAsync(LoginRequest request, string? ipAddress = null)
     {
@@ -81,7 +76,7 @@ public class AuthService
             throw new UnauthorizedAccessException("Invalid employee ID or password.");
         }
 
-        // 5. Successful login — reset lockout counters
+        // 5. Successful login � reset lockout counters
         await ResetLockoutCountersAsync(employee, ipAddress);
 
         // 6. Load user permissions
@@ -344,7 +339,7 @@ public class AuthService
     }
 
     /// <summary>
-    /// Logout — invalidate the current refresh token.
+    /// Logout � invalidate the current refresh token.
     /// </summary>
     public async Task LogoutAsync(string employeeId)
     {

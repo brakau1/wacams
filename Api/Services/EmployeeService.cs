@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -113,7 +108,7 @@ public class EmployeeService
     }
 
     /// <summary>
-    /// Create a new employee (used for programmatic creation — registration goes through AuthService).
+    /// Create a new employee (used for programmatic creation � registration goes through AuthService).
     /// </summary>
     public async Task<EmployeeDto> CreateAsync(CreateEmployeeRequest request)
     {
@@ -425,7 +420,7 @@ public class EmployeeService
             .ToDictionary(p => p.Name, p => p.GetValue(newValues)?.ToString());
 
         var changes = oldDict.Keys.Select(key =>
-            $"{key}:{oldDict[key]}→{newDict[key]}").ToList();
+            $"{key}:{oldDict[key]}?{newDict[key]}").ToList();
 
         return string.Join("|", changes);
     }

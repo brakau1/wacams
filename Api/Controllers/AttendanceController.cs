@@ -1,16 +1,13 @@
-ï»¿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
 /// <summary>
-/// Attendance endpoints â€” clock in/out, daily/weekly/monthly stats, exception reporting.
+/// Attendance endpoints — clock in/out, daily/weekly/monthly stats, exception reporting.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -27,7 +24,7 @@ public class AttendanceController : ControllerBase
     }
 
     /// <summary>
-    /// POST /api/attendance/clockin â€” Clock in for an employee.
+    /// POST /api/attendance/clockin — Clock in for an employee.
     /// Automatically calculates lateness based on shift time.
     /// Creates LateArrival exception if >30 min late (after grace period).
     /// </summary>
@@ -54,7 +51,7 @@ public class AttendanceController : ControllerBase
     }
 
     /// <summary>
-    /// POST /api/attendance/clockout â€” Clock out for an employee.
+    /// POST /api/attendance/clockout — Clock out for an employee.
     /// Automatically calculates early departure based on shift end time.
     /// </summary>
     [HttpPost("clockout")]
@@ -80,7 +77,7 @@ public class AttendanceController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/attendance/daily â€” Get daily attendance records for all employees or by department.
+    /// GET /api/attendance/daily — Get daily attendance records for all employees or by department.
     /// Query params: date (required), departmentId (optional).
     /// </summary>
     [HttpGet("daily")]
@@ -95,7 +92,7 @@ public class AttendanceController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/attendance/summary â€” Get aggregated attendance summary for a date range.
+    /// GET /api/attendance/summary — Get aggregated attendance summary for a date range.
     /// Calculates Department Attendance %, Employee Attendance %, Lost Production Hours.
     /// Query params: startDate, endDate, departmentId (optional).
     /// </summary>
@@ -115,7 +112,7 @@ public class AttendanceController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/attendance/individual/{employeeId} â€” Individual employee attendance report.
+    /// GET /api/attendance/individual/{employeeId} — Individual employee attendance report.
     /// Query params: startDate, endDate.
     /// </summary>
     [HttpGet("individual/{employeeId}")]
@@ -138,7 +135,7 @@ public class AttendanceController : ControllerBase
     }
 
     /// <summary>
-    /// POST /api/attendance/scan-missing-clockins â€” Scan for missing clock-ins (admin/system endpoint).
+    /// POST /api/attendance/scan-missing-clockins — Scan for missing clock-ins (admin/system endpoint).
     /// Creates UnplannedAbsenteeism exceptions for employees without records past threshold.
     /// </summary>
     [HttpPost("scan-missing-clockins")]
@@ -151,7 +148,7 @@ public class AttendanceController : ControllerBase
     }
 
     /// <summary>
-    /// POST /api/attendance/scan-missing-clockouts â€” Scan for missing clock-outs.
+    /// POST /api/attendance/scan-missing-clockouts — Scan for missing clock-outs.
     /// Creates MissingClockOut exceptions for employees who haven't clocked out after shift end.
     /// </summary>
     [HttpPost("scan-missing-clockouts")]

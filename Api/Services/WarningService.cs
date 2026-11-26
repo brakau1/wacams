@@ -1,21 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Enums;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Generate warnings (validate investigation status first), signed form upload handler.
-/// Progressive discipline: Counselling → VerbalWarning → WrittenWarning → FinalWrittenWarning
+/// Progressive discipline: Counselling ? VerbalWarning ? WrittenWarning ? FinalWrittenWarning
 /// No disciplinary action allowed until exception status is "Investigated" or "Closed".
 /// </summary>
 public class WarningService
@@ -94,7 +89,7 @@ public class WarningService
     /// </summary>
     public async Task<WarningLetterDto> GenerateWarningAsync(GenerateWarningRequest request, string issuedBy)
     {
-        // ── VALIDATION: Check exception exists and is investigated/closed ──
+        // -- VALIDATION: Check exception exists and is investigated/closed --
         var exception = await _context.AttendanceExceptions
             .FirstOrDefaultAsync(ae => ae.Id == request.ExceptionId && ae.EmployeeId == request.EmployeeId);
 
@@ -145,7 +140,7 @@ public class WarningService
         _logger.LogInformation("Warning generated: Type={Type}, Employee={EmployeeId}, Id={Id}",
             warningLetter.Type, warningLetter.EmployeeId, warningLetter.Id);
 
-        // ── AUTO-ESCALATION: When FinalWrittenWarning is generated ──
+        // -- AUTO-ESCALATION: When FinalWrittenWarning is generated --
         if (request.Type == "FinalWrittenWarning")
         {
             try
@@ -254,7 +249,7 @@ public class WarningService
     }
 
     /// <summary>
-    /// Count how many warnings of each type an employee has — used for progressive discipline validation.
+    /// Count how many warnings of each type an employee has � used for progressive discipline validation.
     /// </summary>
     public async Task<Dictionary<string, int>> GetWarningCountsAsync(string employeeId)
     {

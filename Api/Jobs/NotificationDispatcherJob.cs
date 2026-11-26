@@ -1,11 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Services;
 using WACAMS.Api.Data;
-using WACAMS.Api.Services;
 using WACAMS.Core.Entities;
-using WACAMS.Api.Services;
 using WACAMS.Core.Enums;
-using WACAMS.Api.Services;
 
 namespace WACAMS.Api.Jobs;
 

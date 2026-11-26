@@ -1,48 +1,29 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Http.Features;
 using Serilog;
-using Microsoft.AspNetCore.Http.Features;
 using System.Text;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Data;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Data.SeedData;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Extensions;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Filters;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Middleware;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Policies;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Services;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Core.Interfaces;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Core.Disciplinary.Services;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Infrastructure.Services;
-using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Infrastructure.Services.NotificationChannels;
-using Microsoft.AspNetCore.Http.Features;
 
 namespace WACAMS.Api;
 
 /// <summary>
-/// Application startup — DI, middleware pipeline, auth, CORS, Swagger, health checks.
+/// Application startup � DI, middleware pipeline, auth, CORS, Swagger, health checks.
 /// </summary>
 public class Program
 {
@@ -50,7 +31,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // ── Serilog configuration ──
+        // -- Serilog configuration --
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(builder.Configuration)
             .Enrich.FromLogContext()
@@ -60,7 +41,7 @@ public class Program
 
         builder.Host.UseSerilog();
 
-        // ── Database ──
+        // -- Database --
         var connString = builder.Configuration.GetConnectionString("WacamDb")
             ?? throw new InvalidOperationException("Connection string 'WacamDb' is not configured.");
 
@@ -71,7 +52,7 @@ public class Program
                     maxRetryDelay: TimeSpan.FromSeconds(10),
                     errorCodesToAdd: null)));
 
-        // ── JWT Authentication ──
+        // -- JWT Authentication --
         var jwtSection = builder.Configuration.GetSection("Jwt");
         var jwtKey = jwtSection["Key"]
             ?? "WACAMS-Default-JWT-Secret-Key-MustBe-At-Least-32-Characters!";
@@ -111,7 +92,7 @@ public class Program
 
         // Authorization policies registered below with notification platform config
 
-        // ── Controllers & Validation ──
+        // -- Controllers & Validation --
         builder.Services.AddControllers(options =>
         {
             options.Filters.Add<ValidateModelStateAttribute>();
@@ -121,7 +102,7 @@ public class Program
             options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
         });
 
-        // ── Swagger / OpenAPI ──
+        // -- Swagger / OpenAPI --
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -129,7 +110,7 @@ public class Program
             {
                 Title = "WACAMS API",
                 Version = "v1",
-                Description = "Workforce Attendance & Corrective Action Management System — Production-ready REST API",
+                Description = "Workforce Attendance & Corrective Action Management System � Production-ready REST API",
                 Contact = new OpenApiContact { Name = "Curi Lab", Url = new Uri("https://qgao2.com") }
             });
 
@@ -161,26 +142,26 @@ public class Program
             });
         });
 
-        // ── Health Checks ──
+        // -- Health Checks --
         builder.Services.AddHealthChecks()
             .AddCheck<WacamDbContext>("Database");
 
-        // ── Register API Services ──
+        // -- Register API Services --
         builder.Services.AddApiServices();
 
-        // ── RBAC Services ──
+        // -- RBAC Services --
         builder.Services.AddScoped<PermissionService>();
 
-        // ── Department Authorization Service ──
+        // -- Department Authorization Service --
         builder.Services.AddScoped<DepartmentAuthorizationService>();
 
-        // ── Admin User Service ──
+        // -- Admin User Service --
         builder.Services.AddScoped<AdminUserService>();
 
-        // ── SuperAdmin Service ──
+        // -- SuperAdmin Service --
         builder.Services.AddScoped<SuperAdminService>();
 
-        // ── SuperAdmin Enhancement Pack Services ──
+        // -- SuperAdmin Enhancement Pack Services --
         builder.Services.AddScoped<PermissionTemplateService>();
         builder.Services.AddScoped<SecurityOperationsService>();
         builder.Services.AddScoped<BulkAdminService>();
@@ -188,7 +169,7 @@ public class Program
         builder.Services.AddScoped<SecurityAnalyticsService>();
         builder.Services.AddScoped<GISAdminService>();
 
-        // ── Notification Platform ──
+        // -- Notification Platform --
         builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Notification:Email"));
         builder.Services.Configure<TeamsSettings>(builder.Configuration.GetSection("Notification:Teams"));
         builder.Services.Configure<SmsSettings>(builder.Configuration.GetSection("Notification:SMS"));
@@ -204,22 +185,22 @@ public class Program
         builder.Services.AddHttpClient<SmsNotificationChannel>();
         builder.Services.AddHttpClient<WhatsAppNotificationChannel>();
 
-        // ── Authorization Policies ──
+        // -- Authorization Policies --
         builder.Services.AddAuthorization(options =>
         {
             AuthorizationPolicies.Configure(options);
         });
 
-        // ── CORS ──
+        // -- CORS --
         builder.Services.ConfigureCors(builder.Environment);
 
-        // ── File uploads ──
+        // -- File uploads --
         builder.Services.Configure<FormOptions>(options =>
         {
             options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
         });
 
-        // ── Background Jobs ──
+        // -- Background Jobs --
         builder.Services.AddHostedService<WACAMS.Api.Jobs.EscalationMonitorJob>();
         builder.Services.AddHostedService<WACAMS.Api.Jobs.AttendanceExceptionMonitorJob>();
         builder.Services.AddHostedService<WACAMS.Api.Jobs.CorrectiveActionExpiryJob>();
@@ -227,7 +208,7 @@ public class Program
         builder.Services.AddHostedService<WACAMS.Api.Jobs.ExecutiveMetricsRefreshJob>();
         builder.Services.AddHostedService<WACAMS.Api.Jobs.NotificationDispatcherJob>();
 
-        // ── Analytics Services ──
+        // -- Analytics Services --
         builder.Services.AddScoped<DashboardAggregationService>();
         builder.Services.AddScoped<TrendAnalyticsService>();
         builder.Services.AddScoped<ExecutiveAnalyticsService>();
@@ -237,14 +218,14 @@ public class Program
         builder.Services.AddScoped<DepartmentAnalyticsService>();
         builder.Services.AddScoped<PlantPerformanceService>();
 
-        // ── GIS Integration Services (Phase 4A) ──
+        // -- GIS Integration Services (Phase 4A) --
         builder.Services.AddScoped<EncryptionService>();
         builder.Services.AddScoped<GISAuthenticationService>();
         builder.Services.AddHttpClient("GISClient");
 
         var app = builder.Build();
 
-        // ── Seed RBAC Data ──
+        // -- Seed RBAC Data --
         using (var scope = app.Services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
@@ -252,7 +233,7 @@ public class Program
             await AdminUserSeeder.SeedAsync(context);
         }
 
-        // ── Middleware Pipeline (order is critical) ──
+        // -- Middleware Pipeline (order is critical) --
 
         // 1. Exception Handling Middleware
         app.UseMiddleware<GlobalExceptionMiddleware>();
@@ -269,7 +250,7 @@ public class Program
         // 4. Authentication (JWT Bearer)
         app.UseAuthentication();
 
-        // 4.5. DEV-ONLY: Bypass authentication — inject fake development user
+        // 4.5. DEV-ONLY: Bypass authentication � inject fake development user
         if (app.Environment.IsDevelopment())
         {
             app.UseMiddleware<DevelopmentUserMiddleware>();
@@ -287,7 +268,7 @@ public class Program
         // 8. Routing
         app.MapControllers();
 
-        // 9. Endpoint Mapping — Swagger (development only)
+        // 9. Endpoint Mapping � Swagger (development only)
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

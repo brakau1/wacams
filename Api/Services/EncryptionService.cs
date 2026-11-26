@@ -70,7 +70,6 @@ public class EncryptionService
         {
             var combined = Convert.FromBase64String(encryptedText);
 
-            using var aes = Aes.Create();
             aes.Key = _key;
 
             // Extract IV

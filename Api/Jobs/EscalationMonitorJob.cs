@@ -1,17 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Services;
 using WACAMS.Api.Data;
-using WACAMS.Api.Services;
 using WACAMS.Core.Entities;
-using WACAMS.Api.Services;
 using WACAMS.Core.Enums;
-using WACAMS.Api.Services;
 
 namespace WACAMS.Api.Jobs;
 
 /// <summary>
 /// Hourly job: Monitor escalations and auto-escalate after 24h of inactivity.
-/// Follows manager hierarchy: Team Leader → Production Manager → Next Level.
+/// Follows manager hierarchy: Team Leader ? Production Manager ? Next Level.
 /// </summary>
 public class EscalationMonitorJob : BackgroundService
 {

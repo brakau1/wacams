@@ -1,31 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Utils;
 using WACAMS.Core.Exceptions;
-using WACAMS.Api.Utils;
 using WACAMS.Api.Controllers;
-using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
-using WACAMS.Api.Utils;
 using WACAMS.Api.Data;
-using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
-using WACAMS.Api.Utils;
 using WACAMS.Api.DTOs;
-using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
-using WACAMS.Api.Utils;
 using WACAMS.Core.Entities;
-using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
-using WACAMS.Api.Utils;
 using WACAMS.Core.Enums;
-using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
-using WACAMS.Api.Utils;
 using WACAMS.Api.Middleware;
-using WACAMS.Api.Utils;
-using WACAMS.Core.Exceptions;
-using WACAMS.Api.Utils;
 
 namespace WACAMS.Api.Services;
 
@@ -233,7 +214,7 @@ public class ReportService
     }
 
     /// <summary>
-    /// Get exceptions count by type for a date range — useful for dashboard KPIs.
+    /// Get exceptions count by type for a date range � useful for dashboard KPIs.
     /// </summary>
     public async Task<Dictionary<string, int>> GetExceptionBreakdownAsync(DateTime startDate, DateTime endDate, Guid? departmentId = null)
     {
@@ -284,12 +265,12 @@ public class ReportService
         return summary;
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // DASHBOARD METHODS — Phase 3 Live Dashboard Integration
-    // ═══════════════════════════════════════════════════════════════════════════════
+    // -------------------------------------------------------------------------------
+    // DASHBOARD METHODS � Phase 3 Live Dashboard Integration
+    // -------------------------------------------------------------------------------
 
     /// <summary>
-    /// Get department KPIs for today — used by general dashboard.
+    /// Get department KPIs for today � used by general dashboard.
     /// </summary>
     public async Task<List<DashboardDepartmentDto>> GetDepartmentKPIsAsync(DateTime date)
     {
@@ -331,7 +312,7 @@ public class ReportService
     }
 
     /// <summary>
-    /// Get 14-day trend data — used by dashboard and manager dashboard.
+    /// Get 14-day trend data � used by dashboard and manager dashboard.
     /// </summary>
     public async Task<List<DashboardTrendDto>> GetTrendAsync(DateTime startDate, DateTime endDate, Guid? departmentId = null)
     {

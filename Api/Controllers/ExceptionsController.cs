@@ -1,21 +1,16 @@
-ï»¿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
 /// <summary>
-/// Attendance exception CRUD â€” investigate workflow, bulk investigate.
-/// Status flow: Pending â†’ Investigated â†’ Closed
+/// Attendance exception CRUD — investigate workflow, bulk investigate.
+/// Status flow: Pending ? Investigated ? Closed
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -32,7 +27,7 @@ public class ExceptionsController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/exceptions â€” List exceptions with filters and pagination.
+    /// GET /api/exceptions — List exceptions with filters and pagination.
     /// Query params: employeeId, startDate, endDate, exceptionType, status, departmentId, page, pageSize.
     /// </summary>
     [HttpGet]
@@ -54,7 +49,7 @@ public class ExceptionsController : ControllerBase
     }
 
     /// <summary>
-    /// POST /api/exceptions â€” Create a new attendance exception manually.
+    /// POST /api/exceptions — Create a new attendance exception manually.
     /// Admin/Supervisor/HR only.
     /// Valid types: LateArrival, EarlyDeparture, UnplannedAbsenteeism, Awol, SickLeave,
     /// FamilyResponsibilityLeave, ShiftCancellation, WorkshopAttendance, Training,
@@ -88,8 +83,8 @@ public class ExceptionsController : ControllerBase
     }
 
     /// <summary>
-    /// PUT /api/exceptions/{id}/investigate â€” Investigate an exception.
-    /// Transitions from Pending â†’ Investigated.
+    /// PUT /api/exceptions/{id}/investigate — Investigate an exception.
+    /// Transitions from Pending ? Investigated.
     /// Supervisor, Admin, SuperAdmin, HR only.
     /// </summary>
     [HttpPut("{id:guid}/investigate")]
@@ -118,7 +113,7 @@ public class ExceptionsController : ControllerBase
     }
 
     /// <summary>
-    /// PUT /api/exceptions/bulk-investigate â€” Bulk investigate multiple exceptions at once.
+    /// PUT /api/exceptions/bulk-investigate — Bulk investigate multiple exceptions at once.
     /// Supervisor, Admin, SuperAdmin, HR only.
     /// </summary>
     [HttpPut("bulk-investigate")]
@@ -134,8 +129,8 @@ public class ExceptionsController : ControllerBase
     }
 
     /// <summary>
-    /// PUT /api/exceptions/{id}/close â€” Close an investigated exception.
-    /// Transitions from Investigated â†’ Closed.
+    /// PUT /api/exceptions/{id}/close — Close an investigated exception.
+    /// Transitions from Investigated ? Closed.
     /// Admin, Supervisor, SuperAdmin, HR only.
     /// </summary>
     [HttpPut("{id:guid}/close")]

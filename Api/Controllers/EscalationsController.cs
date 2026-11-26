@@ -1,20 +1,15 @@
-ï»¿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
 /// <summary>
-/// Escalation endpoints â€” list, progress escalation, get chain.
+/// Escalation endpoints — list, progress escalation, get chain.
 /// Auto-created when FinalWrittenWarning is generated.
 /// Follows supervisor hierarchy via ManagerId chain.
 /// Each manager has 24 hours to act before auto-escalating.
@@ -34,7 +29,7 @@ public class EscalationsController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/escalations â€” List escalations with filters and pagination.
+    /// GET /api/escalations — List escalations with filters and pagination.
     /// Query params: employeeId, status, level, departmentId, page, pageSize.
     /// </summary>
     [HttpGet]
@@ -54,7 +49,7 @@ public class EscalationsController : ControllerBase
     }
 
     /// <summary>
-    /// PUT /api/escalations/{id}/progress â€” Progress an escalation.
+    /// PUT /api/escalations/{id}/progress — Progress an escalation.
     /// Acknowledge at current level or escalate to next level in the chain.
     /// Responsible manager can mark as acknowledged; if overdue, auto-escalates.
     /// </summary>
@@ -84,7 +79,7 @@ public class EscalationsController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/escalations/{employeeId}/chain â€” Get the full escalation chain for an employee.
+    /// GET /api/escalations/{employeeId}/chain — Get the full escalation chain for an employee.
     /// Shows all management levels from direct supervisor up to top-level manager.
     /// </summary>
     [HttpGet("{employeeId}/chain")]
@@ -105,7 +100,7 @@ public class EscalationsController : ControllerBase
     }
 
     /// <summary>
-    /// POST /api/escalations/scan-overdue â€” Scan for overdue escalations (admin/system endpoint).
+    /// POST /api/escalations/scan-overdue — Scan for overdue escalations (admin/system endpoint).
     /// Auto-escalates any pending escalation where the manager hasn't acted within 24 hours.
     /// Should be called by a scheduled background job.
     /// </summary>

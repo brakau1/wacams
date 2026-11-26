@@ -1,19 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
-using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
-using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
-using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
 /// <summary>
 /// Create/update/investigate exceptions, status transitions, audit log.
-/// Status flow: Pending → Investigated → Closed
+/// Status flow: Pending ? Investigated ? Closed
 /// </summary>
 public class ExceptionService
 {
@@ -197,7 +193,7 @@ public class ExceptionService
     }
 
     /// <summary>
-    /// Investigate an exception — transitions from Pending → Investigated.
+    /// Investigate an exception � transitions from Pending ? Investigated.
     /// Must have access rights (Supervisor, Admin, SuperAdmin, HR).
     /// </summary>
     public async Task<AttendanceExceptionDto> InvestigateAsync(Guid exceptionId, InvestigateExceptionRequest request, string investigatedBy)
@@ -227,7 +223,7 @@ public class ExceptionService
             httpEndpoint: $"PUT /api/exceptions/{exceptionId}/investigate",
             changesJson: $"{{\"OldStatus\":\"Pending\",\"NewStatus\":\"Investigated\",\"Investigator\":\"{investigatedBy}\"}}");
 
-        _logger.LogInformation("Exception investigated: Id={Id}, Employee={EmployeeId}, Status→Investigated",
+        _logger.LogInformation("Exception investigated: Id={Id}, Employee={EmployeeId}, Status?Investigated",
             exceptionId, exception.EmployeeId);
 
         return MapToDto(exception, exception.Employee!);
@@ -271,7 +267,7 @@ public class ExceptionService
 
     /// <summary>
     /// Close an investigated exception.
-    /// Transitions: Investigated → Closed.
+    /// Transitions: Investigated ? Closed.
     /// </summary>
     public async Task<AttendanceExceptionDto> CloseAsync(Guid exceptionId, string closedBy)
     {
