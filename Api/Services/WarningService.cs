@@ -201,7 +201,6 @@ public class WarningService
         var fullPath = Path.Combine(uploadsPath, fileName);
 
         using var stream = new FileStream(fullPath, FileMode.Create);
-using WACAMS.Core.Exceptions;
         await file.CopyToAsync(stream);
 
         // Store relative path in DB

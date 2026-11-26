@@ -47,7 +47,6 @@ public class AttendanceExceptionMonitorJob : BackgroundService
     private async Task RunExceptionCheckAsync()
     {
         using var scope = _serviceProvider.CreateScope();
-using WACAMS.Api.Services;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();
         var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();

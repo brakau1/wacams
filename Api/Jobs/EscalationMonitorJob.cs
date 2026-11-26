@@ -47,7 +47,6 @@ public class EscalationMonitorJob : BackgroundService
     private async Task RunEscalationCheckAsync()
     {
         using var scope = _serviceProvider.CreateScope();
-using WACAMS.Api.Services;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();
         var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();

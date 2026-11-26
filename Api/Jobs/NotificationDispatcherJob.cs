@@ -47,7 +47,6 @@ public class NotificationDispatcherJob : BackgroundService
     private async Task DispatchNotificationsAsync()
     {
         using var scope = _serviceProvider.CreateScope();
-using WACAMS.Api.Services;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();

@@ -312,7 +312,6 @@ public class AuthService
     public async Task<LoginResponse> RefreshTokenAsync(string employeeId, string refreshToken)
     {
         var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
-using WACAMS.Core.Exceptions;
 
         if (employee is null || string.IsNullOrEmpty(employee.RefreshToken))
             throw new UnauthorizedAccessException("Invalid refresh token.");

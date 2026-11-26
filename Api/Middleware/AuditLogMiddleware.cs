@@ -32,7 +32,6 @@ public class AuditLogMiddleware
         {
             context.Request.EnableBuffering();
             using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
-using System.Security.Claims;
             requestBody = await reader.ReadToEndAsync();
             context.Request.Body.Position = 0;
         }
@@ -40,7 +39,6 @@ using System.Security.Claims;
         // Intercept response body to capture status code
         var originalResponseBody = context.Response.Body;
         using var newResponseBody = new System.IO.MemoryStream();
-using System.Security.Claims;
         context.Response.Body = newResponseBody;
 
         try

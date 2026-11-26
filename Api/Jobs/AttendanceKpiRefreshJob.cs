@@ -47,9 +47,6 @@ public class AttendanceKpiRefreshJob : BackgroundService
     private async Task RefreshKpisAsync()
     {
         using var scope = _serviceProvider.CreateScope();
-using WACAMS.Core.Enums;
-using WACAMS.Api.Services;
-using WACAMS.Core.Enums;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var kpiService = scope.ServiceProvider.GetRequiredService<AttendanceKpiService>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();

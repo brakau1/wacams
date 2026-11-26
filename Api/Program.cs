@@ -148,7 +148,6 @@ public class Program
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-using Microsoft.AspNetCore.Http.Features;
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -249,7 +248,6 @@ using Microsoft.AspNetCore.Http.Features;
         using (var scope = app.Services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
-using Microsoft.AspNetCore.Http.Features;
             await PermissionSeeder.SeedAsync(context);
             await AdminUserSeeder.SeedAsync(context);
         }

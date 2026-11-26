@@ -51,9 +51,6 @@ public class CorrectiveActionExpiryJob : BackgroundService
     private async Task RunExpiryCheckAsync()
     {
         using var scope = _serviceProvider.CreateScope();
-using WACAMS.Core.Enums;
-using WACAMS.Api.Services;
-using WACAMS.Core.Enums;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();
 

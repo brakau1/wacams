@@ -92,7 +92,6 @@ public class AuthController : ControllerBase
         try
         {
             var principal = TokenGenerator.ValidateToken(request.AccessToken);
-using WACAMS.Core.Exceptions;
             if (principal is null)
                 throw new UnauthorizedAccessException("Invalid access token.");
 
