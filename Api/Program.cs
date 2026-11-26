@@ -10,7 +10,7 @@ using System.Text;
 using Wacam.Api.Data;
 using Wacam.Api.Data.SeedData;
 using Wacam.Api.Extensions;
-using WACAMS.Api.Middleware;
+using Wacam.Api.Middleware;
 using Wacam.Api.Policies;
 using Wacam.Api.Services;
 using WACAMS.Core.Interfaces;

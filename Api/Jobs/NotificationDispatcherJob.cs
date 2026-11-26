@@ -1,5 +1,5 @@
 using WACAMS.Infrastructure.Services;
-using WACAMS.Api.Services;
+using Wacam.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Wacam.Api.Data;
 using WACAMS.Core.Entities;

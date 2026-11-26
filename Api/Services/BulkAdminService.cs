@@ -451,55 +451,55 @@ public class BulkAdminService
 
         return result;
     }
-}
 
-        public async Task<BulkOperationResultDto> ImportUsersAsync(IFormFile file, string initiatedBy)
+    public async Task<BulkOperationResultDto> ImportUsersAsync(IFormFile file, string initiatedBy)
+    {
+        var result = new BulkOperationResultDto
         {
-            var result = new BulkOperationResultDto
+            OperationType = "UserImport",
+            InitiatedBy = initiatedBy,
+            StartedAt = DateTime.UtcNow
+        };
+        try
+        {
+            using var stream = file.OpenReadStream();
+            using var reader = new StreamReader(stream);
+            var lines = await reader.ReadToEndAsync();
+            var users = ParseCsvUsers(lines);
+            foreach (var user in users)
             {
-                OperationType = "UserImport",
-                InitiatedBy = initiatedBy,
-                StartedAt = DateTime.UtcNow
-            };
-            try
-            {
-                using var stream = file.OpenReadStream();
-                using var reader = new StreamReader(stream);
-                var lines = await reader.ReadToEndAsync();
-                var users = ParseCsvUsers(lines);
-                foreach (var user in users)
+                try
                 {
-                    try
-                    {
-                        _context.Users.Add(new User { Username = user.Username, Email = user.Email });
-                        result.SuccessCount++;
-                    }
-                    catch (Exception ex)
-                    {
-                        result.ErrorCount++;
-                        result.ErrorMessage += $"Failed {user.Username}: {ex.Message}\n";
-                    }
+                    _context.Users.Add(new User { Username = user.Username, Email = user.Email });
+                    result.SuccessCount++;
                 }
-                await _context.SaveChangesAsync();
-                result.Status = "Completed";
-                result.CompletedAt = DateTime.UtcNow;
-                result.TotalRecords = users.Count;
-                await _auditService.LogAsync("UserImport", "BulkAdmin", 0, initiatedBy, null, $"Imported {result.SuccessCount}");
+                catch (Exception ex)
+                {
+                    result.ErrorCount++;
+                    result.ErrorMessage += $"Failed {user.Username}: {ex.Message}\n";
+                }
             }
-            catch (Exception ex)
-            {
-                result.Status = "Failed";
-                result.ErrorMessage = ex.Message;
-                result.CompletedAt = DateTime.UtcNow;
-            }
-            return result;
+            await _context.SaveChangesAsync();
+            result.Status = "Completed";
+            result.CompletedAt = DateTime.UtcNow;
+            result.TotalRecords = users.Count;
+            await _auditService.LogAsync("UserImport", "BulkAdmin", 0, initiatedBy, null, $"Imported {result.SuccessCount}");
         }
-
-        public async Task<List<BulkImportHistory>> GetImportHistoryAsync(string initiatedBy)
+        catch (Exception ex)
         {
-            return await _context.BulkImportHistories
-                .Where(h => h.InitiatedBy == initiatedBy)
-                .OrderByDescending(h => h.StartedAt)
-                .ToListAsync();
+            result.Status = "Failed";
+            result.ErrorMessage = ex.Message;
+            result.CompletedAt = DateTime.UtcNow;
         }
+        return result;
+    }
+
+    public async Task<List<BulkImportHistory>> GetImportHistoryAsync(string initiatedBy)
+    {
+        return await _context.BulkImportHistories
+            .Where(h => h.InitiatedBy == initiatedBy)
+            .OrderByDescending(h => h.StartedAt)
+            .ToListAsync();
+    }
+}
 
