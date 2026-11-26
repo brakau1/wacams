@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
@@ -93,7 +93,8 @@ public class SettingsController : ControllerBase
         setting.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "UpdateSetting",
+        var performedBy = User.FindFirst("employeeId")?.Value ?? "system";
+        await _auditService.LogActionAsync(performedBy, action: "UpdateSetting",
             entityType: "SystemSettings",
             entityId: key,
             httpEndpoint: $"PUT /api/settings/{key}",
@@ -135,7 +136,8 @@ public class SettingsController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "BulkUpdateSettings",
+        var performedBy = User.FindFirst("employeeId")?.Value ?? "system";
+        await _auditService.LogActionAsync(performedBy, action: "BulkUpdateSettings",
             entityType: "SystemSettings",
             entityId: "bulk",
             httpEndpoint: "POST /api/settings/bulk-update",

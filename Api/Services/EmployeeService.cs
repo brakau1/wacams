@@ -1,9 +1,15 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -31,7 +37,7 @@ public class EmployeeService
     /// </summary>
     public async Task<(List<EmployeeDto> Employees, int TotalCount)> ListAsync(
         string? searchKeyword = null,
-        int? departmentId = null,
+        Guid? departmentId = null,
         bool? isActive = null,
         string? role = null,
         string? requestingEmployeeId = null,
@@ -78,7 +84,7 @@ public class EmployeeService
     /// <summary>
     /// Get a single employee with full hierarchy info (manager + subordinates).
     /// </summary>
-    public async Task<EmployeeHierarchyDto> GetByIdAsync(int id)
+    public async Task<EmployeeHierarchyDto> GetByIdAsync(Guid id)
     {
         var employee = await _context.Employees
             .Include(e => e.Department)
@@ -159,7 +165,7 @@ public class EmployeeService
     /// Update an existing employee. Only non-sensitive fields can be changed via this method.
     /// Password changes go through AuthService.ChangePasswordAsync.
     /// </summary>
-    public async Task<EmployeeDto> UpdateAsync(int id, UpdateEmployeeRequest request)
+    public async Task<EmployeeDto> UpdateAsync(Guid id, UpdateEmployeeRequest request)
     {
         var employee = await _context.Employees
             .Include(e => e.Department)
@@ -302,7 +308,7 @@ public class EmployeeService
     /// <summary>
     /// Soft-delete (disable) an employee.
     /// </summary>
-    public async Task DisableAsync(int id)
+    public async Task DisableAsync(Guid id)
     {
         var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
         if (employee is null)

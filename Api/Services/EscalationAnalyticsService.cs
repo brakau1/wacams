@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Core.Enums;
 
@@ -76,14 +76,14 @@ public class EscalationAnalyticsService
 
         // Manager response time
         var managerResponseTimes = escalations
-            .Where(e => e.AssignedTo != null && e.ManagerRespondedAt.HasValue)
+            .Where(e => e.AssignedTo != null && e.AcknowledgedAt.HasValue)
             .GroupBy(e => e.AssignedTo)
             .Select(g => new ManagerResponseDto
             {
                 ManagerId = g.Key ?? "",
                 TotalAssigned = g.Count(),
-                AvgResponseHours = g.Average(e => (e.ManagerRespondedAt!.Value - e.EscalatedAt).TotalHours),
-                Within24hCount = g.Count(e => (e.ManagerRespondedAt!.Value - e.EscalatedAt).TotalHours <= 24)
+                AvgResponseHours = g.Average(e => (e.AcknowledgedAt!.Value - e.EscalatedAt).TotalHours),
+                Within24hCount = g.Count(e => (e.AcknowledgedAt!.Value - e.EscalatedAt).TotalHours <= 24)
             })
             .OrderBy(m => m.AvgResponseHours)
             .ToList();

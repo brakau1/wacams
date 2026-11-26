@@ -1,9 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
@@ -38,7 +44,7 @@ public class ExceptionsController : ControllerBase
         [FromQuery] DateTime? endDate,
         [FromQuery] string? exceptionType,
         [FromQuery] string? status,
-        [FromQuery] int? departmentId,
+        [FromQuery] Guid? departmentId,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 50)
     {
@@ -86,12 +92,12 @@ public class ExceptionsController : ControllerBase
     /// Transitions from Pending → Investigated.
     /// Supervisor, Admin, SuperAdmin, HR only.
     /// </summary>
-    [HttpPut("{id:int}/investigate")]
+    [HttpPut("{id:guid}/investigate")]
     [Authorize(Roles = "SuperAdmin,Admin,Supervisor,HR")]
     [ProducesResponseType(typeof(AttendanceExceptionDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Investigate(int id, [FromBody] InvestigateExceptionRequest request)
+    public async Task<IActionResult> Investigate(Guid id, [FromBody] InvestigateExceptionRequest request)
     {
         var investigatedBy = User.FindFirst("employeeId")?.Value
             ?? throw new InvalidOperationException("No employeeId in claims.");
@@ -132,12 +138,12 @@ public class ExceptionsController : ControllerBase
     /// Transitions from Investigated → Closed.
     /// Admin, Supervisor, SuperAdmin, HR only.
     /// </summary>
-    [HttpPut("{id:int}/close")]
+    [HttpPut("{id:guid}/close")]
     [Authorize(Roles = "SuperAdmin,Admin,Supervisor,HR")]
     [ProducesResponseType(typeof(AttendanceExceptionDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Close(int id)
+    public async Task<IActionResult> Close(Guid id)
     {
         var closedBy = User.FindFirst("employeeId")?.Value
             ?? throw new InvalidOperationException("No employeeId in claims.");

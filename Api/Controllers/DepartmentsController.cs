@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
@@ -94,7 +94,8 @@ public class DepartmentsController : ControllerBase
         _context.Departments.Add(dept);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "CreateDepartment",
+        var performedBy = User.FindFirst("employeeId")?.Value ?? "system";
+        await _auditService.LogActionAsync(performedBy, action: "CreateDepartment",
             entityType: "Department",
             entityId: dept.Id.ToString(),
             httpEndpoint: "POST /api/departments",
@@ -109,11 +110,11 @@ public class DepartmentsController : ControllerBase
     /// PUT /api/departments/{id} — Update a department.
     /// Admin/SuperAdmin only.
     /// </summary>
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:guid}")]
     [Authorize(Roles = "SuperAdmin,Admin")]
     [ProducesResponseType(typeof(DepartmentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateDepartmentRequest request)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateDepartmentRequest request)
     {
         var dept = await _context.Departments.FindAsync(id);
         if (dept is null)
@@ -142,7 +143,8 @@ public class DepartmentsController : ControllerBase
         dept.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "UpdateDepartment",
+        var performedBy = User.FindFirst("employeeId")?.Value ?? "system";
+        await _auditService.LogActionAsync(performedBy, action: "UpdateDepartment",
             entityType: "Department",
             entityId: id.ToString(),
             httpEndpoint: $"PUT /api/departments/{id}",
@@ -155,12 +157,12 @@ public class DepartmentsController : ControllerBase
     /// DELETE /api/departments/{id} — Delete a department (only if it has no employees).
     /// Admin/SuperAdmin only.
     /// </summary>
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:guid}")]
     [Authorize(Roles = "SuperAdmin,Admin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         var dept = await _context.Departments
             .Include(d => d.Employees)

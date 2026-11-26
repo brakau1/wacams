@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
@@ -224,7 +224,7 @@ public class GISIntegrationController : ControllerBase
     {
         var currentUser = User.FindFirst("employeeId")?.Value ?? "unknown";
 
-        await _auditService.LogActionAsync(action: "ResetGISIntegrationSettings",
+        await _auditService.LogActionAsync(currentUser, action: "ResetGISIntegrationSettings",
             entityType: "GISIntegrationSettings",
             entityId: "all",
             changesJson: "GIS integration settings reset"

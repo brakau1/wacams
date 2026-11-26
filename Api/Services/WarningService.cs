@@ -1,9 +1,15 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -120,7 +126,7 @@ public class WarningService
             ExceptionId = request.ExceptionId,
             Type = Enum.Parse<WarningType>(request.Type),
             DateIssued = DateTime.UtcNow,
-            Reason = request.Description.Trim(),
+            Reason = request.Reason.Trim(),
             IssuedBy = issuedBy,
             CreatedAt = DateTime.UtcNow
         };
@@ -195,6 +201,7 @@ public class WarningService
         var fullPath = Path.Combine(uploadsPath, fileName);
 
         using var stream = new FileStream(fullPath, FileMode.Create);
+using WACAMS.Core.Exceptions;
         await file.CopyToAsync(stream);
 
         // Store relative path in DB
@@ -230,7 +237,7 @@ public class WarningService
             throw new NotFoundException($"Warning with ID {warningId} not found for employee {employeeId}.");
 
         warning.Signed = true;
-        warning.AcknowledgedAt = DateTime.UtcNow;
+        warning.SignedAt = DateTime.UtcNow;
         warning.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
@@ -310,7 +317,7 @@ public class WarningService
             IssuedBy = issuerName,
             SignedFormPath = warning.SignedFilePath,
             Acknowledged = warning.Signed,
-            AcknowledgedAt = warning.AcknowledgedAt,
+            AcknowledgedAt = warning.SignedAt,
             CreatedAt = warning.CreatedAt
         };
     }

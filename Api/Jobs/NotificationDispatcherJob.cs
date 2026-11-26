@@ -1,7 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Api.Services;
 using WACAMS.Api.Data;
+using WACAMS.Api.Services;
 using WACAMS.Core.Entities;
+using WACAMS.Api.Services;
 using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
 
 namespace WACAMS.Api.Jobs;
 
@@ -43,6 +47,7 @@ public class NotificationDispatcherJob : BackgroundService
     private async Task DispatchNotificationsAsync()
     {
         using var scope = _serviceProvider.CreateScope();
+using WACAMS.Api.Services;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();
@@ -53,7 +58,7 @@ public class NotificationDispatcherJob : BackgroundService
 
         // Find pending notifications
         var pendingNotifications = await context.Notifications
-            .Include(n => n.RecipientUser)
+            .Include(n => n.RecipientEmployeeId)
             .Where(n => n.Status == NotificationStatus.Pending && n.ScheduledAt <= now)
             .OrderBy(n => n.ScheduledAt)
             .Take(100) // Process in batches
@@ -68,15 +73,15 @@ public class NotificationDispatcherJob : BackgroundService
                 {
                     case NotificationChannel.Email:
                         await notificationService.SendEmailNotificationAsync(
-                            notification.RecipientUser?.Email ?? "",
+                            notification.RecipientEmployeeId?.Email ?? "",
                             notification.Subject ?? "",
                             notification.Body ?? ""
                         );
                         break;
 
-                    case NotificationChannel.Push:
+                    case NotificationChannel.SMS:
                         await notificationService.SendPushNotificationAsync(
-                            notification.RecipientUserId,
+                            notification.RecipientEmployeeIdId,
                             notification.Title ?? "",
                             notification.Body ?? ""
                         );
@@ -84,7 +89,7 @@ public class NotificationDispatcherJob : BackgroundService
 
                     case NotificationChannel.SMS:
                         await notificationService.SendSmsNotificationAsync(
-                            notification.RecipientUser?.Phone ?? "",
+                            notification.RecipientEmployeeId?.Phone ?? "",
                             notification.Body ?? ""
                         );
                         break;
@@ -97,7 +102,7 @@ public class NotificationDispatcherJob : BackgroundService
                 dispatchedCount++;
 
                 _logger.LogDebug("Dispatched notification {Id} to user {UserId} via {Channel}",
-                    notification.Id, notification.RecipientUserId, notification.Channel);
+                    notification.Id, notification.RecipientEmployeeIdId, notification.Channel);
             }
             catch (Exception ex)
             {

@@ -1,6 +1,15 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
+using WACAMS.Core.Enums;
 using WACAMS.Api.Data;
+using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
+using WACAMS.Core.Enums;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
+using WACAMS.Core.Enums;
 
 namespace WACAMS.Api.Jobs;
 
@@ -42,6 +51,9 @@ public class CorrectiveActionExpiryJob : BackgroundService
     private async Task RunExpiryCheckAsync()
     {
         using var scope = _serviceProvider.CreateScope();
+using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
+using WACAMS.Core.Enums;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();
 
@@ -49,7 +61,7 @@ public class CorrectiveActionExpiryJob : BackgroundService
         int expiredCount = 0;
 
         // Find active corrective actions past expiry date
-        var expiredActions = await context.CorrectiveActions
+        var expiredActions = await context.WarningLetters
             .Include(ca => ca.Employee)
             .Where(ca => ca.IsActive && ca.ExpiryDate < now)
             .ToListAsync();

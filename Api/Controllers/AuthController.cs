@@ -1,10 +1,17 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
@@ -85,6 +92,7 @@ public class AuthController : ControllerBase
         try
         {
             var principal = TokenGenerator.ValidateToken(request.AccessToken);
+using WACAMS.Core.Exceptions;
             if (principal is null)
                 throw new UnauthorizedAccessException("Invalid access token.");
 

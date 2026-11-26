@@ -1,8 +1,13 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -39,7 +44,7 @@ public class ExceptionService
         DateTime? endDate = null,
         string? exceptionType = null,
         string? status = null,
-        int? departmentId = null,
+        Guid? departmentId = null,
         int page = 1,
         int pageSize = 50)
     {
@@ -140,7 +145,8 @@ public class ExceptionService
         _context.AttendanceExceptions.Add(exception);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "CreateException",
+        await _auditService.LogActionAsync("system",
+            action: "CreateException",
             entityType: "AttendanceException",
             entityId: exception.Id.ToString(),
             httpEndpoint: "POST /api/exceptions",
@@ -194,7 +200,7 @@ public class ExceptionService
     /// Investigate an exception — transitions from Pending → Investigated.
     /// Must have access rights (Supervisor, Admin, SuperAdmin, HR).
     /// </summary>
-    public async Task<AttendanceExceptionDto> InvestigateAsync(int exceptionId, InvestigateExceptionRequest request, string investigatedBy)
+    public async Task<AttendanceExceptionDto> InvestigateAsync(Guid exceptionId, InvestigateExceptionRequest request, string investigatedBy)
     {
         var exception = await _context.AttendanceExceptions
             .Include(ae => ae.Employee)
@@ -214,7 +220,8 @@ public class ExceptionService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "InvestigateException",
+        await _auditService.LogActionAsync(investigatedBy,
+            action: "InvestigateException",
             entityType: "AttendanceException",
             entityId: exceptionId.ToString(),
             httpEndpoint: $"PUT /api/exceptions/{exceptionId}/investigate",
@@ -229,7 +236,7 @@ public class ExceptionService
     /// <summary>
     /// Bulk investigate multiple exceptions at once.
     /// </summary>
-    public async Task<int> BulkInvestigateAsync(List<int> exceptionIds, InvestigateExceptionRequest request, string investigatedBy)
+    public async Task<int> BulkInvestigateAsync(List<Guid> exceptionIds, InvestigateExceptionRequest request, string investigatedBy)
     {
         var exceptions = await _context.AttendanceExceptions
             .Where(ae => exceptionIds.Contains(ae.Id) && ae.InvestigationStatus == WACAMS.Core.Enums.InvestigationStatus.Open)
@@ -251,7 +258,8 @@ public class ExceptionService
 
         if (count > 0)
         {
-            await _auditService.LogActionAsync(action: "BulkInvestigateExceptions",
+            await _auditService.LogActionAsync(investigatedBy,
+                action: "BulkInvestigateExceptions",
                 entityType: "AttendanceException",
                 entityId: string.Join(",", exceptionIds),
                 httpEndpoint: "PUT /api/exceptions/bulk-investigate",
@@ -265,7 +273,7 @@ public class ExceptionService
     /// Close an investigated exception.
     /// Transitions: Investigated → Closed.
     /// </summary>
-    public async Task<AttendanceExceptionDto> CloseAsync(int exceptionId, string closedBy)
+    public async Task<AttendanceExceptionDto> CloseAsync(Guid exceptionId, string closedBy)
     {
         var exception = await _context.AttendanceExceptions
             .Include(ae => ae.Employee)
@@ -282,7 +290,8 @@ public class ExceptionService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "CloseException",
+        await _auditService.LogActionAsync(closedBy,
+            action: "CloseException",
             entityType: "AttendanceException",
             entityId: exceptionId.ToString(),
             httpEndpoint: $"PUT /api/exceptions/{exceptionId}/close",

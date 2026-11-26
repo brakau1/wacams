@@ -1,9 +1,15 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -38,11 +44,11 @@ public class AuthService
     {
         // 1. Look up employee (including locked accounts so we can return a specific message)
         var employee = await _context.Employees
-            .FirstOrDefaultAsync(e => e.EmployeeId == request.EmployeeId);
+            .FirstOrDefaultAsync(e => e.EmployeeId == request.Email);
 
         if (employee is null || !employee.IsActive)
         {
-            _logger.LogWarning("Failed login attempt for unknown/inactive EmployeeId: {EmployeeId}", request.EmployeeId);
+            _logger.LogWarning("Failed login attempt for unknown/inactive EmployeeId: {EmployeeId}", request.Email);
             throw new UnauthorizedAccessException("Invalid employee ID or password.");
         }
 
@@ -52,7 +58,7 @@ public class AuthService
             var minutesRemaining = (int)Math.Ceiling((employee.LockoutEnd.Value - DateTime.UtcNow).TotalMinutes);
             _logger.LogWarning(
                 "Login attempt for locked account {EmployeeId}. Lockout ends {LockoutEnd} ({MinutesRemaining} min remaining).",
-                request.EmployeeId, employee.LockoutEnd.Value, minutesRemaining);
+                request.Email, employee.LockoutEnd.Value, minutesRemaining);
 
             throw new AccountLockedException(
                 $"Account is locked due to too many failed login attempts. Try again in {minutesRemaining} minutes.");
@@ -261,8 +267,8 @@ public class AuthService
     public async Task<EmployeeDto> RegisterAsync(RegisterRequest request)
     {
         // Check for duplicate EmployeeId
-        if (await _context.Employees.AnyAsync(e => e.EmployeeId == request.EmployeeId))
-            throw new ConflictException($"Employee with ID '{request.EmployeeId}' already exists.");
+        if (await _context.Employees.AnyAsync(e => e.EmployeeId == request.Email))
+            throw new ConflictException($"Employee with ID '{request.Email}' already exists.");
 
         // Validate department exists
         var department = await _context.Departments.FindAsync(request.DepartmentId);
@@ -279,7 +285,7 @@ public class AuthService
 
         var newEmployee = new Employee
         {
-            EmployeeId = request.EmployeeId.Trim(),
+            EmployeeId = request.Email.Trim(),
             DisplayName = request.DisplayName.Trim(),
             Email = request.Email.ToLowerInvariant().Trim(),
             PhoneNumber = request.Phone?.Trim(),
@@ -306,6 +312,7 @@ public class AuthService
     public async Task<LoginResponse> RefreshTokenAsync(string employeeId, string refreshToken)
     {
         var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+using WACAMS.Core.Exceptions;
 
         if (employee is null || string.IsNullOrEmpty(employee.RefreshToken))
             throw new UnauthorizedAccessException("Invalid refresh token.");

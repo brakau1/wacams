@@ -1,9 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
@@ -52,12 +58,12 @@ public class EscalationsController : ControllerBase
     /// Acknowledge at current level or escalate to next level in the chain.
     /// Responsible manager can mark as acknowledged; if overdue, auto-escalates.
     /// </summary>
-    [HttpPut("{id:int}/progress")]
+    [HttpPut("{id:guid}/progress")]
     [Authorize]
     [ProducesResponseType(typeof(EscalationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Progress(int id, [FromBody] ProgressEscalationRequest request)
+    public async Task<IActionResult> Progress(Guid id, [FromBody] ProgressEscalationRequest request)
     {
         var actedBy = User.FindFirst("employeeId")?.Value
             ?? throw new InvalidOperationException("No employeeId in claims.");

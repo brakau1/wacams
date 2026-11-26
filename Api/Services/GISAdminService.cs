@@ -57,13 +57,13 @@ public class GISAdminService
         {
             Id = Guid.Parse(log.Id.ToString()),
             SyncType = log.Action.Replace("GISSync", ""),
-            Status = log.Details?.Contains("Failed") == true ? "Failed" : "Completed",
-            TotalRecords = 0, // Will be populated from Details JSON in Phase 4
+            Status = log.ChangesJson?.Contains("Failed") == true ? "Failed" : "Completed",
+            TotalRecords = 0, // Will be populated from ChangesJson in Phase 4
             SuccessCount = 0,
             ErrorCount = 0,
             StartedAt = log.PerformedAt,
             CompletedAt = log.PerformedAt,
-            ErrorMessage = log.Details?.Contains("Failed") == true ? log.Details : null
+            ErrorMessage = log.ChangesJson?.Contains("Failed") == true ? log.ChangesJson : null
         }).ToList();
     }
 
@@ -90,15 +90,13 @@ public class GISAdminService
             ErrorMessage = "GIS integration will be implemented in Phase 4"
         };
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             $"GISSync{syncType}",
-            "SuperAdmin",
             "GIS",
             syncResult.Id.ToString(),
             $"Manual GIS sync triggered: {syncType}",
-            null,
-            new { syncType, fromDate, toDate },
-            initiatedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { syncType, fromDate, toDate }));
 
         return syncResult;
     }
@@ -108,15 +106,12 @@ public class GISAdminService
     /// </summary>
     public async Task PauseSyncAsync(string initiatedBy)
     {
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "GISSyncPaused",
-            "SuperAdmin",
             "GIS",
             "System",
-            "GIS sync paused",
-            null,
-            null,
-            initiatedBy);
+            "GIS sync paused");;
     }
 
     /// <summary>
@@ -124,14 +119,11 @@ public class GISAdminService
     /// </summary>
     public async Task ResumeSyncAsync(string initiatedBy)
     {
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "GISSyncResumed",
-            "SuperAdmin",
             "GIS",
             "System",
-            "GIS sync resumed",
-            null,
-            null,
-            initiatedBy);
+            "GIS sync resumed");;
     }
 }

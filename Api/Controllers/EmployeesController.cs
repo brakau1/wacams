@@ -1,9 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
@@ -33,24 +39,25 @@ public class EmployeesController : ControllerBase
     [ProducesResponseType(typeof((List<EmployeeDto>, int)), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(
         [FromQuery] string? searchKeyword,
-        [FromQuery] int? departmentId,
+        [FromQuery] Guid? departmentId,
         [FromQuery] bool? isActive,
         [FromQuery] string? role,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 50)
     {
-        var (employees, totalCount) = await _employeeService.ListAsync(searchKeyword, departmentId, isActive, role, page, pageSize);
+        var requestingEmployeeId = User.FindFirst("employeeId")?.Value;
+        var (employees, totalCount) = await _employeeService.ListAsync(searchKeyword, departmentId, isActive, role, requestingEmployeeId, page, pageSize);
         return Ok(new { employees, totalCount, page, pageSize });
     }
 
     /// <summary>
     /// GET /api/employees/{id} — Get employee detail with full hierarchy (manager + subordinates).
     /// </summary>
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:guid}")]
     [Authorize]
     [ProducesResponseType(typeof(EmployeeHierarchyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         try
         {
@@ -100,12 +107,12 @@ public class EmployeesController : ControllerBase
     /// PUT /api/employees/{id} — Update an existing employee.
     /// Admin/Supervisor/SuperAdmin only.
     /// </summary>
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:guid}")]
     [Authorize(Roles = "SuperAdmin,Admin,Supervisor")]
     [ProducesResponseType(typeof(EmployeeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateEmployeeRequest request)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateEmployeeRequest request)
     {
         try
         {
@@ -126,11 +133,11 @@ public class EmployeesController : ControllerBase
     /// DELETE /api/employees/{id}/disable — Soft-delete (disable) an employee.
     /// Admin/SuperAdmin only.
     /// </summary>
-    [HttpDelete("{id:int}/disable")]
+    [HttpDelete("{id:guid}/disable")]
     [Authorize(Roles = "SuperAdmin,Admin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Disable(int id)
+    public async Task<IActionResult> Disable(Guid id)
     {
         try
         {

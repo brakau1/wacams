@@ -1,7 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Api.Services;
 using WACAMS.Api.Data;
+using WACAMS.Api.Services;
 using WACAMS.Core.Entities;
+using WACAMS.Api.Services;
 using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
 
 namespace WACAMS.Api.Jobs;
 
@@ -43,6 +47,7 @@ public class EscalationMonitorJob : BackgroundService
     private async Task RunEscalationCheckAsync()
     {
         using var scope = _serviceProvider.CreateScope();
+using WACAMS.Api.Services;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();
         var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
@@ -82,7 +87,7 @@ public class EscalationMonitorJob : BackgroundService
             escalation.Status = EscalationStatus.Escalated;
 
             // Log to history
-            context.EscalationHistories.Add(new EscalationHistory
+            context.Escalations.Add(new EscalationHistory
             {
                 EscalationId = escalation.Id,
                 FromLevel = escalation.Level - 1,

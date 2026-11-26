@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
@@ -42,7 +42,7 @@ public class DepartmentAuthorizationService
         var role = user.Role;
 
         // SuperAdmin, Admin, HR have unrestricted access
-        if (role == Role.SuperAdmin || role == Role.Admin || role == Role.HR)
+        if (role == Enums.Role.SuperAdmin || role == Enums.Role.Admin || role == Enums.Role.HR)
         {
             return null; // null means unrestricted
         }
@@ -54,9 +54,9 @@ public class DepartmentAuthorizationService
         }
 
         // Supervisor and Manager can access their assigned department
-        if (user.Employee != null && user.Employee.DepartmentId.HasValue)
+        if (user.Employee != null && user.Employee.DepartmentId!= Guid.Empty)
         {
-            return new List<Guid> { user.Employee.DepartmentId.Value };
+            return new List<Guid> { user.Employee.DepartmentId };
         }
 
         _logger.LogWarning("User {EmployeeId} with role {Role} has no department assignment", employeeId, role);
@@ -131,8 +131,8 @@ public class DepartmentAuthorizationService
         {
             var employee = employeeSelector(e);
             return employee != null &&
-                   employee.DepartmentId.HasValue &&
-                   authorizedDepartments.Contains(employee.DepartmentId.Value);
+                   employee.DepartmentId!= Guid.Empty &&
+                   authorizedDepartments.Contains(employee.DepartmentId);
         });
     }
 
@@ -145,7 +145,7 @@ public class DepartmentAuthorizationService
     /// <exception cref="UnauthorizedAccessException">Thrown when access is denied</exception>
     public async Task ValidateDepartmentAccessAsync(string employeeId, Guid? requestedDepartmentId)
     {
-        if (!requestedDepartmentId.HasValue)
+        if (!requestedDepartmentId!= Guid.Empty)
         {
             // No specific department requested - check if user has any department access
             var authorizedDepartments = await GetAuthorizedDepartmentIdsAsync(employeeId);
@@ -156,7 +156,7 @@ public class DepartmentAuthorizationService
             return;
         }
 
-        var canAccess = await CanAccessDepartmentAsync(employeeId, requestedDepartmentId.Value);
+        var canAccess = await CanAccessDepartmentAsync(employeeId, requestedDepartmentId);
         if (!canAccess)
         {
             _logger.LogWarning(

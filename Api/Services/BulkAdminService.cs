@@ -102,15 +102,13 @@ public class BulkAdminService
             result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
             result.CompletedAt = DateTime.UtcNow;
 
-            await _auditService.LogAsync(
-                "BulkRoleAssignment",
-                "SuperAdmin",
-                "UserRole",
-                role.Id.ToString(),
-                $"Bulk assigned role '{roleName}' to {successCount} users",
-                null,
-                new { roleName, result.TotalRecords, successCount, errorCount },
-                initiatedBy);
+            await _auditService.LogActionAsync(
+            initiatedBy,
+            "BulkRoleAssignment",
+            "UserRole",
+            role.Id.ToString(),
+            $"Bulk assigned role '{roleName}' to {successCount} users",
+            System.Text.Json.JsonSerializer.Serialize(new { roleName, result.TotalRecords, successCount, errorCount }));
         }
         catch (Exception ex)
         {
@@ -197,15 +195,13 @@ public class BulkAdminService
             result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
             result.CompletedAt = DateTime.UtcNow;
 
-            await _auditService.LogAsync(
-                "BulkRoleRemoval",
-                "SuperAdmin",
-                "UserRole",
-                role.Id.ToString(),
-                $"Bulk removed role '{roleName}' from {successCount} users",
-                null,
-                new { roleName, result.TotalRecords, successCount, errorCount },
-                initiatedBy);
+            await _auditService.LogActionAsync(
+            initiatedBy,
+            "BulkRoleRemoval",
+            "UserRole",
+            role.Id.ToString(),
+            $"Bulk removed role '{roleName}' from {successCount} users",
+            System.Text.Json.JsonSerializer.Serialize(new { roleName, result.TotalRecords, successCount, errorCount }));
         }
         catch (Exception ex)
         {
@@ -264,7 +260,7 @@ public class BulkAdminService
                         continue;
                     }
 
-                    user.DepartmentId = department.Id;
+                    User.Employee!.DepartmentId = department.Id;
                     successCount++;
                 }
                 catch (Exception ex)
@@ -282,15 +278,13 @@ public class BulkAdminService
             result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
             result.CompletedAt = DateTime.UtcNow;
 
-            await _auditService.LogAsync(
-                "BulkDepartmentAssignment",
-                "SuperAdmin",
-                "User",
-                department.Id.ToString(),
-                $"Bulk assigned department '{departmentName}' to {successCount} users",
-                null,
-                new { departmentName, result.TotalRecords, successCount, errorCount },
-                initiatedBy);
+            await _auditService.LogActionAsync(
+            initiatedBy,
+            "BulkDepartmentAssignment",
+            "User",
+            department.Id.ToString(),
+            $"Bulk assigned department '{departmentName}' to {successCount} users",
+            System.Text.Json.JsonSerializer.Serialize(new { departmentName, result.TotalRecords, successCount, errorCount }));
         }
         catch (Exception ex)
         {
@@ -357,15 +351,13 @@ public class BulkAdminService
             result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
             result.CompletedAt = DateTime.UtcNow;
 
-            await _auditService.LogAsync(
-                "BulkAccountActivation",
-                "SuperAdmin",
-                "User",
-                "Bulk",
-                $"Bulk activated {successCount} user accounts",
-                null,
-                new { result.TotalRecords, successCount, errorCount },
-                initiatedBy);
+            await _auditService.LogActionAsync(
+            initiatedBy,
+            "BulkAccountActivation",
+            "User",
+            "Bulk",
+            $"Bulk activated {successCount} user accounts",
+            System.Text.Json.JsonSerializer.Serialize(new { result.TotalRecords, successCount, errorCount }));
         }
         catch (Exception ex)
         {
@@ -432,15 +424,13 @@ public class BulkAdminService
             result.ErrorMessage = errors.Any() ? string.Join("; ", errors.Take(10)) : null;
             result.CompletedAt = DateTime.UtcNow;
 
-            await _auditService.LogAsync(
-                "BulkAccountDeactivation",
-                "SuperAdmin",
-                "User",
-                "Bulk",
-                $"Bulk deactivated {successCount} user accounts",
-                null,
-                new { result.TotalRecords, successCount, errorCount },
-                initiatedBy);
+            await _auditService.LogActionAsync(
+            initiatedBy,
+            "BulkAccountDeactivation",
+            "User",
+            "Bulk",
+            $"Bulk deactivated {successCount} user accounts",
+            System.Text.Json.JsonSerializer.Serialize(new { result.TotalRecords, successCount, errorCount }));
         }
         catch (Exception ex)
         {
@@ -476,15 +466,13 @@ public class BulkAdminService
             result.Status = "Completed";
             result.CompletedAt = DateTime.UtcNow;
 
-            await _auditService.LogAsync(
-                "BulkUserImport",
-                "SuperAdmin",
-                "User",
-                "Bulk",
-                $"Bulk import from file '{fileName}'",
-                null,
-                new { fileName, result.TotalRows, result.SuccessCount, result.ErrorCount },
-                initiatedBy);
+            await _auditService.LogActionAsync(
+            initiatedBy,
+            "BulkUserImport",
+            "User",
+            "Bulk",
+            $"Bulk import from file '{fileName}'",
+            System.Text.Json.JsonSerializer.Serialize(new { fileName, result.TotalRows, result.SuccessCount, result.ErrorCount }));
         }
         catch (Exception ex)
         {

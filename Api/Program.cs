@@ -1,23 +1,43 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http.Features;
 using Serilog;
+using Microsoft.AspNetCore.Http.Features;
 using System.Text;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Data;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Data.SeedData;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Extensions;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Filters;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Middleware;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Policies;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Api.Services;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Core.Interfaces;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Core.Disciplinary.Services;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Infrastructure.Services;
+using Microsoft.AspNetCore.Http.Features;
 using WACAMS.Infrastructure.Services.NotificationChannels;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace WACAMS.Api;
 
@@ -94,7 +114,7 @@ public class Program
         // ── Controllers & Validation ──
         builder.Services.AddControllers(options =>
         {
-            options.Filters.Add<ValidateModelAttribute>();
+            options.Filters.Add<ValidateModelStateAttribute>();
         }).AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.PropertyNamingPolicy = null; // Keep PascalCase for API
@@ -128,6 +148,7 @@ public class Program
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
+using Microsoft.AspNetCore.Http.Features;
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -143,7 +164,7 @@ public class Program
 
         // ── Health Checks ──
         builder.Services.AddHealthChecks()
-            .AddDbContextCheck<WacamDbContext>("Database");
+            .AddCheck<WacamDbContext>("Database");
 
         // ── Register API Services ──
         builder.Services.AddApiServices();
@@ -228,6 +249,7 @@ public class Program
         using (var scope = app.Services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
+using Microsoft.AspNetCore.Http.Features;
             await PermissionSeeder.SeedAsync(context);
             await AdminUserSeeder.SeedAsync(context);
         }

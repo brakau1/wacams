@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Runtime.Caching;
 using WACAMS.Api.Data;
 
@@ -168,7 +168,7 @@ public class DashboardAggregationService
             {
                 TotalEmployees = kpis.TotalEmployees,
                 AttendanceRate = kpis.AttendanceRate,
-                OnTimeRate = kpis.OnTimeRate,
+                OnTimeRate = kpis.AttendanceRate,
                 TotalLostMinutes = kpis.TotalLostMinutes,
                 ExceptionCount = kpis.ExceptionCount,
                 EscalationCount = kpis.EscalationCount,
@@ -194,8 +194,8 @@ public class DashboardAggregationService
             {
                 TotalEmployees = attendanceKpis.TotalEmployees,
                 AttendanceRate = attendanceKpis.AttendanceRate,
-                OnTimeRate = attendanceKpis.OnTimeRate,
-                TotalLostMinutes = attendanceKpis.TotalLateMinutes + attendanceKpis.TotalEarlyMinutes,
+                OnTimeRate = attendanceKpis.AttendanceRate,
+                TotalLostMinutes = attendanceKpis.LateMinutes + attendanceKpis.EarlyMinutes,
                 ExceptionCount = attendanceKpis.ExceptionCount,
                 EscalationCount = 0,
                 WarningCount = 0
@@ -219,8 +219,8 @@ public class DashboardAggregationService
             {
                 TotalEmployees = attendanceKpis.TotalEmployees,
                 AttendanceRate = attendanceKpis.AttendanceRate,
-                OnTimeRate = attendanceKpis.OnTimeRate,
-                TotalLostMinutes = attendanceKpis.TotalLateMinutes + attendanceKpis.TotalEarlyMinutes,
+                OnTimeRate = attendanceKpis.AttendanceRate,
+                TotalLostMinutes = attendanceKpis.LateMinutes + attendanceKpis.EarlyMinutes,
                 ExceptionCount = attendanceKpis.ExceptionCount,
                 EscalationCount = 0,
                 WarningCount = 0
@@ -243,8 +243,8 @@ public class DashboardAggregationService
             {
                 TotalEmployees = attendanceKpis.TotalEmployees,
                 AttendanceRate = attendanceKpis.AttendanceRate,
-                OnTimeRate = attendanceKpis.OnTimeRate,
-                TotalLostMinutes = attendanceKpis.TotalLateMinutes + attendanceKpis.TotalEarlyMinutes,
+                OnTimeRate = attendanceKpis.AttendanceRate,
+                TotalLostMinutes = attendanceKpis.LateMinutes + attendanceKpis.EarlyMinutes,
                 ExceptionCount = attendanceKpis.ExceptionCount,
                 EscalationCount = 0,
                 WarningCount = 0
@@ -269,11 +269,11 @@ public class DashboardAggregationService
             EndDate = endDate,
             TotalEmployees = kpis.TotalEmployees,
             AttendanceRate = kpis.AttendanceRate,
-            OnTimeRate = kpis.OnTimeRate,
+            OnTimeRate = kpis.AttendanceRate,
             LateCount = kpis.LateCount,
             EarlyDepartureCount = kpis.EarlyDepartureCount,
             AbsentCount = kpis.AbsentCount,
-            TotalLostMinutes = kpis.TotalLateMinutes + kpis.TotalEarlyMinutes,
+            TotalLostMinutes = kpis.LateMinutes + kpis.EarlyMinutes,
             ExceptionCount = kpis.ExceptionCount
         };
     }
@@ -289,7 +289,7 @@ public class DashboardAggregationService
             EndDate = endDate,
             TotalEmployees = kpis.TotalEmployees,
             AttendanceRate = kpis.AttendanceRate,
-            OnTimeRate = kpis.OnTimeRate,
+            OnTimeRate = kpis.AttendanceRate,
             LateCount = kpis.LateCount,
             EarlyDepartureCount = kpis.EarlyDepartureCount,
             AbsentCount = kpis.AbsentCount,
@@ -309,7 +309,7 @@ public class DashboardAggregationService
             EndDate = endDate,
             TotalEmployees = kpis.TotalEmployees,
             AttendanceRate = kpis.AttendanceRate,
-            OnTimeRate = kpis.OnTimeRate,
+            OnTimeRate = kpis.AttendanceRate,
             LateCount = kpis.LateCount,
             EarlyDepartureCount = kpis.EarlyDepartureCount,
             AbsentCount = kpis.AbsentCount,

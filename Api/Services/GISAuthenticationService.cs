@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 
@@ -86,7 +86,7 @@ public class GISAuthenticationService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogActionAsync(action: "UpdateGISIntegrationSettings",
+        await _auditService.LogActionAsync("system", action: "UpdateGISIntegrationSettings",
             entityType: "GISIntegrationSettings",
             entityId: settings.Id.ToString(),
             changesJson: $"Updated GIS integration settings"
@@ -152,7 +152,7 @@ public class GISAuthenticationService
 
             await _context.SaveChangesAsync();
 
-            await _auditService.LogActionAsync(action: "GISAuthentication",
+            await _auditService.LogActionAsync("system", action: "GISAuthentication",
                 entityType: "GISIntegrationSettings",
                 entityId: settings.Id.ToString(),
                 changesJson: "GIS authentication successful"
@@ -296,7 +296,7 @@ public class GISAuthenticationService
                 await _context.SaveChangesAsync();
             }
 
-            await _auditService.LogActionAsync(action: "GISConnectionTest",
+            await _auditService.LogActionAsync("system", action: "GISConnectionTest",
                 entityType: "GISIntegrationSettings",
                 entityId: settings?.Id.ToString() ?? "test",
                 changesJson: "GIS connection test successful"

@@ -19,7 +19,7 @@ public class PermissionService
     /// <summary>
     /// Get all permissions for a user based on their assigned roles.
     /// </summary>
-    public async Task<IEnumerable<string>> GetUserPermissionsAsync(int userId)
+    public async Task<IEnumerable<string>> GetUserPermissionsAsync(Guid userId)
     {
         var permissions = await _context.UserRoles
             .Where(ur => ur.UserId == userId)
@@ -49,7 +49,7 @@ public class PermissionService
     /// <summary>
     /// Check if a user has a specific permission.
     /// </summary>
-    public async Task<bool> HasPermissionAsync(int userId, string permission)
+    public async Task<bool> HasPermissionAsync(Guid userId, string permission)
     {
         var permissions = await GetUserPermissionsAsync(userId);
         return permissions.Contains(permission);
@@ -58,7 +58,7 @@ public class PermissionService
     /// <summary>
     /// Check if a user has any of the specified permissions.
     /// </summary>
-    public async Task<bool> HasAnyPermissionAsync(int userId, IEnumerable<string> permissions)
+    public async Task<bool> HasAnyPermissionAsync(Guid userId, IEnumerable<string> permissions)
     {
         var userPermissions = await GetUserPermissionsAsync(userId);
         return userPermissions.Intersect(permissions).Any();

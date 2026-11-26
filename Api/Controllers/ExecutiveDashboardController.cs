@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Enums;
@@ -113,7 +113,7 @@ public class ExecutiveDashboardController : ControllerBase
         var today = DateTime.UtcNow.Date;
 
         var departments = await _db.Departments
-            .Select(d => new { d.Id, d.Name, d.Code, d.AttendanceTargetPercentage })
+            .Select(d => new { d.Id, d.Name, d.Code, d.TargetAttendancePercent })
             .ToListAsync(ct);
 
         var results = new List<object>();
@@ -152,7 +152,7 @@ public class ExecutiveDashboardController : ControllerBase
                 .SumAsync(ar => ar.LateMinutes + ar.EarlyMinutes, ct);
 
             var attendancePct = Math.Round((decimal)presentCount / totalEmployees * 100, 1);
-            var gap = attendancePct - dept.AttendanceTargetPercentage;
+            var gap = attendancePct - dept.TargetAttendancePercent;
 
             string heatLevel = gap switch
             {
@@ -173,7 +173,7 @@ public class ExecutiveDashboardController : ControllerBase
                 absentCount,
                 lostMinutes,
                 attendancePercentage = attendancePct,
-                targetPercentage = dept.AttendanceTargetPercentage,
+                targetPercentage = dept.TargetAttendancePercent,
                 gapToTarget = Math.Round(gap, 1),
                 heatLevel
             });
@@ -193,7 +193,7 @@ public class ExecutiveDashboardController : ControllerBase
         var last7Days = today.AddDays(-6);
 
         var departments = await _db.Departments
-            .Select(d => new { d.Id, d.Name, d.Code, d.AttendanceTargetPercentage })
+            .Select(d => new { d.Id, d.Name, d.Code, d.TargetAttendancePercent })
             .ToListAsync(ct);
 
         var leaderboard = new List<object>();
@@ -231,7 +231,7 @@ public class ExecutiveDashboardController : ControllerBase
                 .CountAsync(ct);
 
             int rank = 0; // Will be assigned after sorting
-            string trend = avgAttendance >= dept.AttendanceTargetPercentage ? "up" : "down";
+            string trend = avgAttendance >= dept.TargetAttendancePercent ? "up" : "down";
 
             leaderboard.Add(new
             {
@@ -240,7 +240,7 @@ public class ExecutiveDashboardController : ControllerBase
                 departmentCode = dept.Code,
                 totalEmployees,
                 attendancePercentage = avgAttendance,
-                targetPercentage = dept.AttendanceTargetPercentage,
+                targetPercentage = dept.TargetAttendancePercent,
                 totalLostHours = totalLostHrs,
                 exceptionsCount,
                 trend,

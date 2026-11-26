@@ -1,11 +1,19 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
 using WACAMS.Core.Interfaces;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Services;
 
@@ -148,7 +156,7 @@ public class EscalationService
             WarningLetterId = warningLetterId,
             Level = 1,
             ResponsibleManagerId = employee.ManagerId,
-            Status = "Pending",
+            Status = EscalationStatus.Pending,
             Notes = $"Auto-created escalation due to FinalWrittenWarning (Id={warningLetterId}).",
             CreatedAt = DateTime.UtcNow
         };
@@ -204,7 +212,7 @@ public class EscalationService
         if (chain.Count <= escalation.Level)
         {
             // We've reached the top of the chain — resolve
-            escalation.Status = "Resolved";
+            escalation.Status = EscalationStatus.Resolved;
             escalation.ResolvedAt = DateTime.UtcNow;
         }
         else
@@ -212,7 +220,7 @@ public class EscalationService
             // Move to next level
             escalation.Level = chain[escalation.Level].Level;
             escalation.AssignedTo = chain[escalation.Level].ManagerId;
-            escalation.Status = "Pending";
+            escalation.Status = EscalationStatus.Pending;
 
             await SendEscalationNotificationAsync(escalation);
         }
@@ -255,7 +263,7 @@ public class EscalationService
                 if (chain.Count <= esc.Level)
                 {
                     // Top of chain reached — resolve
-                    esc.Status = "Resolved";
+                    esc.Status = EscalationStatus.Resolved;
                     esc.ResolvedAt = DateTime.UtcNow;
                     esc.Notes += Environment.NewLine + "[AUTO] Reached end of escalation chain — resolved.";
                 }

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 
 namespace WACAMS.Api.Services;
@@ -61,14 +61,14 @@ public class CorrectiveActionAnalyticsService
                 DepartmentId = g.Key,
                 DepartmentName = g.First().Employee?.Department?.Name ?? "Unknown",
                 WarningCount = g.Count(),
-                AvgEscalationLevel = g.Average(w => w.EscalationLevel)
+                AvgEscalationLevel = g.Average(w => w.Level)
             })
             .OrderByDescending(d => d.WarningCount)
             .ToList();
 
         // Escalation level distribution
         var escalationDistribution = warnings
-            .GroupBy(w => w.EscalationLevel)
+            .GroupBy(w => w.Level)
             .Select(g => new EscalationLevelDto
             {
                 Level = g.Key,
@@ -87,7 +87,7 @@ public class CorrectiveActionAnalyticsService
                 EmployeeName = g.First().Employee?.DisplayName ?? "Unknown",
                 DepartmentName = g.First().Employee?.Department?.Name ?? "Unknown",
                 WarningCount = g.Count(),
-                MaxEscalationLevel = g.Max(w => w.EscalationLevel),
+                MaxEscalationLevel = g.Max(w => w.Level),
                 LastWarningDate = g.Max(w => w.DateIssued)
             })
             .OrderByDescending(o => o.WarningCount)

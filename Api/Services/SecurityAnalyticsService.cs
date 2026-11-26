@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
@@ -45,10 +45,10 @@ public class SecurityAnalyticsService
         var startOfLastMonth = startOfMonth.AddMonths(-1);
 
         var newUsersThisMonth = await _context.Users
-            .CountAsync(u => u.CreatedAt >= startOfMonth);
+            .CountAsync(u => u.CreatedDate >= startOfMonth);
 
         var newUsersLastMonth = await _context.Users
-            .CountAsync(u => u.CreatedAt >= startOfLastMonth && u.CreatedAt < startOfMonth);
+            .CountAsync(u => u.CreatedDate >= startOfLastMonth && u.CreatedDate < startOfMonth);
 
         var growthRate = newUsersLastMonth > 0
             ? ((double)(newUsersThisMonth - newUsersLastMonth) / newUsersLastMonth) * 100
@@ -61,7 +61,7 @@ public class SecurityAnalyticsService
             var monthStart = startOfMonth.AddMonths(-i);
             var monthEnd = monthStart.AddMonths(1);
             var count = await _context.Users
-                .CountAsync(u => u.CreatedAt >= monthStart && u.CreatedAt < monthEnd);
+                .CountAsync(u => u.CreatedDate >= monthStart && u.CreatedDate < monthEnd);
 
             trend.Add(new TrendDataPoint
             {
@@ -126,7 +126,7 @@ public class SecurityAnalyticsService
             var monthStart = startOfMonth.AddMonths(-i);
             var monthEnd = monthStart.AddMonths(1);
             var count = await _context.EmployeeAccessOverrides
-                .CountAsync(o => o.CreatedAt >= monthStart && o.CreatedAt < monthEnd);
+                .CountAsync(o => o.CreatedDate >= monthStart && o.CreatedDate < monthEnd);
 
             trend.Add(new TrendDataPoint
             {

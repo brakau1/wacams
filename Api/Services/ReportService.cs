@@ -1,10 +1,31 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
+using WACAMS.Api.Utils;
 using WACAMS.Api.Controllers;
+using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
+using WACAMS.Api.Utils;
 using WACAMS.Api.Data;
+using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
+using WACAMS.Api.Utils;
 using WACAMS.Api.DTOs;
+using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
+using WACAMS.Api.Utils;
 using WACAMS.Core.Entities;
+using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
+using WACAMS.Api.Utils;
 using WACAMS.Core.Enums;
+using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
+using WACAMS.Api.Utils;
 using WACAMS.Api.Middleware;
+using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
+using WACAMS.Api.Utils;
 
 namespace WACAMS.Api.Services;
 
@@ -149,7 +170,7 @@ public class ReportService
     /// Export attendance data to CSV format.
     /// Returns CSV content as a string (caller can stream to response).
     /// </summary>
-    public async Task<string> ExportAttendanceCsvAsync(DateTime startDate, DateTime endDate, int? departmentId = null)
+    public async Task<string> ExportAttendanceCsvAsync(DateTime startDate, DateTime endDate, Guid? departmentId = null)
     {
         var query = _context.AttendanceRecords
             .Include(r => r.Employee)
@@ -214,7 +235,7 @@ public class ReportService
     /// <summary>
     /// Get exceptions count by type for a date range — useful for dashboard KPIs.
     /// </summary>
-    public async Task<Dictionary<string, int>> GetExceptionBreakdownAsync(DateTime startDate, DateTime endDate, int? departmentId = null)
+    public async Task<Dictionary<string, int>> GetExceptionBreakdownAsync(DateTime startDate, DateTime endDate, Guid? departmentId = null)
     {
         var query = _context.AttendanceExceptions
             .Include(ae => ae.Employee)

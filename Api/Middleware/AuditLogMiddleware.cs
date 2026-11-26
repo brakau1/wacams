@@ -1,6 +1,9 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WACAMS.Api.Data;
+using System.Security.Claims;
 using WACAMS.Core.Entities;
+using System.Security.Claims;
 
 namespace WACAMS.Api.Middleware;
 
@@ -29,6 +32,7 @@ public class AuditLogMiddleware
         {
             context.Request.EnableBuffering();
             using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
+using System.Security.Claims;
             requestBody = await reader.ReadToEndAsync();
             context.Request.Body.Position = 0;
         }
@@ -36,6 +40,7 @@ public class AuditLogMiddleware
         // Intercept response body to capture status code
         var originalResponseBody = context.Response.Body;
         using var newResponseBody = new System.IO.MemoryStream();
+using System.Security.Claims;
         context.Response.Body = newResponseBody;
 
         try

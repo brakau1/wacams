@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
@@ -116,15 +116,12 @@ public class PermissionTemplateService
         _context.PermissionTemplateVersions.Add(version);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(createdBy,
             "PermissionTemplateCreated",
-            "SuperAdmin",
             "PermissionTemplate",
             template.Id.ToString(),
-            $"Created permission template: {template.Name}",
             null,
-            new { template.Name, template.TargetRole, template.TargetDepartmentId },
-            createdBy);
+            System.Text.Json.JsonSerializer.Serialize(new { template.Name, template.TargetRole, template.TargetDepartmentId }));
 
         return (await GetTemplateByIdAsync(template.Id))!;
     }
@@ -172,15 +169,12 @@ public class PermissionTemplateService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(modifiedBy,
             "PermissionTemplateUpdated",
-            "SuperAdmin",
             "PermissionTemplate",
             template.Id.ToString(),
-            $"Updated permission template: {template.Name}",
-            new { OldPermissions = oldPermissions },
-            new { template.Name, template.Version, template.IsActive },
-            modifiedBy);
+            null,
+            System.Text.Json.JsonSerializer.Serialize(new { OldPermissions = oldPermissions, template.Name, template.Version, template.IsActive }));
 
         return await GetTemplateByIdAsync(id);
     }
@@ -227,15 +221,12 @@ public class PermissionTemplateService
         _context.PermissionTemplateVersions.Add(version);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(clonedBy,
             "PermissionTemplateCloned",
-            "SuperAdmin",
             "PermissionTemplate",
             clone.Id.ToString(),
-            $"Cloned permission template '{source.Name}' to '{clone.Name}'",
             null,
-            new { SourceTemplateId = sourceId, SourceTemplateName = source.Name, NewTemplateName = clone.Name },
-            clonedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { SourceTemplateId = sourceId, SourceTemplateName = source.Name, NewTemplateName = clone.Name }));
 
         return await GetTemplateByIdAsync(clone.Id);
     }
@@ -254,15 +245,12 @@ public class PermissionTemplateService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(deactivatedBy,
             "PermissionTemplateDeactivated",
-            "SuperAdmin",
             "PermissionTemplate",
             template.Id.ToString(),
-            $"Deactivated permission template: {template.Name}",
             null,
-            new { template.Name },
-            deactivatedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { template.Name }));
 
         return true;
     }
@@ -306,15 +294,12 @@ public class PermissionTemplateService
         _context.PermissionTemplateAssignments.AddRange(assignments);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(assignedBy,
             "PermissionTemplateAssigned",
-            "SuperAdmin",
             "PermissionTemplate",
             templateId.ToString(),
-            $"Assigned template '{template.Name}' to {assignments.Count} employees",
             null,
-            new { TemplateName = template.Name, EmployeeCount = assignments.Count, EmployeeIds = request.EmployeeIds },
-            assignedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { TemplateName = template.Name, EmployeeCount = assignments.Count, EmployeeIds = request.EmployeeIds }));
 
         return assignments.Count;
     }

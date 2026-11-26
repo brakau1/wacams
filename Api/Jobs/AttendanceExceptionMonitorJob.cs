@@ -1,7 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Api.Services;
 using WACAMS.Api.Data;
+using WACAMS.Api.Services;
 using WACAMS.Core.Entities;
+using WACAMS.Api.Services;
 using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
 
 namespace WACAMS.Api.Jobs;
 
@@ -43,6 +47,7 @@ public class AttendanceExceptionMonitorJob : BackgroundService
     private async Task RunExceptionCheckAsync()
     {
         using var scope = _serviceProvider.CreateScope();
+using WACAMS.Api.Services;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();
         var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
@@ -54,7 +59,7 @@ public class AttendanceExceptionMonitorJob : BackgroundService
         var overdueExceptions = await context.AttendanceExceptions
             .Include(e => e.Employee)
                 .ThenInclude(e => e!.Department)
-            .Include(e => e.InvestigatedByUser)
+            .Include(e => e.InvestigatedBy)
             .Where(e => e.Status == InvestigationStatus.Open && e.CreatedAt < overdueCutoff)
             .ToListAsync();
 
@@ -77,12 +82,12 @@ public class AttendanceExceptionMonitorJob : BackgroundService
             );
 
             // Notify supervisor if assigned
-            if (exception.InvestigatedByUserId != null)
+            if (exception.InvestigatedById != null)
             {
                 await notificationService.NotifyExceptionOverdueAsync(
                     exception.Id,
                     exception.EmployeeId,
-                    exception.InvestigatedByUserId
+                    exception.InvestigatedById
                 );
             }
 

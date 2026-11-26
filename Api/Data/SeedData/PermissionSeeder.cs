@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Core.Entities;
 
@@ -98,7 +98,7 @@ public static class PermissionSeeder
         var roles = new List<Role>
         {
             new() { Name = RoleNames.User, Description = "Basic user - view own records only" },
-            new() { Name = RoleNames.Operator, Description = "Operator - plant floor worker, view own attendance and records" },
+            new() { Name = "Operator", Description = "Operator - plant floor worker, view own attendance and records" },
             new() { Name = RoleNames.Supervisor, Description = "Supervisor - view team data, manage team members" },
             new() { Name = RoleNames.Manager, Description = "Manager - department-wide access, escalation management" },
             new() { Name = RoleNames.HR, Description = "Human Resources - attendance oversight, leave approvals, warning generation" },
@@ -116,7 +116,7 @@ public static class PermissionSeeder
         var roles = await context.Roles.ToListAsync();
 
         var userRoleEntity = roles.First(r => r.Name == RoleNames.User);
-        var operatorRole = roles.First(r => r.Name == RoleNames.Operator);
+        var operatorRole = roles.First(r => r.Name == "Operator");
         var hrRole = roles.First(r => r.Name == RoleNames.HR);
         var supervisorRole = roles.First(r => r.Name == RoleNames.Supervisor);
         var managerRole = roles.First(r => r.Name == RoleNames.Manager);

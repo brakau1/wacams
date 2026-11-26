@@ -1,5 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
+using WACAMS.Core.Enums;
 using WACAMS.Api.Data;
+using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
+using WACAMS.Core.Enums;
 
 namespace WACAMS.Api.Jobs;
 
@@ -41,6 +47,9 @@ public class ExecutiveMetricsRefreshJob : BackgroundService
     private async Task RefreshExecutiveMetricsAsync()
     {
         using var scope = _serviceProvider.CreateScope();
+using WACAMS.Core.Enums;
+using WACAMS.Api.Services;
+using WACAMS.Core.Enums;
         var context = scope.ServiceProvider.GetRequiredService<WacamDbContext>();
         var executiveKpiService = scope.ServiceProvider.GetRequiredService<ExecutiveKpiService>();
         var auditService = scope.ServiceProvider.GetRequiredService<AuditService>();

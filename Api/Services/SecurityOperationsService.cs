@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
@@ -49,20 +49,18 @@ public class SecurityOperationsService
             Severity = "High",
             EmployeeId = employeeId,
             DetailsJson = System.Text.Json.JsonSerializer.Serialize(new { Reason = reason, SessionsTerminated = sessions.Count }),
-            Timestamp = DateTime.UtcNow
+            OccurredAt = DateTime.UtcNow
         };
         _context.SecurityEvents.Add(securityEvent);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "ForceLogout",
-            "SuperAdmin",
             "UserSession",
             employeeId,
             $"Force logged out user {employeeId}",
-            null,
-            new { Reason = reason, SessionsTerminated = sessions.Count },
-            initiatedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { Reason = reason, SessionsTerminated = sessions.Count }));
 
         return true;
     }
@@ -99,20 +97,18 @@ public class SecurityOperationsService
             Severity = "High",
             EmployeeId = employeeId,
             DetailsJson = System.Text.Json.JsonSerializer.Serialize(new { Reason = reason }),
-            Timestamp = DateTime.UtcNow
+            OccurredAt = DateTime.UtcNow
         };
         _context.SecurityEvents.Add(securityEvent);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "AccountLocked",
-            "SuperAdmin",
             "User",
             employeeId,
             $"Locked user account: {employeeId}",
-            null,
-            new { Reason = reason },
-            initiatedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { Reason = reason }));
 
         return true;
     }
@@ -128,15 +124,12 @@ public class SecurityOperationsService
         user.IsLocked = false;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "AccountUnlocked",
-            "SuperAdmin",
             "User",
             employeeId,
-            $"Unlocked user account: {employeeId}",
-            null,
-            null,
-            initiatedBy);
+            $"Unlocked user account: {employeeId}");
 
         return true;
     }
@@ -173,20 +166,18 @@ public class SecurityOperationsService
             Severity = "Critical",
             EmployeeId = employeeId,
             DetailsJson = System.Text.Json.JsonSerializer.Serialize(new { Reason = reason }),
-            Timestamp = DateTime.UtcNow
+            OccurredAt = DateTime.UtcNow
         };
         _context.SecurityEvents.Add(securityEvent);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "AccountDisabled",
-            "SuperAdmin",
             "User",
             employeeId,
             $"Disabled user account: {employeeId}",
-            null,
-            new { Reason = reason },
-            initiatedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { Reason = reason }));
 
         return true;
     }
@@ -203,15 +194,12 @@ public class SecurityOperationsService
         user.IsLocked = false;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "AccountEnabled",
-            "SuperAdmin",
             "User",
             employeeId,
-            $"Enabled user account: {employeeId}",
-            null,
-            null,
-            initiatedBy);
+            $"Enabled user account: {employeeId}");
 
         return true;
     }
@@ -234,15 +222,13 @@ public class SecurityOperationsService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "SessionsRevoked",
-            "SuperAdmin",
             "UserSession",
             employeeId,
             $"Revoked all sessions for user {employeeId}",
-            null,
-            new { Reason = reason, SessionsRevoked = sessions.Count },
-            initiatedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { Reason = reason, SessionsRevoked = sessions.Count }));
 
         return sessions.Count;
     }
@@ -258,15 +244,12 @@ public class SecurityOperationsService
         user.MustChangePassword = true;
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "ForcePasswordReset",
-            "SuperAdmin",
             "User",
             employeeId,
-            $"Forced password reset for user {employeeId}",
-            null,
-            null,
-            initiatedBy);
+            $"Forced password reset for user {employeeId}");
 
         return true;
     }
@@ -302,21 +285,19 @@ public class SecurityOperationsService
                 request.TargetRole,
                 request.Reason
             }),
-            Timestamp = DateTime.UtcNow
+            OccurredAt = DateTime.UtcNow
         };
         _context.SecurityEvents.Add(securityEvent);
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            initiatedBy,
             "SecurityLockdownInitiated",
-            "SuperAdmin",
             "SecurityLockdown",
             lockdown.Id.ToString(),
             $"Initiated security lockdown: {request.LockdownType}",
-            null,
-            new { request.LockdownType, request.DepartmentId, request.TargetRole, request.Reason },
-            initiatedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { request.LockdownType, request.DepartmentId, request.TargetRole, request.Reason }));
 
         return new SecurityLockdownDto
         {
@@ -349,21 +330,19 @@ public class SecurityOperationsService
             EventType = "SecurityLockdownEnded",
             Severity = "High",
             DetailsJson = System.Text.Json.JsonSerializer.Serialize(new { LockdownId = lockdownId }),
-            Timestamp = DateTime.UtcNow
+            OccurredAt = DateTime.UtcNow
         };
         _context.SecurityEvents.Add(securityEvent);
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            endedBy,
             "SecurityLockdownEnded",
-            "SuperAdmin",
             "SecurityLockdown",
             lockdownId.ToString(),
             $"Ended security lockdown",
-            null,
-            new { LockdownId = lockdownId },
-            endedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { LockdownId = lockdownId }));
 
         return true;
     }
@@ -434,15 +413,13 @@ public class SecurityOperationsService
 
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            acknowledgedBy,
             "SecurityEventAcknowledged",
-            "SuperAdmin",
             "SecurityEvent",
             eventId.ToString(),
             $"Acknowledged security event: {securityEvent.EventType}",
-            null,
-            new { EventType = securityEvent.EventType, Notes = notes },
-            acknowledgedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { EventType = securityEvent.EventType, Notes = notes }));
 
         return true;
     }

@@ -1,9 +1,27 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
+using WACAMS.Core.Enums;
 using WACAMS.Api.Data;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
+using WACAMS.Core.Enums;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
+using WACAMS.Core.Enums;
 using WACAMS.Core.Entities;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
+using WACAMS.Core.Enums;
 using WACAMS.Api.Utils;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
+using WACAMS.Core.Enums;
 using WACAMS.Api.Middleware;
+using WACAMS.Core.Enums;
+using WACAMS.Core.Exceptions;
+using WACAMS.Core.Enums;
 
 namespace WACAMS.Api.Services;
 
@@ -57,7 +75,7 @@ public class AttendanceService
         var existingRecord = await _context.AttendanceRecords
             .FirstOrDefaultAsync(r => r.EmployeeId == employee.EmployeeId && r.Date.Date == date);
 
-        if (existingRecord != null && existingRecord.ClockInTime.HasValue)
+        if (existingRecord != null && existingRecord.ClockInTimeTime.HasValue)
             throw new ConflictException("Already clocked in for this date.");
 
         var minutesLate = DateTimeHelper.CalculateMinutesLate(clockInTime, expectedStart);
@@ -76,10 +94,10 @@ public class AttendanceService
             EmployeeId = employee.EmployeeId,
             Date = date,
             ShiftCode = GetShiftCodeForShiftName(shiftName),
-            ClockIn = clockInTime,
+            ClockInTime = clockInTime,
             ExpectedClockIn = expectedStart,
             IsLate = isLate,
-            MinutesLate = minutesLate,
+            LateMinutes = minutesLate,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -98,7 +116,7 @@ public class AttendanceService
                     ExceptionType = "LateArrival",
                     ExpectedClockIn = expectedStart,
                     ActualClockIn = clockInTime,
-                    MinutesLate = minutesLate,
+                    LateMinutes = minutesLate,
                     LostProductionMinutes = minutesLate
                 });
             }
@@ -109,11 +127,11 @@ public class AttendanceService
             }
         }
 
-        await _auditService.LogActionAsync(action: "ClockIn",
+        await _auditService.LogActionAsync("system", action: "ClockInTime",
             entityType: "AttendanceRecord",
             entityId: record.Id.ToString(),
             httpEndpoint: "POST /api/attendance/clockin",
-            changesJson: $"{{\"Date\":\"{date:yyyy-MM-dd}\",\"ClockIn\":\"{clockInTime:HH:mm}\",\"IsLate\":{isLate},\"MinutesLate\":{minutesLate}}}");
+            changesJson: $"{{\"Date\":\"{date:yyyy-MM-dd}\",\"ClockInTime\":\"{clockInTime:HH:mm}\",\"IsLate\":{isLate},\"LateMinutes\":{minutesLate}}}");
 
         _logger.LogInformation("Clock in: {EmployeeId} at {Time}, Late={IsLate}, Minutes={Minutes}",
             employee.EmployeeId, clockInTime, isLate, minutesLate);
@@ -144,7 +162,7 @@ public class AttendanceService
         if (record is null)
             throw new NotFoundException($"No attendance record found for {employee.EmployeeId} on {date:yyyy-MM-dd}.");
 
-        if (record.ClockOutTime.HasValue)
+        if (record.ClockOutTimeTime.HasValue)
             throw new ConflictException("Already clocked out for this date.");
 
         var expectedEnd = record.ExpectedClockOut ?? DateTimeHelper.GetShiftEndTime(
@@ -154,7 +172,7 @@ public class AttendanceService
         var threshold = GetSettingValueAsInt("EarlyDepartureThresholdMinutes", 10);
         var isEarly = minutesEarly >= threshold;
 
-        record.ClockOutTime = clockOutTime;
+        record.ClockOutTimeTime = clockOutTime;
         record.ExpectedClockOut = expectedEnd;
         record.EarlyMinutes > 0 = isEarly;
         record.EarlyMinutes = minutesEarly;
@@ -168,11 +186,11 @@ public class AttendanceService
             // Normal — clocked out after expected end, no exception
         }
 
-        await _auditService.LogActionAsync(action: "ClockOut",
+        await _auditService.LogActionAsync("system", action: "ClockOutTime",
             entityType: "AttendanceRecord",
             entityId: record.Id.ToString(),
             httpEndpoint: "POST /api/attendance/clockout",
-            changesJson: $"{{\"Date\":\"{date:yyyy-MM-dd}\",\"ClockOut\":\"{clockOutTime:HH:mm}\",\"IsEarly\":{isEarly},\"MinutesEarly\":{minutesEarly}}}");
+            changesJson: $"{{\"Date\":\"{date:yyyy-MM-dd}\",\"ClockOutTime\":\"{clockOutTime:HH:mm}\",\"IsEarly\":{isEarly},\"EarlyMinutes\":{minutesEarly}}}");
 
         _logger.LogInformation("Clock out: {EmployeeId} at {Time}, Early={IsEarly}, Minutes={Minutes}",
             employee.EmployeeId, clockOutTime, isEarly, minutesEarly);
@@ -198,7 +216,7 @@ public class AttendanceService
 
         if (departmentId.HasValue)
         {
-            query = query.Where(r => r.Employee!.DepartmentId == departmentId.Value);
+            query = query.Where(r => r.Employee!.Employee!.DepartmentId == departmentId.Value);
         }
 
         var records = await query.OrderBy(r => r.Employee!.DisplayName).ToListAsync();
@@ -218,7 +236,7 @@ public class AttendanceService
             .Where(r => r.Date >= startDate.Date && r.Date <= endDate.Date.Date);
 
         if (departmentId.HasValue)
-            records = records.Where(r => r.Employee!.DepartmentId == departmentId.Value);
+            records = records.Where(r => r.Employee!.Employee!.DepartmentId == departmentId.Value);
 
         var allRecords = await records.ToListAsync();
 
@@ -253,7 +271,7 @@ public class AttendanceService
 
             totalPossibleAttendances += workingDays;
 
-            var presentDays = empRecords.Count(r => r.ClockInTime.HasValue);
+            var presentDays = empRecords.Count(r => r.ClockInTimeTime.HasValue);
             presentCount += presentDays;
 
             lateCount += empRecords.Count(r => r.LateMinutes > 0);
@@ -271,8 +289,8 @@ public class AttendanceService
                 awolCount++;
 
             // Missing clock-in/out
-            missingClockInCount += empRecords.Count(r => !r.ClockInTime.HasValue);
-            missingClockOutCount += empRecords.Count(r => !r.ClockOutTime.HasValue);
+            missingClockInCount += empRecords.Count(r => !r.ClockInTimeTime.HasValue);
+            missingClockOutCount += empRecords.Count(r => !r.ClockOutTimeTime.HasValue);
         }
 
         var attendancePercent = totalPossibleAttendances > 0
@@ -329,7 +347,7 @@ public class AttendanceService
                 workingDays++;
         }
 
-        var daysPresent = records.Count(r => r.ClockInTime.HasValue);
+        var daysPresent = records.Count(r => r.ClockInTimeTime.HasValue);
         var daysAbsent = workingDays - daysPresent;
         var daysLate = records.Count(r => r.LateMinutes > 0);
         var daysEarly = records.Count(r => r.EarlyMinutes > 0);
@@ -409,7 +427,7 @@ public class AttendanceService
             var record = await _context.AttendanceRecords
                 .FirstOrDefaultAsync(r => r.EmployeeId == emp.EmployeeId && r.Date.Date == date.Date);
 
-            if (record != null && !record.ClockOutTime.HasValue && record.ClockInTime.HasValue)
+            if (record != null && !record.ClockOutTimeTime.HasValue && record.ClockInTimeTime.HasValue)
             {
                 var expectedEnd = record.ExpectedClockOut ?? new TimeSpan(14, 0, 0);
                 var cutoff = DateTimeHelper.StartOfDayInSast(date).Add(expectedEnd).AddMinutes(10);
@@ -462,7 +480,7 @@ public class AttendanceService
     {
         if (departmentId.HasValue)
         {
-            return await _context.Employees.Where(e => e.DepartmentId == departmentId.Value && e.IsActive).ToListAsync();
+            return await _context.Employees.Where(e => e.Employee!.DepartmentId == departmentId.Value && e.IsActive).ToListAsync();
         }
         return await _context.Employees.Where(e => e.IsActive).ToListAsync();
     }
@@ -519,12 +537,12 @@ public class AttendanceService
             DisplayName = employee.DisplayName,
             Date = record.Date,
             ShiftCode = record.ShiftCode,
-            ClockIn = record.ClockInTime,
-            ClockOut = record.ClockOutTime,
+            ClockInTime = record.ClockInTimeTime,
+            ClockOutTime = record.ClockOutTimeTime,
             IsLate = record.LateMinutes > 0,
-            MinutesLate = record.LateMinutes,
+            LateMinutes = record.LateMinutes,
             IsEarlyDeparture = record.EarlyMinutes > 0,
-            MinutesEarly = record.EarlyMinutes,
+            EarlyMinutes = record.EarlyMinutes,
             TotalHoursWorked = record.TotalHoursWorked,
             CreatedAt = record.CreatedAt
         };

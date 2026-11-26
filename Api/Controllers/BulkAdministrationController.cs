@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
@@ -45,7 +45,7 @@ public class BulkAdministrationController : ControllerBase
 
             var initiatedBy = GetCurrentEmployeeId();
             using var stream = file.OpenReadStream();
-            var result = await _bulkAdminService.ImportUsersAsync(stream, file.FileName, initiatedBy);
+            var result = await _bulkAdminService.ProcessBulkImportAsync(stream, file.FileName, initiatedBy);
             
             if (result.Status == "Failed")
             {

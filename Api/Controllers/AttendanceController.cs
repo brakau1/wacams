@@ -1,7 +1,11 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.DTOs;
+using WACAMS.Core.Exceptions;
 using WACAMS.Api.Services;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Controllers;
 
@@ -32,7 +36,7 @@ public class AttendanceController : ControllerBase
     [ProducesResponseType(typeof(AttendanceRecordDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> ClockIn([FromBody] ClockInRequest request)
+    public async Task<IActionResult> ClockInTime([FromBody] ClockInRequest request)
     {
         try
         {
@@ -58,7 +62,7 @@ public class AttendanceController : ControllerBase
     [ProducesResponseType(typeof(AttendanceRecordDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> ClockOut([FromBody] ClockOutRequest request)
+    public async Task<IActionResult> ClockOutTime([FromBody] ClockOutRequest request)
     {
         try
         {

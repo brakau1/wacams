@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Entities;
 
 namespace WACAMS.Api.Data;
@@ -240,7 +240,7 @@ public class WacamDbContext : DbContext
             .HasIndex(ars => ars.EmployeeId);
 
         modelBuilder.Entity<AccessReviewSnapshot>()
-            .HasIndex(ars => ars.SnapshotDate);
+            .HasIndex(ars => ars.SnapshotAt);
 
         modelBuilder.Entity<AccessReviewSnapshot>()
             .HasOne(ars => ars.Employee)
@@ -249,7 +249,7 @@ public class WacamDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<BulkImportHistory>()
-            .HasIndex(bih => bih.ImportDate);
+            .HasIndex(bih => bih.StartedAt);
 
         modelBuilder.Entity<BulkImportHistory>()
             .HasIndex(bih => bih.Status);

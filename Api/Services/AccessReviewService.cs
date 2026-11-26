@@ -28,7 +28,8 @@ public class AccessReviewService
         string? reason = null)
     {
         var user = await _context.Users
-            .Include(u => u.Department)
+            .Include(u => u.Employee)
+                .ThenInclude(e => e!.Department)
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
@@ -47,7 +48,7 @@ public class AccessReviewService
             .Where(o => o.EmployeeId == employeeId && o.IsActive)
             .ToListAsync();
 
-        var overrideList = overrides.Select(o => o.PermissionName).ToList();
+        var overrideList = overrides.Select(o => o.OverrideRole).ToList();
 
         // Get last login
         var lastLogin = await _context.UserSessions
@@ -72,17 +73,16 @@ public class AccessReviewService
         {
             Id = Guid.NewGuid(),
             EmployeeId = employeeId,
-            DisplayName = $"{user.DisplayName} {user}",
-            Department = user.Department?.Name,
+            DisplayName = user.Employee?.DisplayName ?? user.DisplayName ?? employeeId,
+            Department = user.Employee?.Department?.Name,
             Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? "User",
             AssignedPermissionsJson = System.Text.Json.JsonSerializer.Serialize(assignedPermissions),
             InheritedPermissionsJson = System.Text.Json.JsonSerializer.Serialize(inheritedPermissions),
             OverridesJson = System.Text.Json.JsonSerializer.Serialize(overrideList),
-            DepartmentScope = user.Department?.Name,
             LastLoginAt = lastLogin?.StartedAt,
             LastRoleChangeAt = lastRoleChange?.AssignedAt,
             LastPermissionChangeAt = lastPermissionChange?.PerformedAt,
-            SnapshotDate = DateTime.UtcNow,
+            SnapshotAt = DateTime.UtcNow,
             CapturedBy = capturedBy,
             Reason = reason
         };
@@ -90,15 +90,13 @@ public class AccessReviewService
         _context.AccessReviewSnapshots.Add(snapshot);
         await _context.SaveChangesAsync();
 
-        await _auditService.LogAsync(
+        await _auditService.LogActionAsync(
+            capturedBy,
             "AccessSnapshotCaptured",
-            "SuperAdmin",
             "AccessReviewSnapshot",
             snapshot.Id.ToString(),
             $"Captured access snapshot for user {employeeId}",
-            null,
-            new { employeeId, reason },
-            capturedBy);
+            System.Text.Json.JsonSerializer.Serialize(new { employeeId, reason }));
 
         return new AccessReviewSnapshotDto
         {
@@ -110,11 +108,11 @@ public class AccessReviewService
             AssignedPermissions = assignedPermissions,
             InheritedPermissions = inheritedPermissions,
             ActiveOverrides = overrideList,
-            DepartmentScope = snapshot.DepartmentScope,
+            DepartmentScope = snapshot.Department,
             LastLoginAt = snapshot.LastLoginAt,
             LastRoleChangeAt = snapshot.LastRoleChangeAt,
             LastPermissionChangeAt = snapshot.LastPermissionChangeAt,
-            SnapshotDate = snapshot.SnapshotDate,
+            SnapshotDate = snapshot.SnapshotAt,
             CapturedBy = snapshot.CapturedBy
         };
     }
@@ -128,7 +126,7 @@ public class AccessReviewService
     {
         var snapshots = await _context.AccessReviewSnapshots
             .Where(s => s.EmployeeId == employeeId)
-            .OrderByDescending(s => s.SnapshotDate)
+            .OrderByDescending(s => s.SnapshotAt)
             .Take(limit)
             .ToListAsync();
 
@@ -142,11 +140,11 @@ public class AccessReviewService
             AssignedPermissions = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, bool>>>(s.AssignedPermissionsJson) ?? new(),
             InheritedPermissions = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, bool>>>(s.InheritedPermissionsJson) ?? new(),
             ActiveOverrides = System.Text.Json.JsonSerializer.Deserialize<List<string>>(s.OverridesJson) ?? new(),
-            DepartmentScope = s.DepartmentScope,
+            DepartmentScope = s.Department,
             LastLoginAt = s.LastLoginAt,
             LastRoleChangeAt = s.LastRoleChangeAt,
             LastPermissionChangeAt = s.LastPermissionChangeAt,
-            SnapshotDate = s.SnapshotDate,
+            SnapshotDate = s.SnapshotAt,
             CapturedBy = s.CapturedBy
         }).ToList();
     }
@@ -157,7 +155,8 @@ public class AccessReviewService
     public async Task<UserAccessExplorerDto?> GetUserAccessAsync(string employeeId)
     {
         var user = await _context.Users
-            .Include(u => u.Department)
+            .Include(u => u.Employee)
+                .ThenInclude(e => e!.Department)
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.EmployeeId == employeeId);
@@ -179,12 +178,12 @@ public class AccessReviewService
         {
             Id = o.Id,
             EmployeeId = o.EmployeeId,
-            PermissionName = o.PermissionName,
-            GrantedBy = o.GrantedBy,
-            Reason = o.Reason,
+            PermissionName = o.OverrideRole,
+            GrantedBy = o.CreatedByEmployeeId,
+            Reason = o.Notes,
             IsActive = o.IsActive,
-            CreatedAt = o.CreatedAt,
-            ExpiresAt = o.ExpiresAt
+            CreatedAt = o.CreatedDate,
+            ExpiresAt = o.EffectiveTo
         }).ToList();
 
         // Get last login
@@ -209,13 +208,12 @@ public class AccessReviewService
         return new UserAccessExplorerDto
         {
             EmployeeId = employeeId,
-            DisplayName = $"{user.DisplayName} {user}",
-            Department = user.Department?.Name,
+            DisplayName = user.Employee?.DisplayName ?? user.DisplayName ?? employeeId,
+            Department = user.Employee?.Department?.Name,
             Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? "User",
             AssignedPermissions = assignedPermissions,
             InheritedPermissions = inheritedPermissions,
             Overrides = overrideDtos,
-            DepartmentScope = user.Department?.Name,
             LastLoginAt = lastLogin?.StartedAt,
             LastRoleChangeAt = lastRoleChange?.AssignedAt,
             LastPermissionChangeAt = lastPermissionChange?.PerformedAt
@@ -228,7 +226,8 @@ public class AccessReviewService
     public async Task<List<UserAccessExplorerDto>> GetAllUserAccessAsync()
     {
         var users = await _context.Users
-            .Include(u => u.Department)
+            .Include(u => u.Employee)
+                .ThenInclude(e => e!.Department)
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .ToListAsync();
@@ -245,12 +244,12 @@ public class AccessReviewService
             {
                 Id = o.Id,
                 EmployeeId = o.EmployeeId,
-                PermissionName = o.PermissionName,
-                GrantedBy = o.GrantedBy,
-                Reason = o.Reason,
+                PermissionName = o.OverrideRole,
+                GrantedBy = o.CreatedByEmployeeId,
+                Reason = o.Notes,
                 IsActive = o.IsActive,
-                CreatedAt = o.CreatedAt,
-                ExpiresAt = o.ExpiresAt
+                CreatedAt = o.CreatedDate,
+                ExpiresAt = o.EffectiveTo
             }).ToList();
 
             var lastLogin = await _context.UserSessions
@@ -272,13 +271,12 @@ public class AccessReviewService
             result.Add(new UserAccessExplorerDto
             {
                 EmployeeId = user.EmployeeId,
-                DisplayName = $"{user.DisplayName} {user}",
-                Department = user.Department?.Name,
+                DisplayName = user.Employee?.DisplayName ?? user.DisplayName ?? user.EmployeeId,
+                Department = user.Employee?.Department?.Name,
                 Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? "User",
                 AssignedPermissions = new Dictionary<string, Dictionary<string, bool>>(),
                 InheritedPermissions = new Dictionary<string, Dictionary<string, bool>>(),
                 Overrides = overrideDtos,
-                DepartmentScope = user.Department?.Name,
                 LastLoginAt = lastLogin?.StartedAt,
                 LastRoleChangeAt = lastRoleChange?.AssignedAt,
                 LastPermissionChangeAt = lastPermissionChange?.PerformedAt

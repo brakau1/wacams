@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
@@ -37,7 +37,7 @@ public class KpiCalculationEngine
 
             if (!string.IsNullOrEmpty(departmentId))
             {
-                query = query.Where(ar => ar.DepartmentId == departmentId);
+                query = query.Where(ar => ar.Employee!.DepartmentId == departmentId);
             }
 
             if (!string.IsNullOrEmpty(managerId))
@@ -78,7 +78,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(ar => ar.DepartmentId == departmentId);
+            query = query.Where(ar => ar.Employee!.DepartmentId == departmentId);
         }
 
         return await query.Select(ar => ar.EmployeeId).Distinct().CountAsync();
@@ -98,7 +98,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(ar => ar.DepartmentId == departmentId);
+            query = query.Where(ar => ar.Employee!.DepartmentId == departmentId);
         }
 
         return await query.Select(ar => ar.EmployeeId).Distinct().CountAsync();
@@ -117,7 +117,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(ar => ar.DepartmentId == departmentId);
+            query = query.Where(ar => ar.Employee!.DepartmentId == departmentId);
         }
 
         var totalRecords = await query.CountAsync();
@@ -143,7 +143,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(ar => ar.DepartmentId == departmentId);
+            query = query.Where(ar => ar.Employee!.DepartmentId == departmentId);
         }
 
         var totalRecords = await query.CountAsync();
@@ -169,7 +169,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(ar => ar.DepartmentId == departmentId);
+            query = query.Where(ar => ar.Employee!.DepartmentId == departmentId);
         }
 
         var totalRecords = await query.CountAsync();
@@ -202,7 +202,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(e => e.DepartmentId == departmentId);
+            query = query.Where(e => e.Employee!.DepartmentId == departmentId);
         }
 
         var exceptionCount = await query.CountAsync();
@@ -246,7 +246,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(e => e.DepartmentId == departmentId);
+            query = query.Where(e => e.Employee!.DepartmentId == departmentId);
         }
 
         var lostMinutes = await query
@@ -318,7 +318,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(e => e.DepartmentId == departmentId);
+            query = query.Where(e => e.Employee!.DepartmentId == departmentId);
         }
 
         return await query.CountAsync();
@@ -334,7 +334,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(ca => ca.Employee != null && ca.Employee.DepartmentId.ToString() == departmentId);
+            query = query.Where(ca => ca.Employee != null && ca.Employee.Employee!.DepartmentId.ToString() == departmentId);
         }
 
         return await query.CountAsync();
@@ -352,7 +352,7 @@ public class KpiCalculationEngine
 
         if (!string.IsNullOrEmpty(departmentId))
         {
-            query = query.Where(e => e.Exception.DepartmentId == departmentId);
+            query = query.Where(e => e.Exception.Employee!.DepartmentId == departmentId);
         }
 
         return await query.CountAsync();
