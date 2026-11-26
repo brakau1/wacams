@@ -1,0 +1,113 @@
+{
+  "total_count": 1,
+  "jobs": [
+    {
+      "id": 140205540521,
+      "run_id": 45906855280,
+      "workflow_name": "Build WACAMS Backend",
+      "head_branch": "master",
+      "run_url": "https://api.github.com/repos/brakau1/wacams/actions/runs/45906855280",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOV1JZaM8AAAAgpObEqQ",
+      "head_sha": "50da7bf0e67a14fbd3d22bf1405fdfbfc1267b60",
+      "url": "https://api.github.com/repos/brakau1/wacams/actions/jobs/140205540521",
+      "html_url": "https://github.com/brakau1/wacams/actions/runs/45906855280/job/140205540521",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-26T22:46:06Z",
+      "started_at": "2026-11-26T22:46:08Z",
+      "completed_at": "2026-11-26T22:46:37Z",
+      "name": "build",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-26T22:46:09Z",
+          "completed_at": "2026-11-26T22:46:10Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-26T22:46:10Z",
+          "completed_at": "2026-11-26T22:46:13Z"
+        },
+        {
+          "name": "Setup .NET 8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-26T22:46:13Z",
+          "completed_at": "2026-11-26T22:46:13Z"
+        },
+        {
+          "name": "Restore dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-26T22:46:13Z",
+          "completed_at": "2026-11-26T22:46:24Z"
+        },
+        {
+          "name": "Build",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 5,
+          "started_at": "2026-11-26T22:46:24Z",
+          "completed_at": "2026-11-26T22:46:36Z"
+        },
+        {
+          "name": "Publish",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-11-26T22:46:36Z",
+          "completed_at": "2026-11-26T22:46:36Z"
+        },
+        {
+          "name": "Upload artifact",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-26T22:46:36Z",
+          "completed_at": "2026-11-26T22:46:36Z"
+        },
+        {
+          "name": "Post Setup .NET 8",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 13,
+          "started_at": "2026-11-26T22:46:36Z",
+          "completed_at": "2026-11-26T22:46:36Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-26T22:46:36Z",
+          "completed_at": "2026-11-26T22:46:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-26T22:46:36Z",
+          "completed_at": "2026-11-26T22:46:36Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/brakau1/wacams/check-runs/140205540521",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000000079,
+      "runner_name": "GitHub Actions 1000000079",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

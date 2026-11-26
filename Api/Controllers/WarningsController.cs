@@ -34,7 +34,7 @@ public class WarningsController : ControllerBase
     [ProducesResponseType(typeof((List<WarningLetterDto>, int)), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(
         [FromQuery] string? employeeId,
-        [FromQuery] Guid? departmentId,
+        [FromQuery] int? departmentId,
         [FromQuery] string? warningType,
         [FromQuery] DateTime? startDate,
         [FromQuery] DateTime? endDate,

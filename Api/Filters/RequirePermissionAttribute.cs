@@ -21,7 +21,7 @@ public class RequirePermissionAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = context.HttpContext.User;
-        if (!user.Identity?.IsAuthenticated)
+        if (!(user.Identity?.IsAuthenticated ?? false))
         {
             context.Result = new UnauthorizedResult();
             return;
