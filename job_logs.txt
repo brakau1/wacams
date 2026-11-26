@@ -1,0 +1,8 @@
+Invoke-RestMethod : {"message":"Must have admin rights to Repository.","documentation_url":"https://docs.github.com/res
+t/actions/workflow-jobs#download-job-logs-for-a-workflow-run","status":"403"}
+At line:1 char:1
++ Invoke-RestMethod -Uri 'https://api.github.com/repos/brakau1/wacams/a ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-RestMethod], WebExc 
+   eption
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeRestMethodCommand

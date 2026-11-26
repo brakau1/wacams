@@ -29,11 +29,11 @@ public static class CorsExtensions
                 "https://wacam.yfpo.co.za"
             };
 
-            // Also read from config if available
-            var originsFromConfig = env.GetSection("Environment").GetValue<string>("") ?? ""WACAMS_ALLOWED_ORIGINS");
-            if (!string.IsNullOrEmpty(originsFromConfig))
+            // Also read from environment variable if available
+            var allowedOriginsEnv = Environment.GetEnvironmentVariable("WACAMS_ALLOWED_ORIGINS");
+            if (!string.IsNullOrEmpty(allowedOriginsEnv))
             {
-                allowedOrigins.AddRange(originsFromConfig.Split(';', StringSplitOptions.RemoveEmptyEntries));
+                allowedOrigins.AddRange(allowedOriginsEnv.Split(';', StringSplitOptions.RemoveEmptyEntries));
             }
 
             services.AddCors(options =>

@@ -1,0 +1,15 @@
+Invoke-RestMethod : The remote server returned an error: (401) Unauthorized.
+At line:1 char:153
++ ... '}; $resp = Invoke-RestMethod -Uri 'https://api.github.com/repos/brak ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-RestMethod], WebExc 
+   eption
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeRestMethodCommand
+ 
+Cannot index into a null array.
+At line:1 char:271
++ ... ns/45904818199/jobs' -Headers $headers; Write-Output $resp.jobs[0].id
++                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException
+    + FullyQualifiedErrorId : NullArray
+ 

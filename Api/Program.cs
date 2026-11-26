@@ -25,7 +25,7 @@ namespace Wacam.Api;
 /// </summary>
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +34,7 @@ public class Program
             .ReadFrom.Configuration(builder.Configuration)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.File("logs/wacam-.txt", rollingEnabled: true, fileSizeLimitBytes: 10_485_760, retainedFileCountLimit: 30)
+            .WriteTo.File("logs/wacam-.txt", rolling: true, fileSizeLimitBytes: 10_485_760, retainedFileCountLimit: 30)
             .CreateLogger();
 
         builder.Host.UseSerilog();
@@ -142,7 +142,7 @@ public class Program
 
         // ── Health Checks ──
         builder.Services.AddHealthChecks()
-            .AddCheck<DatabaseHealthCheck>()("Database");
+            .AddCheck<DatabaseHealthCheck>("Database");
 
         // ── Register API Services ──
         builder.Services.AddApiServices();
