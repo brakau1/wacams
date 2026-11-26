@@ -14,12 +14,14 @@ public class EmployeeService
 {
     private readonly WacamDbContext _context;
     private readonly AuditService _auditService;
+    private readonly DepartmentAuthorizationService _departmentAuth;
     private readonly ILogger<EmployeeService> _logger;
 
-    public EmployeeService(WacamDbContext context, AuditService auditService, ILogger<EmployeeService> logger)
+    public EmployeeService(WacamDbContext context, AuditService auditService, DepartmentAuthorizationService departmentAuth, ILogger<EmployeeService> logger)
     {
         _context = context;
         _auditService = auditService;
+        _departmentAuth = departmentAuth;
         _logger = logger;
     }
 
@@ -130,7 +132,7 @@ public class EmployeeService
             EmployeeId = request.EmployeeId.Trim(),
             DisplayName = request.DisplayName.Trim(),
             Email = request.Email.ToLowerInvariant().Trim(),
-            PhoneNumber = request.Phone?.Trim(),
+            Phone = request.Phone?.Trim(),
             ManagerId = request.ManagerId?.Trim(),
             DepartmentId = request.DepartmentId,
             Role = request.Role,
@@ -266,7 +268,7 @@ public class EmployeeService
                     EmployeeId = item.EmployeeId.Trim(),
                     DisplayName = item.DisplayName.Trim(),
                     Email = item.Email.ToLowerInvariant().Trim(),
-                    PhoneNumber = item.Phone?.Trim(),
+                    Phone = item.Phone?.Trim(),
                     ManagerId = item.ManagerId?.Trim(),
                     DepartmentId = item.DepartmentId,
                     Role = item.Role,
@@ -378,7 +380,7 @@ public class EmployeeService
             .ToList();
 
         // Build hierarchy path
-        var hierarchyPath = GetManagerChainAsync(employee.EmployeeId).AsTask().GetAwaiter().GetResult();
+        var hierarchyPath = GetManagerChainAsync(employee.EmployeeId).GetAwaiter().GetResult();
 
         return new EmployeeHierarchyDto
         {
@@ -399,7 +401,7 @@ public class EmployeeService
             Email = employee.Email,
             PhoneNumber = employee.Phone,
             ManagerId = employee.ManagerId,
-            ManagerName = employee.Manager?.DisplayName,
+            ManagerName = null, // Will be populated separately if needed
             DepartmentId = employee.DepartmentId,
             DepartmentName = employee.Department?.Name ?? string.Empty,
             Role = employee.Role,
