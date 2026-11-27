@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
-using WACAMS.Api.Middleware;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
 
@@ -249,7 +248,7 @@ public class WarningService
     }
 
     /// <summary>
-    /// Count how many warnings of each type an employee has — used for progressive discipline validation.
+    /// Count how many warnings of each type an employee has ï¿½ used for progressive discipline validation.
     /// </summary>
     public async Task<Dictionary<string, int>> GetWarningCountsAsync(string employeeId)
     {

@@ -4,7 +4,6 @@ using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Api.Utils;
-using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -39,11 +38,11 @@ public class AuthService
     {
         // 1. Look up employee (including locked accounts so we can return a specific message)
         var employee = await _context.Employees
-            .FirstOrDefaultAsync(e => e.EmployeeId == request.Email);
+            .FirstOrDefaultAsync(e => e.EmployeeId == request.EmployeeId);
 
         if (employee is null || !employee.IsActive)
         {
-            _logger.LogWarning("Failed login attempt for unknown/inactive EmployeeId: {EmployeeId}", request.Email);
+            _logger.LogWarning("Failed login attempt for unknown/inactive EmployeeId: {EmployeeId}", request.EmployeeId);
             throw new UnauthorizedAccessException("Invalid employee ID or password.");
         }
 
@@ -53,7 +52,7 @@ public class AuthService
             var minutesRemaining = (int)Math.Ceiling((employee.LockoutEnd.Value - DateTime.UtcNow).TotalMinutes);
             _logger.LogWarning(
                 "Login attempt for locked account {EmployeeId}. Lockout ends {LockoutEnd} ({MinutesRemaining} min remaining).",
-                request.Email, employee.LockoutEnd.Value, minutesRemaining);
+                request.EmployeeId, employee.LockoutEnd.Value, minutesRemaining);
 
             throw new AccountLockedException(
                 $"Account is locked due to too many failed login attempts. Try again in {minutesRemaining} minutes.");
@@ -76,7 +75,7 @@ public class AuthService
             throw new UnauthorizedAccessException("Invalid employee ID or password.");
         }
 
-        // 5. Successful login — reset lockout counters
+        // 5. Successful login ï¿½ reset lockout counters
         await ResetLockoutCountersAsync(employee, ipAddress);
 
         // 6. Load user permissions
@@ -262,8 +261,8 @@ public class AuthService
     public async Task<EmployeeDto> RegisterAsync(RegisterRequest request)
     {
         // Check for duplicate EmployeeId
-        if (await _context.Employees.AnyAsync(e => e.EmployeeId == request.Email))
-            throw new ConflictException($"Employee with ID '{request.Email}' already exists.");
+        if (await _context.Employees.AnyAsync(e => e.EmployeeId == request.EmployeeId))
+            throw new ConflictException($"Employee with ID '{request.EmployeeId}' already exists.");
 
         // Validate department exists
         var department = await _context.Departments.FindAsync(request.DepartmentId);
@@ -280,7 +279,7 @@ public class AuthService
 
         var newEmployee = new Employee
         {
-            EmployeeId = request.Email.Trim(),
+            EmployeeId = request.EmployeeId.Trim(),
             DisplayName = request.DisplayName.Trim(),
             Email = request.Email.ToLowerInvariant().Trim(),
             PhoneNumber = request.Phone?.Trim(),
@@ -339,7 +338,7 @@ public class AuthService
     }
 
     /// <summary>
-    /// Logout — invalidate the current refresh token.
+    /// Logout ï¿½ invalidate the current refresh token.
     /// </summary>
     public async Task LogoutAsync(string employeeId)
     {

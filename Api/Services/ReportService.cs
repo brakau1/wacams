@@ -6,7 +6,6 @@ using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Core.Enums;
-using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -214,7 +213,7 @@ public class ReportService
     }
 
     /// <summary>
-    /// Get exceptions count by type for a date range — useful for dashboard KPIs.
+    /// Get exceptions count by type for a date range ï¿½ useful for dashboard KPIs.
     /// </summary>
     public async Task<Dictionary<string, int>> GetExceptionBreakdownAsync(DateTime startDate, DateTime endDate, Guid? departmentId = null)
     {
@@ -266,11 +265,11 @@ public class ReportService
     }
 
     // -------------------------------------------------------------------------------
-    // DASHBOARD METHODS — Phase 3 Live Dashboard Integration
+    // DASHBOARD METHODS ï¿½ Phase 3 Live Dashboard Integration
     // -------------------------------------------------------------------------------
 
     /// <summary>
-    /// Get department KPIs for today — used by general dashboard.
+    /// Get department KPIs for today ï¿½ used by general dashboard.
     /// </summary>
     public async Task<List<DashboardDepartmentDto>> GetDepartmentKPIsAsync(DateTime date)
     {
@@ -312,7 +311,7 @@ public class ReportService
     }
 
     /// <summary>
-    /// Get 14-day trend data — used by dashboard and manager dashboard.
+    /// Get 14-day trend data ï¿½ used by dashboard and manager dashboard.
     /// </summary>
     public async Task<List<DashboardTrendDto>> GetTrendAsync(DateTime startDate, DateTime endDate, Guid? departmentId = null)
     {

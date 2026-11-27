@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using WACAMS.Core.Exceptions;
 
 namespace WACAMS.Api.Middleware;
 
@@ -89,22 +90,8 @@ public class GlobalExceptionMiddleware
     }
 }
 
-// Custom exception types for clean error handling
-public class NotFoundException : Exception
-{
-    public NotFoundException(string message) : base(message) { }
-    public NotFoundException(string message, Exception inner) : base(message, inner) { }
-}
-
-public class ForbiddenException : Exception
-{
-    public ForbiddenException(string message) : base(message) { }
-}
-
-public class ConflictException : Exception
-{
-    public ConflictException(string message) : base(message) { }
-}
+// Use exception types from WACAMS.Core.Exceptions namespace
+// NotFoundException, ConflictException are defined in Api/Exceptions/
 
 public record ErrorResponse
 {

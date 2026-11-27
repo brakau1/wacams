@@ -166,7 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
       
       // Auto-login after registration
-      return login({ email: data.email, password: data.password })
+      return login({ employeeId: data.employeeId, password: data.password })
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : 'Registration failed.'
       setState(prev => ({

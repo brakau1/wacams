@@ -6,7 +6,6 @@ using WACAMS.Core.Entities;
 using WACAMS.Core.DTOs;
 using WACAMS.Core.Enums;
 using WACAMS.Core.Interfaces;
-using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -129,7 +128,7 @@ public class EscalationService
         var employee = warningLetter.Employee;
         if (employee?.ManagerId is null)
         {
-            _logger.LogWarning("Cannot auto-create escalation for {EmployeeId} — no manager assigned.", employeeId);
+            _logger.LogWarning("Cannot auto-create escalation for {EmployeeId} ï¿½ no manager assigned.", employeeId);
             return;
         }
 
@@ -180,7 +179,7 @@ public class EscalationService
     }
 
     /// <summary>
-    /// Progress an escalation — either acknowledge at current level or escalate to next level.
+    /// Progress an escalation ï¿½ either acknowledge at current level or escalate to next level.
     /// If resolved, mark as Resolved. Otherwise increment Level and assign to next manager in chain.
     /// </summary>
     public async Task<EscalationDto> ProgressEscalationAsync(Guid escalationId, ProgressEscalationRequest request, string actedBy)
@@ -204,7 +203,7 @@ public class EscalationService
 
         if (chain.Count <= escalation.Level)
         {
-            // We've reached the top of the chain — resolve
+            // We've reached the top of the chain ï¿½ resolve
             escalation.Status = EscalationStatus.Resolved;
             escalation.ResolvedAt = DateTime.UtcNow;
         }
@@ -255,10 +254,10 @@ public class EscalationService
 
                 if (chain.Count <= esc.Level)
                 {
-                    // Top of chain reached — resolve
+                    // Top of chain reached ï¿½ resolve
                     esc.Status = EscalationStatus.Resolved;
                     esc.ResolvedAt = DateTime.UtcNow;
-                    esc.Notes += Environment.NewLine + "[AUTO] Reached end of escalation chain — resolved.";
+                    esc.Notes += Environment.NewLine + "[AUTO] Reached end of escalation chain ï¿½ resolved.";
                 }
                 else
                 {

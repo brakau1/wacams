@@ -3,7 +3,6 @@ using WACAMS.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
-using WACAMS.Api.Middleware;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
 
 namespace WACAMS.Api.Controllers;
@@ -26,7 +25,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/employees — List/search employees with filters and pagination.
+    /// GET /api/employees ï¿½ List/search employees with filters and pagination.
     /// Query params: searchKeyword, departmentId, isActive, role, page, pageSize.
     /// </summary>
     [HttpGet]
@@ -46,7 +45,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/employees/{id} — Get employee detail with full hierarchy (manager + subordinates).
+    /// GET /api/employees/{id} ï¿½ Get employee detail with full hierarchy (manager + subordinates).
     /// </summary>
     [HttpGet("{id:guid}")]
     [Authorize]
@@ -66,7 +65,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/employees/by-id/{employeeId} — Get employee by master key (EmployeeId).
+    /// GET /api/employees/by-id/{employeeId} ï¿½ Get employee by master key (EmployeeId).
     /// </summary>
     [HttpGet("by-id/{employeeId}")]
     [Authorize]
@@ -86,7 +85,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// POST /api/employees/bulk — Bulk upload employees from a list.
+    /// POST /api/employees/bulk ï¿½ Bulk upload employees from a list.
     /// Admin/SuperAdmin only.
     /// </summary>
     [HttpPost("bulk")]
@@ -99,7 +98,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// PUT /api/employees/{id} — Update an existing employee.
+    /// PUT /api/employees/{id} ï¿½ Update an existing employee.
     /// Admin/Supervisor/SuperAdmin only.
     /// </summary>
     [HttpPut("{id:guid}")]
@@ -125,7 +124,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// DELETE /api/employees/{id}/disable — Soft-delete (disable) an employee.
+    /// DELETE /api/employees/{id}/disable ï¿½ Soft-delete (disable) an employee.
     /// Admin/SuperAdmin only.
     /// </summary>
     [HttpDelete("{id:guid}/disable")]
@@ -146,7 +145,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/employees/{employeeId}/hierarchy — Get the manager chain for an employee.
+    /// GET /api/employees/{employeeId}/hierarchy ï¿½ Get the manager chain for an employee.
     /// </summary>
     [HttpGet("{employeeId}/hierarchy")]
     [Authorize]
@@ -158,7 +157,7 @@ public class EmployeesController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/employees/{employeeId}/subordinates — Get all direct subordinates of an employee.
+    /// GET /api/employees/{employeeId}/subordinates ï¿½ Get all direct subordinates of an employee.
     /// </summary>
     [HttpGet("{employeeId}/subordinates")]
     [Authorize]

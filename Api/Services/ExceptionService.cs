@@ -3,7 +3,6 @@ using WACAMS.Core.Exceptions;
 using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
-using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -193,7 +192,7 @@ public class ExceptionService
     }
 
     /// <summary>
-    /// Investigate an exception — transitions from Pending ? Investigated.
+    /// Investigate an exception ï¿½ transitions from Pending ? Investigated.
     /// Must have access rights (Supervisor, Admin, SuperAdmin, HR).
     /// </summary>
     public async Task<AttendanceExceptionDto> InvestigateAsync(Guid exceptionId, InvestigateExceptionRequest request, string investigatedBy)

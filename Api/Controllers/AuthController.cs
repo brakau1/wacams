@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using WACAMS.Api.DTOs;
 using WACAMS.Api.Services;
-using WACAMS.Api.Middleware;
 using WACAMS.Api.Utils;
+using WACAMS.Core.Exceptions;
 using ErrorResponse = WACAMS.Api.DTOs.ErrorResponse;
-using NotFoundException = WACAMS.Api.Middleware.NotFoundException;
-using ConflictException = WACAMS.Api.Middleware.ConflictException;
 
 namespace WACAMS.Api.Controllers;
 

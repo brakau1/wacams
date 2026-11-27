@@ -5,7 +5,7 @@
 // ─── Auth Types ────────────────────────────────────────────────────────────
 
 export interface LoginRequest {
-  email: string
+  employeeId: string
   password: string
 }
 

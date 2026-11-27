@@ -9,18 +9,18 @@ interface LoginFormProps {
 
 export default function LoginForm({ onSuccess }: LoginFormProps) {
   const { login, isLoading, error, clearError } = useAuth()
-  const [email, setEmail] = useState('')
+  const [employeeId, setEmployeeId] = useState('')
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email.trim() || !password.trim()) return
+    if (!employeeId.trim() || !password.trim()) return
     
     setSubmitting(true)
     clearError()
     try {
-      await login({ email, password })
+      await login({ employeeId, password })
       onSuccess?.()
     } finally {
       setSubmitting(false)
@@ -36,19 +36,19 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         </div>
       )}
 
-      {/* Email */}
+      {/* Employee ID */}
       <div className="space-y-2">
-        <label htmlFor="login-email" className="text-sm font-medium">
-          Email Address
+        <label htmlFor="login-employeeId" className="text-sm font-medium">
+          Employee ID
         </label>
         <input
-          id="login-email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@company.com"
+          id="login-employeeId"
+          type="text"
+          value={employeeId}
+          onChange={(e) => setEmployeeId(e.target.value)}
+          placeholder="e.g., 708513"
           required
-          autoComplete="email"
+          autoComplete="username"
           className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
         />
       </div>

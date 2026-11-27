@@ -5,7 +5,6 @@ using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Api.Utils;
-using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -167,7 +166,7 @@ public class AttendanceService
         // Auto-detect: if missing clock-out after shift end + threshold, flag it
         if (!isEarly && expectedEnd <= clockOutTime && clockOutTime - expectedEnd > TimeSpan.FromMinutes(threshold))
         {
-            // Normal — clocked out after expected end, no exception
+            // Normal ï¿½ clocked out after expected end, no exception
         }
 
         await _auditService.LogActionAsync("system", action: "ClockOutTime",
@@ -502,7 +501,7 @@ public class AttendanceService
     private static int GetSettingValueAsInt(string key, int defaultValue)
     {
         // In production, read from SystemSettings table via ReportService
-        // For now, use defaults — the DB seed data contains these values
+        // For now, use defaults ï¿½ the DB seed data contains these values
         return key switch
         {
             "LateGracePeriodMinutes" => 5,

@@ -4,7 +4,6 @@ using WACAMS.Api.Data;
 using WACAMS.Api.DTOs;
 using WACAMS.Core.Entities;
 using WACAMS.Api.Utils;
-using WACAMS.Api.Middleware;
 
 namespace WACAMS.Api.Services;
 
@@ -108,7 +107,7 @@ public class EmployeeService
     }
 
     /// <summary>
-    /// Create a new employee (used for programmatic creation — registration goes through AuthService).
+    /// Create a new employee (used for programmatic creation ï¿½ registration goes through AuthService).
     /// </summary>
     public async Task<EmployeeDto> CreateAsync(CreateEmployeeRequest request)
     {
